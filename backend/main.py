@@ -290,6 +290,8 @@ class GameSession:
         self.max_hp = 100
         self.insight = 0
         self.modifiers = assign_random_modifiers()
+        self.weapon_id = "none"
+        self.armor_id  = "none"
 
 
 _sessions: dict[str, GameSession] = {}
@@ -325,6 +327,30 @@ def get_game_world(session_id: str) -> dict:
         "max_hp": session.max_hp,
         "modifiers": session.modifiers,
         "insight": session.insight,
+        "weapon_id": getattr(session, "weapon_id", "none"),
+        "armor_id":  getattr(session, "armor_id", "none"),
+    }
+
+
+class EquipRequest(BaseModel):
+    session_id: str
+    weapon_id: Optional[str] = None
+    armor_id:  Optional[str] = None
+
+@app.post("/api/game/equip")
+def equip_items(body: EquipRequest) -> dict:
+    if body.session_id not in _sessions:
+        raise HTTPException(status_code=404, detail="Session not found")
+    session = _sessions[body.session_id]
+    from backend.equipment import WEAPONS, ARMORS
+    if body.weapon_id and body.weapon_id in WEAPONS:
+        session.weapon_id = body.weapon_id
+    if body.armor_id and body.armor_id in ARMORS:
+        session.armor_id = body.armor_id
+    return {
+        "weapon_id": session.weapon_id,
+        "armor_id": session.armor_id,
+        "message": "Equipment updated.",
     }
 
 

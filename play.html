@@ -22,32 +22,56 @@
     .pbar .xp-bar { width:80px; height:8px; background:#1a1a0a; border-radius:4px; overflow:hidden; display:inline-block; margin-left:6px; vertical-align:middle; }
     .pbar .xp-fill { height:100%; background:#f1c40f; border-radius:4px; transition:width 0.4s; }
 
-    /* ── Map ────────────────────────────────────────────────────────── */
-    .map-wrap { margin-bottom:16px; }
-    .map-label { color:#555; font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
-    .depth-row { display:flex; align-items:center; margin-bottom:5px; }
-    .depth-num { width:28px; color:#333; font-size:10px; text-align:right; margin-right:8px; flex-shrink:0; }
-    .depth-nodes { display:flex; gap:5px; flex-wrap:wrap; }
-    .nd {
-      padding:5px 10px; border-radius:5px; cursor:pointer; font-size:11px;
-      border:1px solid #1a1a22; background:#101018; color:#666;
-      transition:all 0.12s; user-select:none;
+    /* ── World Map (spatial) ────────────────────────────────────────── */
+    .map-scroll-outer {
+      margin:10px 0 12px; border:1px solid #12121e; border-radius:12px;
+      overflow:hidden; background:#040812;
     }
-    .nd:hover { background:#181828; border-color:#33334a; color:#aaa; }
-    .nd.current { border-color:#c8a2ff!important; color:#c8a2ff; background:#160f2a; box-shadow:0 0 8px rgba(200,162,255,.25); }
-    .nd.reachable { border-color:#2a2a50; color:#8888cc; cursor:pointer; }
-    .nd.visited { color:#444; }
-    .nd.cleared { color:#2a2a35; background:#0a0a10; text-decoration:line-through; cursor:default; }
-    .nd[data-t="combat"]    { border-left:3px solid #8b1a1a; }
-    .nd[data-t="challenge"] { border-left:3px solid #6a2a9a; }
-    .nd[data-t="utility"]   { border-left:3px solid #1a5a30; }
-    .nd[data-t="event"]     { border-left:3px solid #6a4a0a; }
-    .nd[data-t="hub"]       { border-left:3px solid #4a2a8a; }
-    .nd.current[data-t="combat"]    { border-left-color:#ff5555; }
-    .nd.current[data-t="challenge"] { border-left-color:#aa55ff; }
-    .nd.current[data-t="utility"]   { border-left-color:#55ff88; }
-    .nd.current[data-t="event"]     { border-left-color:#ffaa55; }
-    .nd.current[data-t="hub"]       { border-left-color:#c8a2ff; }
+    .map-scroll-bg {
+      background:
+        radial-gradient(ellipse 70% 55% at 15% 50%, rgba(90,50,180,0.07) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 70% at 85% 25%, rgba(180,80,40,0.05) 0%, transparent 65%),
+        repeating-linear-gradient(90deg, transparent 0, transparent 109px, rgba(255,255,255,0.012) 110px),
+        repeating-linear-gradient(0deg,  transparent 0, transparent 59px,  rgba(255,255,255,0.012) 60px),
+        #040812;
+      overflow-x:auto; overflow-y:hidden;
+      padding:8px; cursor:grab; scroll-behavior:smooth; -webkit-overflow-scrolling:touch;
+    }
+    .map-scroll-bg:active { cursor:grabbing; }
+    .map-canvas { position:relative; }
+    .map-svg { overflow:visible; pointer-events:none; position:absolute; top:0; left:0; }
+    /* Node circles */
+    .map-node {
+      position:absolute; border-radius:50%;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      transition:transform 0.15s; user-select:none; cursor:default;
+      background:#070b14; border:2px solid; overflow:visible;
+    }
+    .map-node .mn-icon { font-size:14px; line-height:1; pointer-events:none; }
+    .map-node .mn-label {
+      position:absolute; top:calc(100% + 4px); left:50%; transform:translateX(-50%);
+      font-size:9px; color:#555; white-space:nowrap; pointer-events:none; text-align:center;
+    }
+    .mn-current  { cursor:pointer!important; animation:pulse-cur 2s infinite; }
+    .mn-reachable{ cursor:pointer!important; animation:breathe-reach 1.8s infinite; }
+    .mn-reachable:hover { transform:scale(1.28)!important; }
+    .mn-fog      { opacity:0.15!important; pointer-events:none; }
+    .mn-cleared  { opacity:0.4; }
+    .mn-visited  { opacity:0.75; }
+    @keyframes pulse-cur    { 0%,100%{box-shadow:0 0 8px var(--nc,#888)}  50%{box-shadow:0 0 22px var(--nc,#888),0 0 44px var(--nc,#888)} }
+    @keyframes breathe-reach{ 0%,100%{box-shadow:0 0 4px var(--nc,#888)}  50%{box-shadow:0 0 14px var(--nc,#888)} }
+    /* Location card under map */
+    .map-loc-card {
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;
+      background:#070710; border:1px solid #10101c; border-radius:8px;
+      padding:9px 14px; margin-bottom:10px; font-size:12px;
+    }
+    .mlc-left { display:flex; align-items:center; gap:8px; }
+    .mlc-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+    .mlc-name { color:#ccc; font-weight:bold; }
+    .mlc-meta { color:#3a3a4a; font-size:11px; margin-left:4px; }
+    .mlc-legend { display:flex; gap:10px; flex-wrap:wrap; color:#383848; }
+    .mlc-legend span { display:flex; align-items:center; gap:4px; }
 
     /* ── Node panel ─────────────────────────────────────────────────── */
     .npanel { background:#0e0e1c; border:1px solid #1a1a30; border-radius:10px; padding:18px; margin-bottom:14px; }
@@ -140,6 +164,33 @@
     .result-banner h2 { font-size:28px; margin-bottom:10px; }
     .result-banner p { color:#888; font-size:14px; margin-bottom:20px; }
 
+    /* ── Insight button ──────────────────────────────────────────── */
+    .insight-btn { padding:8px 16px; background:#0a1525; border:1px solid #1a3a5a; color:#6bcfff; font-size:13px; border-radius:6px; cursor:pointer; transition:all 0.15s; margin-top:8px; }
+    .insight-btn:hover:not(:disabled) { background:#0f2035; border-color:#4a8abf; }
+    .insight-btn:disabled { opacity:0.4; cursor:default; }
+    .insight-hint { background:#050f1a; border:1px solid #1a3a5a; border-radius:6px; padding:10px 14px; margin-top:8px; color:#88ccff; font-size:13px; line-height:1.5; }
+    /* ── Equipment picker ─────────────────────────────────────────── */
+    .equip-panel { background:#0c0c1a; border:1px solid #1a1a30; border-radius:10px; padding:18px; margin-bottom:14px; }
+    .equip-panel h2 { color:#c8a2ff; margin-bottom:14px; font-size:17px; }
+    .equip-section { margin-bottom:16px; }
+    .equip-section h3 { color:#888; font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+    .equip-card { display:inline-block; padding:10px 14px; margin:4px; border-radius:7px; border:1px solid #1e1e30; background:#12121e; cursor:pointer; font-size:13px; color:#bbb; transition:all 0.12s; vertical-align:top; min-width:130px; }
+    .equip-card:hover { background:#181828; border-color:#4a4a8a; color:#eee; }
+    .equip-card.selected { border-color:#c8a2ff; color:#c8a2ff; background:#160f2a; }
+    .equip-card .eq-name { font-weight:bold; margin-bottom:3px; }
+    .equip-card .eq-stat { font-size:11px; color:#666; }
+    .equip-card.selected .eq-stat { color:#9a7adf; }
+    /* ── Codex viewer ──────────────────────────────────────────────── */
+    .codex-panel { background:#0a0c0a; border:1px solid #1a2a1a; border-radius:10px; padding:18px; margin-bottom:14px; }
+    .codex-panel h2 { color:#88cc88; margin-bottom:6px; font-size:17px; }
+    .codex-sub { color:#445; font-size:12px; margin-bottom:14px; }
+    .codex-table { width:100%; border-collapse:collapse; font-size:12px; }
+    .codex-table th { background:#0f1f0f; color:#88cc88; padding:7px 10px; text-align:left; border-bottom:1px solid #2a3a2a; }
+    .codex-table td { padding:7px 10px; border-bottom:1px solid #111a11; color:#aaa; vertical-align:top; max-width:200px; word-break:break-word; }
+    .codex-table tr:hover td { background:#0c150c; }
+    .codex-ok { color:#5a5; }
+    .codex-bad { color:#a55; }
+    .codex-empty { color:#445; font-size:13px; text-align:center; padding:30px; }
     /* ── Level up ───────────────────────────────────────────────────── */
     @keyframes levelup { 0%{opacity:0;transform:scale(0.8)} 50%{opacity:1;transform:scale(1.05)} 100%{opacity:0;transform:scale(1)} }
     .levelup-flash { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
@@ -229,9 +280,11 @@ function dmgPop(text, type, el) {
 // ── Start Screen ───────────────────────────────────────────────────────────
 function renderStart() {
   render(`<div class="start">
-    <h1>⚔️ Origins: The Unbound</h1>
+    <h1>C.R.A.M — The Unbound</h1>
     <p>Enter the Unread World. Answer to survive.</p>
     <button class="start-btn" onclick="startGame()">Begin Your Run</button>
+    <br><br>
+    <button class="start-btn" onclick="renderCodex()" style="font-size:13px;padding:10px 24px;background:#0a1a0a;border-color:#2a4a2a;color:#88cc88">📕 Open Codex</button>
   </div>`);
 }
 
@@ -250,7 +303,8 @@ async function startGame() {
 async function syncPlayer() {
   const d = await api(`/api/game/world/${gameId}`);
   if (!d) return;
-  player  = { level:d.level, xp:d.xp, hp:d.hp, max_hp:d.max_hp, insight:d.insight||0 };
+  player  = { level:d.level, xp:d.xp, hp:d.hp, max_hp:d.max_hp, insight:d.insight||0,
+              weapon_id: d.weapon_id||"none", armor_id: d.armor_id||"none" };
   world   = d.world;
   curNode = d.current_node;
 }
@@ -259,48 +313,165 @@ async function syncPlayer() {
 function renderOverworld() {
   const conns = world[curNode]?.connections || [];
 
-  // group by depth
+  // Build depth groups
   const depths = {};
   for (const [id, n] of Object.entries(world)) {
     const d = n.depth;
-    (depths[d] = depths[d]||[]).push({id,...n});
+    if (!depths[d]) depths[d] = [];
+    depths[d].push({id,...n});
   }
   const sortedD = Object.keys(depths).map(Number).sort((a,b)=>a-b);
 
-  let mapHtml = sortedD.map(d => {
+  // Layout constants
+  const COL_W   = 112;
+  const PAD_X   = 60;
+  const PAD_TOP = 24;
+  const PAD_BOT = 44;
+  const MAP_H   = 320;
+  const AREA_H  = MAP_H - PAD_TOP - PAD_BOT;
+  const NODE_R  = 22;
+
+  // Assign x,y positions per node
+  const positions = {};
+  for (const d of sortedD) {
     const nodes = depths[d];
-    const nodesHtml = nodes.map(n => {
-      let cls = "nd";
-      const isCurrent = n.id === curNode;
-      const isReachable = !isCurrent && conns.includes(n.id);
-      if (isCurrent)        cls += " current";
-      else if (n.state==="cleared") cls += " cleared";
-      else if (isReachable) cls += " reachable";
-      else if (n.state==="visited") cls += " visited";
-      const click = isReachable || isCurrent ? `onclick="moveTo('${n.id}')"` : "";
-      const label = n.id==="citadel" ? "🏰 Citadel" : (n.subtype||n.id);
-      return `<button class="${cls}" data-t="${n.type}" ${click} title="${n.id} · ${n.type}/${n.subtype} · depth ${n.depth}">${label}</button>`;
-    }).join("");
-    return `<div class="depth-row"><div class="depth-num">${d===0?"🏰":d}</div><div class="depth-nodes">${nodesHtml}</div></div>`;
-  }).join("");
+    const count = nodes.length;
+    nodes.forEach((node, i) => {
+      const x = PAD_X + d * COL_W;
+      const y = PAD_TOP + (count === 1 ? AREA_H / 2 : (i / (count - 1)) * AREA_H);
+      positions[node.id] = {x, y};
+    });
+  }
+
+  const mapW = PAD_X * 2 + (sortedD.length - 1) * COL_W;
+  const mapH = MAP_H;
+
+  // Node visuals
+  const TYPE_ICON  = {combat:'⚔', challenge:'📖', utility:'⛺', event:'✦', hub:'🏰'};
+  const TYPE_COLOR = {combat:'#bb3333', challenge:'#7733bb', utility:'#228844', event:'#bb7722', hub:'#c8a2ff'};
+
+  // Build SVG connection paths
+  const drawnLines = new Set();
+  const linePaths = [];
+  for (const [id, n] of Object.entries(world)) {
+    for (const connId of (n.connections || [])) {
+      const key = [id, connId].sort().join('|');
+      if (drawnLines.has(key) || !positions[id] || !positions[connId]) continue;
+      drawnLines.add(key);
+      const a = positions[id], b = positions[connId];
+      const isTravel = (id===curNode && conns.includes(connId)) || (connId===curNode && conns.includes(id));
+      const bothCleared = world[id]?.state==='cleared' && world[connId]?.state==='cleared';
+      // Quadratic bezier for visual curves
+      const mx = (a.x + b.x) / 2;
+      const my = (a.y + b.y) / 2 - Math.abs(b.x - a.x) * 0.06;
+      const pathD = `M${a.x},${a.y} Q${mx},${my} ${b.x},${b.y}`;
+      if (isTravel) {
+        // Double line for travelable paths — glow + solid
+        linePaths.push(`<path d="${pathD}" fill="none" stroke="#1a3a6a" stroke-width="6" stroke-opacity="0.4" stroke-linecap="round"/>`);
+        linePaths.push(`<path d="${pathD}" fill="none" stroke="#4a8acc" stroke-width="2" stroke-opacity="0.9" stroke-linecap="round"/>`);
+      } else if (bothCleared) {
+        linePaths.push(`<path d="${pathD}" fill="none" stroke="#1a2a1a" stroke-width="1.5" stroke-opacity="0.5" stroke-linecap="round"/>`);
+      } else {
+        linePaths.push(`<path d="${pathD}" fill="none" stroke="#1c2438" stroke-width="1.5" stroke-opacity="0.6" stroke-dasharray="3,4" stroke-linecap="round"/>`);
+      }
+    }
+  }
+
+  // Build depth column labels (biome label at bottom of each column)
+  const colLabels = sortedD.map(d => {
+    const firstNode = depths[d]?.[0];
+    const px = positions[firstNode?.id];
+    if (!px) return '';
+    const lbl = d===0 ? 'ORIGIN' : `DEPTH ${d}`;
+    return `<div style="position:absolute;bottom:6px;left:${px.x}px;transform:translateX(-50%);font-size:8px;color:#1e1e2e;letter-spacing:1px;white-space:nowrap;user-select:none">${lbl}</div>`;
+  }).join('');
+
+  // Build node circle elements
+  const nodeEls = Object.entries(world).map(([id, n]) => {
+    const pos = positions[id];
+    if (!pos) return '';
+    const isCurrent   = id === curNode;
+    const isReachable = !isCurrent && conns.includes(id);
+    const isCleared   = n.state === 'cleared';
+    const isVisited   = n.state === 'visited';
+    const isFog       = n.state === 'unvisited' && !isCurrent && !isReachable;
+
+    const icon  = TYPE_ICON[n.type]  || '?';
+    const color = TYPE_COLOR[n.type] || '#555';
+    const label = id==='citadel' ? 'Citadel' : (n.subtype || n.type);
+    const displayLabel = isFog ? '???' : label;
+
+    let cls = 'map-node';
+    if (isCurrent)    cls += ' mn-current';
+    else if (isReachable) cls += ' mn-reachable';
+    else if (isCleared)   cls += ' mn-cleared';
+    else if (isVisited)   cls += ' mn-visited';
+    else                  cls += ' mn-fog';
+
+    const onClick    = (isCurrent || isReachable) ? `onclick="moveTo('${id}')"` : '';
+    const borderCol  = isFog ? '#131320' : color;
+    const bgCol      = isCurrent ? '#110820' : isCleared ? '#060608' : '#070b14';
+    const borderW    = isCurrent ? '2.5px' : '2px';
+    const size       = NODE_R * 2;
+
+    return `<div class="${cls}"
+      style="left:${pos.x-NODE_R}px;top:${pos.y-NODE_R}px;width:${size}px;height:${size}px;
+             border-color:${borderCol};border-width:${borderW};background:${bgCol};--nc:${color}"
+      ${onClick} title="${id} · ${n.type}/${n.subtype} · depth ${n.depth}">
+      <div class="mn-icon">${isFog ? '?' : icon}</div>
+      <div class="mn-label">${displayLabel}</div>
+    </div>`;
+  }).join('');
+
+  // Current node summary card
+  const cur     = world[curNode] || {};
+  const curColor = TYPE_COLOR[cur.type] || '#888';
+  const curIcon  = TYPE_ICON[cur.type]  || '?';
+  const locName  = curNode==='citadel' ? '🏰 The Citadel' : `${curIcon} ${cur.subtype||cur.type}`;
 
   render(`
-    <div class="header"><h1>⚔️ Origins: The Unbound</h1><div class="sub">The Unread World</div></div>
+    <div class="header"><h1>C.R.A.M — The Unbound</h1><div class="sub">The Unread World</div></div>
     ${playerBar()}
-    <div class="legend">
-      <span><span class="dot" style="background:#ff5555"></span>Combat</span>
-      <span><span class="dot" style="background:#aa55ff"></span>Challenge</span>
-      <span><span class="dot" style="background:#44cc77"></span>Utility</span>
-      <span><span class="dot" style="background:#ffaa44"></span>Event</span>
-      <span><span class="dot" style="background:#c8a2ff"></span>Hub</span>
+
+    <div class="map-scroll-outer">
+      <div class="map-scroll-bg" id="mapScroll">
+        <div class="map-canvas" style="width:${mapW}px;height:${mapH}px">
+          <svg class="map-svg" width="${mapW}" height="${mapH}">
+            ${linePaths.join('')}
+          </svg>
+          ${nodeEls}
+          ${colLabels}
+        </div>
+      </div>
     </div>
-    <div class="map-wrap">
-      <div class="map-label">🗺 Overworld — you are at <b style="color:#c8a2ff">${curNode}</b> · click reachable nodes to move</div>
-      ${mapHtml}
+
+    <div class="map-loc-card">
+      <div class="mlc-left">
+        <div class="mlc-dot" style="background:${curColor}"></div>
+        <span class="mlc-name">${locName}</span>
+        <span class="mlc-meta">· ${cur.biome||'unknown'} · depth ${cur.depth??0} · ${conns.length} path${conns.length!==1?'s':''} forward</span>
+      </div>
+      <div class="mlc-legend">
+        <span><span class="dot" style="background:#bb3333"></span>Combat</span>
+        <span><span class="dot" style="background:#7733bb"></span>Challenge</span>
+        <span><span class="dot" style="background:#228844"></span>Utility</span>
+        <span><span class="dot" style="background:#bb7722"></span>Event</span>
+        <span><span class="dot" style="background:#c8a2ff"></span>Hub</span>
+      </div>
     </div>
-    <button class="abtn" data-t="info" onclick="enterNode()" style="max-width:220px">🚪 Enter Current Node</button>
+
+    <button class="abtn" data-t="info" onclick="enterNode()" style="max-width:240px">🚪 Enter Current Node</button>
     ${renderLog()}
   `);
+
+  // Auto-scroll map to keep current node visible
+  setTimeout(() => {
+    const scroll = document.getElementById('mapScroll');
+    const pos = positions[curNode];
+    if (scroll && pos) {
+      scroll.scrollLeft = Math.max(0, pos.x - scroll.clientWidth / 2);
+    }
+  }, 40);
 }
 
 async function moveTo(nodeId) {
@@ -322,7 +493,7 @@ async function enterNode() {
 
   const diffStars = "⭐".repeat(Math.min(node.difficulty||1,5));
   render(`
-    <div class="header"><h1>⚔️ Origins: The Unbound</h1></div>
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
     ${playerBar()}
     <div class="npanel">
       <h2>${node.id==="citadel"?"🏰 The Citadel":"📍 "+node.id}</h2>
@@ -371,6 +542,12 @@ async function doAction(actionId) {
     injectResult("info","🌀 " + (r.message||"Anomaly started."));
     return;
   }
+  if (r.type==="codex_view") { renderCodex(); return; }
+  if (r.type==="equipment_menu") { renderEquipment(); return; }
+  if (r.type==="map_view") { renderOverworld(); return; }
+  if (r.type==="flee") { injectResult("info","🏃 " + (r.message||"You fled!")); setTimeout(()=>renderOverworld(),1200); return; }
+  if (r.type==="save_prompt") { injectResult("good","💾 " + (r.message||"Saved.")); return; }
+  if (r.type==="shop_menu") { injectResult("info","🛒 " + (r.message||"Shop coming soon.")); return; }
   if (r.message) { injectResult("info", r.message); return; }
   renderOverworld();
 }
@@ -384,12 +561,14 @@ function injectResult(type, msg) {
 }
 
 // ── Combat ─────────────────────────────────────────────────────────────────
+let combatInsightUses = 2;
+
 async function beginCombat(info) {
   combatLocked = false;
   const r = await api("/start_combat","POST",{
     concept_id: info.concept_id||null,
-    weapon_id:  "none",
-    armor_id:   "none",
+    weapon_id:  player.weapon_id || info.weapon_id || "none",
+    armor_id:   player.armor_id  || info.armor_id  || "none",
     node_god:   info.god||null,
     node_modifiers: [],
     bonus_insight: player.insight||0,
@@ -399,12 +578,13 @@ async function beginCombat(info) {
   combatId      = r.session_id;
   combatRound   = r.round||1;
   combatStreak  = r.streak||0;
+  combatInsightUses = r.insight_uses ?? 2;
   combatEnemy   = { name: r.enemy_name||"Enemy", concept: r.enemy_concept||"" };
   combatHp = {
     player: r.player_hp, playerMax: r.player_max_hp,
     enemy:  r.enemy_hp,  enemyMax:  r.enemy_max_hp,
   };
-  log(`⚔️ Combat! vs ${combatEnemy.name}`);
+  log(`⚔️ Combat! vs ${combatEnemy.name} | Weapon: ${r.weapon?.name||"none"} | Armor: ${r.armor?.name||"none"}`);
   renderCombat(r.question);
 }
 
@@ -412,7 +592,7 @@ function renderCombat(q) {
   if (!q) { endCombat(false); return; }
 
   render(`
-    <div class="header"><h1>⚔️ Origins: The Unbound</h1><div class="sub">Combat</div></div>
+    <div class="header"><h1>C.R.A.M — The Unbound</h1><div class="sub">Combat</div></div>
     <div class="cpanel">
       <h2>⚔️ ${combatEnemy.name}</h2>
       ${hpBarsHtml()}
@@ -422,6 +602,10 @@ function renderCombat(q) {
         ${(q.options||[]).map((opt,i)=>`
           <button class="opt" id="opt${i}" onclick="submitAnswer('${escAttr(q.id)}','${escAttr(opt)}')">${escHtml(opt)}</button>
         `).join("")}
+        <button class="insight-btn" id="insightBtn" ${combatInsightUses<=0?"disabled":""} onclick="useInsight()">
+          💡 Use Insight (${combatInsightUses} left)
+        </button>
+        <div id="insightHint"></div>
         <div id="expl"></div>
       </div>
     </div>
@@ -561,7 +745,7 @@ async function endCombat(victory) {
   await syncPlayer();
 
   render(`
-    <div class="header"><h1>⚔️ Origins: The Unbound</h1></div>
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
     ${playerBar()}
     <div class="cpanel" style="text-align:center; padding:30px">
       <h2 style="font-size:26px; margin-bottom:12px">${victory ? "🏆 Victory!" : "💀 Defeated"}</h2>
@@ -591,6 +775,173 @@ function showLevelUp(level) {
   el.textContent = `⬆️ LEVEL ${level}!`;
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 2600);
+}
+
+// ── Insight ────────────────────────────────────────────────────────────────
+async function useInsight() {
+  if (combatInsightUses <= 0) return;
+  const r = await api("/insight","POST",{session_id:combatId});
+  if (!r) return;
+  combatInsightUses = r.insight_uses ?? combatInsightUses - 1;
+  const btn = document.getElementById("insightBtn");
+  if (btn) {
+    btn.textContent = `💡 Use Insight (${combatInsightUses} left)`;
+    if (combatInsightUses <= 0) btn.disabled = true;
+  }
+  const hintEl = document.getElementById("insightHint");
+  if (hintEl) {
+    hintEl.innerHTML = `<div class="insight-hint">💡 <b>Insight:</b> ${escHtml(r.hint || "No hint available.")}</div>`;
+  }
+  log(`💡 Insight used. ${combatInsightUses} remaining.`);
+}
+
+// ── Codex viewer ────────────────────────────────────────────────────────────
+async function renderCodex() {
+  if (!gameId) {
+    // No active game — show placeholder
+    render(`
+      <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+      <div class="codex-panel">
+        <h2>📕 Codex — Mistake Journal</h2>
+        <div class="codex-sub">Your mistakes from this run will appear here. Start a run first.</div>
+        <div class="codex-empty">No active session. Begin a run to start tracking.</div>
+      </div>
+      <button class="abtn" data-t="navigation" onclick="renderStart()" style="max-width:180px">← Back</button>
+    `);
+    return;
+  }
+
+  const [all, mistakes] = await Promise.all([
+    api(`/codex/${gameId}`),
+    api(`/codex/${gameId}/mistakes`),
+  ]);
+
+  const entries = all?.entries || [];
+  const wrongOnes = mistakes?.entries || [];
+  const accuracy = entries.length > 0
+    ? Math.round(((entries.length - wrongOnes.length) / entries.length) * 100)
+    : null;
+
+  // Group by concept
+  const concepts = [...new Set(entries.map(e => e.concept_id || e.question_id?.split('_')[0] || 'unknown'))];
+
+  const rowsHtml = entries.length === 0
+    ? `<tr><td colspan="5" class="codex-empty">No questions answered yet this run.</td></tr>`
+    : entries.map(e => {
+        const ok = e.correct;
+        return `<tr>
+          <td>${escHtml(e.concept_id || '—')}</td>
+          <td>${escHtml(e.question_text?.substring(0,60) || e.question_id || '—')}${(e.question_text?.length||0)>60?'…':''}</td>
+          <td class="${ok?'codex-ok':'codex-bad'}">${escHtml(e.selected_answer || '—')}</td>
+          <td class="codex-ok">${escHtml(e.correct_answer || '—')}</td>
+          <td>${escHtml(e.explanation?.substring(0,80)||'—')}${(e.explanation?.length||0)>80?'…':''}</td>
+        </tr>`;
+      }).join('');
+
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    <div class="codex-panel">
+      <h2>📕 Codex — Mistake Journal</h2>
+      <div class="codex-sub">
+        ${entries.length} questions answered this run.
+        ${wrongOnes.length} mistakes.
+        ${accuracy !== null ? `Accuracy: <b style="color:#88cc88">${accuracy}%</b>` : ''}
+      </div>
+      ${wrongOnes.length > 0 ? `
+      <div style="background:#1a0a0a;border:1px solid #3a1a1a;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#c88">
+        ⚠️ Weakest concept this run: <b>${getMostMistaken(wrongOnes)}</b>
+      </div>` : ''}
+      <div style="overflow-x:auto">
+        <table class="codex-table">
+          <thead><tr>
+            <th>Concept</th><th>Question</th><th>Your Answer</th><th>Correct Answer</th><th>Explanation</th>
+          </tr></thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>
+    </div>
+    <button class="abtn" data-t="navigation" onclick="renderOverworld()" style="max-width:180px">← Overworld</button>
+    ${renderLog()}
+  `);
+}
+
+function getMostMistaken(wrongEntries) {
+  const counts = {};
+  wrongEntries.forEach(e => {
+    const c = e.concept_id || e.question_id?.split('_')[0] || 'unknown';
+    counts[c] = (counts[c]||0) + 1;
+  });
+  return Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'unknown';
+}
+
+// ── Equipment picker ─────────────────────────────────────────────────────────
+const WEAPONS_CATALOG = {
+  "none":            { name:"Bare Hands",      stat:"+0% damage",    ability:"None" },
+  "binary_blade":    { name:"Binary Blade",    stat:"+15% damage",   ability:"Binary Strike: +50% on hit" },
+  "recursive_staff": { name:"Recursive Staff", stat:"+10% damage",   ability:"Recursive Echo: deal 30% of last hit again" },
+  "balance_edge":    { name:"Balance Edge",    stat:"+8% damage",    ability:"Balance Shift: +40% damage reduction on wrong" },
+};
+const ARMORS_CATALOG = {
+  "none":        { name:"No Armor",    stat:"0% reduction" },
+  "data_vest":   { name:"Data Vest",   stat:"15% damage reduction" },
+  "stack_plate": { name:"Stack Plate", stat:"25% damage reduction" },
+};
+
+async function renderEquipment() {
+  const selectedWeapon = player.weapon_id || "none";
+  const selectedArmor  = player.armor_id  || "none";
+
+  const weaponCards = Object.entries(WEAPONS_CATALOG).map(([id, w]) => `
+    <div class="equip-card ${selectedWeapon===id?'selected':''}" onclick="selectWeapon('${id}')">
+      <div class="eq-name">⚔️ ${escHtml(w.name)}</div>
+      <div class="eq-stat">${escHtml(w.stat)}</div>
+      <div class="eq-stat" style="color:#776">${escHtml(w.ability)}</div>
+    </div>
+  `).join('');
+
+  const armorCards = Object.entries(ARMORS_CATALOG).map(([id, a]) => `
+    <div class="equip-card ${selectedArmor===id?'selected':''}" onclick="selectArmor('${id}')">
+      <div class="eq-name">🛡️ ${escHtml(a.name)}</div>
+      <div class="eq-stat">${escHtml(a.stat)}</div>
+    </div>
+  `).join('');
+
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    ${playerBar()}
+    <div class="equip-panel">
+      <h2>🔧 Equipment</h2>
+      <div class="equip-section">
+        <h3>Weapons</h3>
+        ${weaponCards}
+      </div>
+      <div class="equip-section">
+        <h3>Armor</h3>
+        ${armorCards}
+      </div>
+      <div id="equip-confirm" style="margin-top:10px;font-size:13px;color:#888"></div>
+    </div>
+    <button class="abtn" data-t="navigation" onclick="renderOverworld()" style="max-width:180px">← Overworld</button>
+    ${renderLog()}
+  `);
+}
+
+async function selectWeapon(id) {
+  if (!gameId) return;
+  const r = await api("/api/game/equip","POST",{session_id:gameId, weapon_id:id});
+  if (!r) return;
+  player.weapon_id = r.weapon_id;
+  log(`⚔️ Equipped: ${WEAPONS_CATALOG[id]?.name}`);
+  renderEquipment();
+}
+
+async function selectArmor(id) {
+  if (!gameId) return;
+  const r = await api("/api/game/equip","POST",{session_id:gameId, armor_id:id});
+  if (!r) return;
+  player.armor_id = r.armor_id;
+  log(`🛡️ Equipped: ${ARMORS_CATALOG[id]?.name}`);
+  renderEquipment();
 }
 
 // ── Utils ──────────────────────────────────────────────────────────────────

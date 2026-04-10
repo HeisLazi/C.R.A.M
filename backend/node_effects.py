@@ -26,6 +26,8 @@ def apply_node_action(session, action_id: str) -> dict:
             "god": node.god,
             "difficulty": node.difficulty,
             "level": session.level,
+            "weapon_id": getattr(session, "weapon_id", "none"),
+            "armor_id":  getattr(session, "armor_id", "none"),
         }
 
     if action_id == "study":
@@ -53,6 +55,8 @@ def apply_node_action(session, action_id: str) -> dict:
             "god": node.god,
             "difficulty": node.difficulty,
             "level": session.level,
+            "weapon_id": getattr(session, "weapon_id", "none"),
+            "armor_id":  getattr(session, "armor_id", "none"),
         }
 
     # ── Utility: heal / rest ──────────────────────────────────────────────

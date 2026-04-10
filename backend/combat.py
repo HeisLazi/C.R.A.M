@@ -14,7 +14,7 @@ Rules:
 
 import uuid
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field as dc_field
 from typing import Optional
 
 from backend.question_engine import get_question, evaluate_answer, get_hint
@@ -122,6 +122,7 @@ class CombatSession:
     over: bool = False
     winner: Optional[str] = None
     round: int = 1
+    seen_question_ids: object = dc_field(default_factory=set)  # set[str] — anti-repeat tracker
     # ── Node context (passed through, not used in calculations yet) ────────────
     node_god:       Optional[str] = None
     node_modifiers: list = None          # list[str]
@@ -152,9 +153,11 @@ def start_combat(
         enemy_template = random.choice(ENEMIES)
 
     enemy = dict(enemy_template)
-    question = get_question(concept_id=enemy["concept_id"])
+    seen: set = set()
+    question = get_question(concept_id=enemy["concept_id"], seen_ids=seen)
     if question is None:
         raise RuntimeError("No questions available for this concept.")
+    seen.add(question["id"])
 
     weapon = WEAPONS.get(weapon_id, WEAPONS["none"])
     armor  = ARMORS.get(armor_id,  ARMORS["none"])
@@ -173,6 +176,7 @@ def start_combat(
         weapon=weapon,
         armor=armor,
         insight_uses=INSIGHT_USES_PER_COMBAT + bonus_insight,
+        seen_question_ids=seen,
         node_god=node_god,
         node_modifiers=node_modifiers or [],
         run_modifiers=run_modifiers or [],
@@ -279,9 +283,17 @@ def resolve_action(session_id: str, question_id: str, answer: str) -> dict:
     next_question = None
     if not combat_over:
         session.round += 1
-        next_q = get_question(concept_id=session.enemy["concept_id"])
+        # Track the just-answered question as seen
+        if session.seen_question_ids is None:
+            session.seen_question_ids = set()
+        session.seen_question_ids.add(question_id)
+        next_q = get_question(
+            concept_id=session.enemy["concept_id"],
+            seen_ids=session.seen_question_ids,
+        )
         if next_q:
             session.current_question = next_q
+            session.seen_question_ids.add(next_q["id"])
             next_question = _question_payload(next_q)
 
     return {

@@ -1,0 +1,610 @@
+<!doctype html>
+<html>
+<head>
+  <title>Origins: The Unbound</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0a0a0f; color: #d4d4d4; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+    #app { max-width: 960px; margin: 0 auto; padding: 20px; }
+
+    /* ── Header ─────────────────────────────────────────────────────── */
+    .header { text-align:center; padding:18px 0 8px; border-bottom:1px solid #1a1a2e; margin-bottom:16px; }
+    .header h1 { color:#c8a2ff; font-size:26px; letter-spacing:2px; }
+    .header .sub { color:#555; font-size:11px; margin-top:3px; }
+
+    /* ── Player bar ─────────────────────────────────────────────────── */
+    .pbar { display:flex; gap:18px; justify-content:center; align-items:center;
+            padding:10px 16px; background:#0e0e1a; border-radius:8px; margin-bottom:16px; font-size:13px; }
+    .pbar .s { color:#777; }
+    .pbar .s b { color:#eee; }
+    .pbar .hp-bar { width:120px; height:8px; background:#2a0a0a; border-radius:4px; overflow:hidden; display:inline-block; margin-left:6px; vertical-align:middle; }
+    .pbar .hp-fill { height:100%; background:#c0392b; border-radius:4px; transition:width 0.4s; }
+    .pbar .xp-bar { width:80px; height:8px; background:#1a1a0a; border-radius:4px; overflow:hidden; display:inline-block; margin-left:6px; vertical-align:middle; }
+    .pbar .xp-fill { height:100%; background:#f1c40f; border-radius:4px; transition:width 0.4s; }
+
+    /* ── Map ────────────────────────────────────────────────────────── */
+    .map-wrap { margin-bottom:16px; }
+    .map-label { color:#555; font-size:11px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+    .depth-row { display:flex; align-items:center; margin-bottom:5px; }
+    .depth-num { width:28px; color:#333; font-size:10px; text-align:right; margin-right:8px; flex-shrink:0; }
+    .depth-nodes { display:flex; gap:5px; flex-wrap:wrap; }
+    .nd {
+      padding:5px 10px; border-radius:5px; cursor:pointer; font-size:11px;
+      border:1px solid #1a1a22; background:#101018; color:#666;
+      transition:all 0.12s; user-select:none;
+    }
+    .nd:hover { background:#181828; border-color:#33334a; color:#aaa; }
+    .nd.current { border-color:#c8a2ff!important; color:#c8a2ff; background:#160f2a; box-shadow:0 0 8px rgba(200,162,255,.25); }
+    .nd.reachable { border-color:#2a2a50; color:#8888cc; cursor:pointer; }
+    .nd.visited { color:#444; }
+    .nd.cleared { color:#2a2a35; background:#0a0a10; text-decoration:line-through; cursor:default; }
+    .nd[data-t="combat"]    { border-left:3px solid #8b1a1a; }
+    .nd[data-t="challenge"] { border-left:3px solid #6a2a9a; }
+    .nd[data-t="utility"]   { border-left:3px solid #1a5a30; }
+    .nd[data-t="event"]     { border-left:3px solid #6a4a0a; }
+    .nd[data-t="hub"]       { border-left:3px solid #4a2a8a; }
+    .nd.current[data-t="combat"]    { border-left-color:#ff5555; }
+    .nd.current[data-t="challenge"] { border-left-color:#aa55ff; }
+    .nd.current[data-t="utility"]   { border-left-color:#55ff88; }
+    .nd.current[data-t="event"]     { border-left-color:#ffaa55; }
+    .nd.current[data-t="hub"]       { border-left-color:#c8a2ff; }
+
+    /* ── Node panel ─────────────────────────────────────────────────── */
+    .npanel { background:#0e0e1c; border:1px solid #1a1a30; border-radius:10px; padding:18px; margin-bottom:14px; }
+    .npanel h2 { color:#c8a2ff; font-size:17px; margin-bottom:3px; }
+    .nmeta { color:#555; font-size:12px; margin-bottom:14px; }
+    .nmeta span { margin-right:12px; }
+
+    .abtn {
+      display:block; width:100%; text-align:left; padding:11px 15px; margin-bottom:7px;
+      background:#12121e; border:1px solid #1e1e30; border-radius:7px;
+      color:#bbb; font-size:13px; cursor:pointer; transition:all 0.12s;
+    }
+    .abtn:hover { background:#18182a; border-color:#3a3a66; color:#eee; }
+    .abtn[data-t="combat"]    { border-left:3px solid #ff4444; }
+    .abtn[data-t="challenge"] { border-left:3px solid #aa44ff; }
+    .abtn[data-t="utility"]   { border-left:3px solid #44cc77; }
+    .abtn[data-t="info"]      { border-left:3px solid #44aaff; }
+    .abtn[data-t="event"]     { border-left:3px solid #ffaa44; }
+    .abtn[data-t="navigation"]{ border-left:3px solid #444; color:#777; }
+
+    /* ── Combat ─────────────────────────────────────────────────────── */
+    .cpanel { background:#0f0808; border:1px solid #2a1010; border-radius:10px; padding:18px; margin-bottom:14px; }
+    .cpanel h2 { color:#ff7070; font-size:18px; margin-bottom:12px; }
+
+    .hpbars { display:grid; grid-template-columns:1fr 40px 1fr; gap:10px; align-items:center; margin-bottom:16px; }
+    .combatant { }
+    .combatant .name { font-size:13px; color:#aaa; margin-bottom:5px; }
+    .combatant .hprow { display:flex; align-items:center; gap:8px; }
+    .combatant .bar { flex:1; height:12px; background:#1a0a0a; border-radius:6px; overflow:hidden; }
+    .combatant .fill { height:100%; border-radius:6px; transition:width 0.5s ease; }
+    .combatant.player .fill { background:linear-gradient(90deg,#e74c3c,#ff6b6b); }
+    .combatant.enemy .fill  { background:linear-gradient(90deg,#8e44ad,#c0392b); }
+    .combatant .hpnum { font-size:12px; color:#888; white-space:nowrap; }
+    .vs { text-align:center; font-size:20px; color:#444; }
+
+    .streak-bar { text-align:center; margin-bottom:12px; font-size:13px; color:#f1c40f; height:20px; }
+
+    .qbox { background:#0a0a14; border:1px solid #1a1a28; border-radius:8px; padding:14px; }
+    .qtext { color:#ddd; font-size:14px; margin-bottom:12px; line-height:1.5; }
+    .opt {
+      display:block; width:100%; text-align:left; padding:10px 14px; margin-bottom:6px;
+      background:#111120; border:1px solid #22223a; border-radius:6px;
+      color:#ccc; font-size:13px; cursor:pointer; transition:all 0.12s;
+    }
+    .opt:hover:not(:disabled) { background:#1a1a30; border-color:#44449a; color:#fff; }
+    .opt:disabled { cursor:default; opacity:0.7; }
+    .opt.correct  { background:#0a2a0a!important; border-color:#2a7a2a!important; color:#8f8!important; }
+    .opt.wrong    { background:#2a0a0a!important; border-color:#7a2a2a!important; color:#f88!important; }
+
+    .expl { margin-top:10px; padding:10px; border-radius:6px; font-size:13px; line-height:1.5; }
+    .expl.good { background:#0a1f0a; border:1px solid #1a4a1a; color:#8d8; }
+    .expl.bad  { background:#1f0a0a; border:1px solid #4a1a1a; color:#d88; }
+
+    /* ── Damage flash ───────────────────────────────────────────────── */
+    @keyframes pop { 0%{transform:translateY(0);opacity:1} 100%{transform:translateY(-30px);opacity:0} }
+    .dmg-pop { position:fixed; font-size:22px; font-weight:bold; pointer-events:none; animation:pop 1.2s ease forwards; z-index:999; }
+    .dmg-pop.good { color:#ff5555; }
+    .dmg-pop.bad  { color:#cc44ff; }
+    .dmg-pop.heal { color:#55ff88; }
+
+    /* ── Result boxes ───────────────────────────────────────────────── */
+    .rbox { padding:12px; border-radius:8px; margin:10px 0; font-size:13px; line-height:1.5; }
+    .rbox.good { background:#0a1e0a; border:1px solid #1a3e1a; color:#7d7; }
+    .rbox.bad  { background:#1e0a0a; border:1px solid #3e1a1a; color:#d77; }
+    .rbox.info { background:#0a0a1e; border:1px solid #1a1a3e; color:#77d; }
+
+    /* ── Log ────────────────────────────────────────────────────────── */
+    .log { background:#060609; border:1px solid #111; border-radius:7px; padding:8px 12px;
+           max-height:120px; overflow-y:auto; font-size:11px; font-family:monospace; color:#444; margin-top:12px; }
+    .log div { padding:1px 0; }
+
+    /* ── Start ──────────────────────────────────────────────────────── */
+    .start { text-align:center; padding:80px 20px; }
+    .start h1 { color:#c8a2ff; font-size:34px; margin-bottom:8px; letter-spacing:2px; }
+    .start p { color:#555; margin-bottom:30px; font-size:14px; }
+    .start-btn {
+      padding:14px 44px; background:#1a0f2e; border:1px solid #4a2a8a;
+      color:#c8a2ff; font-size:16px; border-radius:8px; cursor:pointer;
+      letter-spacing:1px; transition:all 0.2s;
+    }
+    .start-btn:hover { background:#250f3e; border-color:#7a4abb; }
+
+    /* ── Legend ─────────────────────────────────────────────────────── */
+    .legend { display:flex; gap:14px; justify-content:center; margin-bottom:10px; font-size:11px; color:#444; flex-wrap:wrap; }
+    .legend span { display:flex; align-items:center; gap:4px; }
+    .dot { width:8px; height:8px; border-radius:2px; flex-shrink:0; }
+
+    /* ── Combat result banner ───────────────────────────────────────── */
+    .result-banner { text-align:center; padding:30px; }
+    .result-banner h2 { font-size:28px; margin-bottom:10px; }
+    .result-banner p { color:#888; font-size:14px; margin-bottom:20px; }
+
+    /* ── Level up ───────────────────────────────────────────────────── */
+    @keyframes levelup { 0%{opacity:0;transform:scale(0.8)} 50%{opacity:1;transform:scale(1.05)} 100%{opacity:0;transform:scale(1)} }
+    .levelup-flash { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
+                     font-size:36px; color:#f1c40f; font-weight:bold; text-shadow:0 0 20px #f1c40f;
+                     pointer-events:none; animation:levelup 2.5s ease forwards; z-index:1000; }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+const API = "http://localhost:8000";
+
+// ── State ──────────────────────────────────────────────────────────────────
+let gameId    = null;   // game session id
+let world     = null;
+let curNode   = null;
+let player    = { level:1, xp:0, hp:100, max_hp:100, insight:0 };
+
+// combat state (separate from game session)
+let combatId  = null;   // combat session id (UUID from /start_combat)
+let combatHp  = { player: 100, playerMax: 100, enemy: 60, enemyMax: 60 };
+let combatEnemy = { name:"Enemy" };
+let combatRound = 1;
+let combatStreak = 0;
+let combatLocked = false;  // prevent double-clicks while animating
+
+let logs = [];
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function log(msg) {
+  logs.push(msg);
+  if (logs.length > 60) logs.shift();
+}
+function renderLog() {
+  return `<div class="log">${logs.slice(-20).map(l=>`<div>> ${l}</div>`).join('')}</div>`;
+}
+function render(html) { document.getElementById("app").innerHTML = html; }
+
+async function api(path, method="GET", body=null) {
+  const opts = { method, headers:{"Content-Type":"application/json"} };
+  if (body) opts.body = JSON.stringify(body);
+  try {
+    const res = await fetch(API + path, opts);
+    if (!res.ok) {
+      const e = await res.json().catch(()=>({detail:res.statusText}));
+      log("❌ " + (e.detail||res.statusText));
+      return null;
+    }
+    return res.json();
+  } catch(e) {
+    log("❌ Connection error: " + e.message);
+    return null;
+  }
+}
+
+function pct(v, max) { return Math.max(0, Math.min(100, Math.round((v/max)*100))); }
+
+function playerBar() {
+  const hp = player.hp, mhp = player.max_hp;
+  const xpInLevel = player.xp % 50, xpNeeded = 50;
+  return `<div class="pbar">
+    <span class="s">Lv <b>${player.level}</b></span>
+    <span class="s">
+      XP <b>${player.xp}</b>
+      <span class="xp-bar"><span class="xp-fill" style="width:${pct(xpInLevel,xpNeeded)}%"></span></span>
+    </span>
+    <span class="s">
+      HP <b>${hp}/${mhp}</b>
+      <span class="hp-bar"><span class="hp-fill" style="width:${pct(hp,mhp)}%"></span></span>
+    </span>
+    <span class="s">💡 <b>${player.insight||0}</b></span>
+  </div>`;
+}
+
+function dmgPop(text, type, el) {
+  const pop = document.createElement("div");
+  pop.className = `dmg-pop ${type}`;
+  pop.textContent = text;
+  const r = el ? el.getBoundingClientRect() : {left:window.innerWidth/2, top:window.innerHeight/2};
+  pop.style.left = (r.left + r.width/2) + "px";
+  pop.style.top  = (r.top) + "px";
+  document.body.appendChild(pop);
+  setTimeout(() => pop.remove(), 1300);
+}
+
+// ── Start Screen ───────────────────────────────────────────────────────────
+function renderStart() {
+  render(`<div class="start">
+    <h1>⚔️ Origins: The Unbound</h1>
+    <p>Enter the Unread World. Answer to survive.</p>
+    <button class="start-btn" onclick="startGame()">Begin Your Run</button>
+  </div>`);
+}
+
+async function startGame() {
+  render(`<div class="start"><p style="color:#555">Generating world...</p></div>`);
+  const data = await api("/api/game/start","POST");
+  if (!data) { renderStart(); return; }
+  gameId  = data.session_id;
+  world   = data.world;
+  curNode = data.current_node;
+  log("Run started — session: " + gameId);
+  await syncPlayer();
+  renderOverworld();
+}
+
+async function syncPlayer() {
+  const d = await api(`/api/game/world/${gameId}`);
+  if (!d) return;
+  player  = { level:d.level, xp:d.xp, hp:d.hp, max_hp:d.max_hp, insight:d.insight||0 };
+  world   = d.world;
+  curNode = d.current_node;
+}
+
+// ── Overworld ──────────────────────────────────────────────────────────────
+function renderOverworld() {
+  const conns = world[curNode]?.connections || [];
+
+  // group by depth
+  const depths = {};
+  for (const [id, n] of Object.entries(world)) {
+    const d = n.depth;
+    (depths[d] = depths[d]||[]).push({id,...n});
+  }
+  const sortedD = Object.keys(depths).map(Number).sort((a,b)=>a-b);
+
+  let mapHtml = sortedD.map(d => {
+    const nodes = depths[d];
+    const nodesHtml = nodes.map(n => {
+      let cls = "nd";
+      const isCurrent = n.id === curNode;
+      const isReachable = !isCurrent && conns.includes(n.id);
+      if (isCurrent)        cls += " current";
+      else if (n.state==="cleared") cls += " cleared";
+      else if (isReachable) cls += " reachable";
+      else if (n.state==="visited") cls += " visited";
+      const click = isReachable || isCurrent ? `onclick="moveTo('${n.id}')"` : "";
+      const label = n.id==="citadel" ? "🏰 Citadel" : (n.subtype||n.id);
+      return `<button class="${cls}" data-t="${n.type}" ${click} title="${n.id} · ${n.type}/${n.subtype} · depth ${n.depth}">${label}</button>`;
+    }).join("");
+    return `<div class="depth-row"><div class="depth-num">${d===0?"🏰":d}</div><div class="depth-nodes">${nodesHtml}</div></div>`;
+  }).join("");
+
+  render(`
+    <div class="header"><h1>⚔️ Origins: The Unbound</h1><div class="sub">The Unread World</div></div>
+    ${playerBar()}
+    <div class="legend">
+      <span><span class="dot" style="background:#ff5555"></span>Combat</span>
+      <span><span class="dot" style="background:#aa55ff"></span>Challenge</span>
+      <span><span class="dot" style="background:#44cc77"></span>Utility</span>
+      <span><span class="dot" style="background:#ffaa44"></span>Event</span>
+      <span><span class="dot" style="background:#c8a2ff"></span>Hub</span>
+    </div>
+    <div class="map-wrap">
+      <div class="map-label">🗺 Overworld — you are at <b style="color:#c8a2ff">${curNode}</b> · click reachable nodes to move</div>
+      ${mapHtml}
+    </div>
+    <button class="abtn" data-t="info" onclick="enterNode()" style="max-width:220px">🚪 Enter Current Node</button>
+    ${renderLog()}
+  `);
+}
+
+async function moveTo(nodeId) {
+  if (nodeId === curNode) { enterNode(); return; }
+  const r = await api("/api/game/move","POST",{session_id:gameId, target_node_id:nodeId});
+  if (!r) return;
+  curNode = r.current_node;
+  if (r.node) world[curNode] = r.node;
+  log(`Moved → ${curNode}`);
+  renderOverworld();
+}
+
+// ── Node Screen ────────────────────────────────────────────────────────────
+async function enterNode() {
+  const r = await api(`/api/game/node/${gameId}`);
+  if (!r) return;
+  const node = r.node, actions = r.actions;
+  log(`Entered ${node.id} (${node.type}/${node.subtype})`);
+
+  const diffStars = "⭐".repeat(Math.min(node.difficulty||1,5));
+  render(`
+    <div class="header"><h1>⚔️ Origins: The Unbound</h1></div>
+    ${playerBar()}
+    <div class="npanel">
+      <h2>${node.id==="citadel"?"🏰 The Citadel":"📍 "+node.id}</h2>
+      <div class="nmeta">
+        <span>Type: ${node.type}</span>
+        <span>Subtype: ${node.subtype}</span>
+        <span>Biome: ${node.biome}</span>
+        <span>Difficulty: ${diffStars}</span>
+        ${node.god?`<span>God: ${node.god}</span>`:""}
+      </div>
+      ${actions.map(a=>`<button class="abtn" data-t="${a.type}" onclick="doAction('${a.id}')">${a.label}</button>`).join("")}
+    </div>
+    ${renderLog()}
+  `);
+}
+
+async function doAction(actionId) {
+  if (actionId==="leave") { renderOverworld(); return; }
+
+  const r = await api("/api/game/node/action","POST",{session_id:gameId,action_id:actionId});
+  if (!r) return;
+  log(`${actionId} → ${r.type}`);
+
+  if (r.type==="combat_started") {
+    await beginCombat(r);
+    return;
+  }
+  if (r.type==="heal") {
+    await syncPlayer();
+    injectResult("good","❤️ " + (r.message||"Healed!"));
+    return;
+  }
+  if (r.type==="reward") {
+    const xpR = await api("/api/game/xp","POST",{session_id:gameId,amount:r.xp||10});
+    if (xpR?.level_up) showLevelUp(xpR.level);
+    await syncPlayer();
+    injectResult("good","🎁 " + (r.message||"Found a reward!"));
+    return;
+  }
+  if (r.type==="bonus") {
+    await syncPlayer();
+    injectResult("info","💡 " + (r.message||"Gained insight."));
+    return;
+  }
+  if (r.type==="anomaly_started") {
+    injectResult("info","🌀 " + (r.message||"Anomaly started."));
+    return;
+  }
+  if (r.message) { injectResult("info", r.message); return; }
+  renderOverworld();
+}
+
+function injectResult(type, msg) {
+  const panel = document.querySelector(".npanel");
+  if (!panel) return;
+  const old = panel.querySelector(".rbox");
+  if (old) old.remove();
+  panel.insertAdjacentHTML("beforeend",`<div class="rbox ${type}">${msg}</div>`);
+}
+
+// ── Combat ─────────────────────────────────────────────────────────────────
+async function beginCombat(info) {
+  combatLocked = false;
+  const r = await api("/start_combat","POST",{
+    concept_id: info.concept_id||null,
+    weapon_id:  "none",
+    armor_id:   "none",
+    node_god:   info.god||null,
+    node_modifiers: [],
+    bonus_insight: player.insight||0,
+  });
+  if (!r) { renderOverworld(); return; }
+
+  combatId      = r.session_id;
+  combatRound   = r.round||1;
+  combatStreak  = r.streak||0;
+  combatEnemy   = { name: r.enemy_name||"Enemy", concept: r.enemy_concept||"" };
+  combatHp = {
+    player: r.player_hp, playerMax: r.player_max_hp,
+    enemy:  r.enemy_hp,  enemyMax:  r.enemy_max_hp,
+  };
+  log(`⚔️ Combat! vs ${combatEnemy.name}`);
+  renderCombat(r.question);
+}
+
+function renderCombat(q) {
+  if (!q) { endCombat(false); return; }
+
+  render(`
+    <div class="header"><h1>⚔️ Origins: The Unbound</h1><div class="sub">Combat</div></div>
+    <div class="cpanel">
+      <h2>⚔️ ${combatEnemy.name}</h2>
+      ${hpBarsHtml()}
+      <div class="streak-bar" id="sbar">${streakHtml()}</div>
+      <div class="qbox">
+        <div class="qtext">${escHtml(q.question)}</div>
+        ${(q.options||[]).map((opt,i)=>`
+          <button class="opt" id="opt${i}" onclick="submitAnswer('${escAttr(q.id)}','${escAttr(opt)}')">${escHtml(opt)}</button>
+        `).join("")}
+        <div id="expl"></div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:#444;margin-top:8px;text-align:center">Round ${combatRound}</div>
+    ${renderLog()}
+  `);
+}
+
+function hpBarsHtml() {
+  const pp = pct(combatHp.player, combatHp.playerMax);
+  const ep = pct(combatHp.enemy, combatHp.enemyMax);
+  return `
+  <div class="hpbars">
+    <div class="combatant player">
+      <div class="name">You</div>
+      <div class="hprow">
+        <div class="bar"><div class="fill" id="php" style="width:${pp}%"></div></div>
+        <div class="hpnum" id="phpnum">${combatHp.player}/${combatHp.playerMax}</div>
+      </div>
+    </div>
+    <div class="vs">⚔️</div>
+    <div class="combatant enemy">
+      <div class="name">${combatEnemy.name}</div>
+      <div class="hprow">
+        <div class="bar"><div class="fill" id="ehp" style="width:${ep}%"></div></div>
+        <div class="hpnum" id="ehpnum">${combatHp.enemy}/${combatHp.enemyMax}</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function streakHtml() {
+  if (combatStreak <= 0) return "";
+  const flames = "🔥".repeat(Math.min(combatStreak,5));
+  return `${flames} Streak ×${combatStreak}`;
+}
+
+function updateBars() {
+  const pp = pct(combatHp.player, combatHp.playerMax);
+  const ep = pct(combatHp.enemy, combatHp.enemyMax);
+  const pEl = document.getElementById("php");
+  const eEl = document.getElementById("ehp");
+  const pNum = document.getElementById("phpnum");
+  const eNum = document.getElementById("ehpnum");
+  if (pEl) { pEl.style.width = pp+"%"; }
+  if (eEl) { eEl.style.width = ep+"%"; }
+  if (pNum) pNum.textContent = `${combatHp.player}/${combatHp.playerMax}`;
+  if (eNum) eNum.textContent = `${combatHp.enemy}/${combatHp.enemyMax}`;
+  const sb = document.getElementById("sbar");
+  if (sb) sb.innerHTML = streakHtml();
+}
+
+async function submitAnswer(qid, answer) {
+  if (combatLocked) return;
+  combatLocked = true;
+
+  // Disable all option buttons
+  document.querySelectorAll(".opt").forEach(b => b.disabled = true);
+
+  const r = await api("/answer","POST",{session_id:combatId, question_id:qid, answer:answer});
+  if (!r) { combatLocked = false; return; }
+
+  // ── Update HP ────────────────────────────────────────────────────────────
+  combatHp.player = r.player_hp;
+  combatHp.enemy  = r.enemy_hp;
+  combatStreak    = r.streak||0;
+  combatRound     = r.round||combatRound;
+  updateBars();
+
+  // ── Highlight answers ────────────────────────────────────────────────────
+  document.querySelectorAll(".opt").forEach(btn => {
+    if (btn.textContent === answer) {
+      btn.classList.add(r.correct ? "correct" : "wrong");
+    }
+    if (btn.textContent === r.correct_answer && !r.correct) {
+      btn.classList.add("correct");
+    }
+  });
+
+  // ── Damage pops ──────────────────────────────────────────────────────────
+  const eEl = document.getElementById("ehp");
+  const pEl = document.getElementById("php");
+  if (r.correct && r.damage_dealt > 0) {
+    dmgPop(`-${r.damage_dealt}`, "good", eEl);
+    log(`✅ Correct! Dealt ${r.damage_dealt} dmg. Streak ×${combatStreak}`);
+  } else if (!r.correct) {
+    dmgPop(`-${r.enemy_damage}`, "bad", pEl);
+    log(`❌ Wrong. Took ${r.enemy_damage} dmg. Streak broken.`);
+  }
+  if (r.streak_feedback) {
+    const sb = document.getElementById("sbar");
+    if (sb) sb.innerHTML = `<span style="color:#f1c40f">${r.streak_feedback}</span>`;
+  }
+
+  // ── Show explanation ──────────────────────────────────────────────────────
+  const explEl = document.getElementById("expl");
+  if (explEl && r.explanation) {
+    explEl.innerHTML = `<div class="expl ${r.correct?'good':'bad'}">${escHtml(r.explanation)}</div>`;
+  }
+
+  // ── Combat over? ─────────────────────────────────────────────────────────
+  if (r.combat_over) {
+    setTimeout(() => endCombat(r.winner === "player"), 2000);
+    return;
+  }
+
+  // ── Next question ─────────────────────────────────────────────────────────
+  const next = r.next_question;
+  setTimeout(() => {
+    combatLocked = false;
+    if (next && next.question) {
+      renderCombat(next);
+    } else {
+      log("No more questions — combat ends");
+      endCombat(true);
+    }
+  }, 2000);
+}
+
+async function endCombat(victory) {
+  // Sync player HP from combat state
+  const diff = player.hp - combatHp.player;
+  if (diff > 0) {
+    await api("/api/game/damage","POST",{session_id:gameId, amount:diff});
+  }
+
+  let xpGained = 0;
+  let levelUp = false;
+
+  if (victory) {
+    // Award XP proportional to enemy difficulty
+    xpGained = 15 + combatRound * 3;
+    const xpR = await api("/api/game/xp","POST",{session_id:gameId, amount:xpGained});
+    if (xpR?.level_up) { levelUp = true; }
+  }
+
+  await syncPlayer();
+
+  render(`
+    <div class="header"><h1>⚔️ Origins: The Unbound</h1></div>
+    ${playerBar()}
+    <div class="cpanel" style="text-align:center; padding:30px">
+      <h2 style="font-size:26px; margin-bottom:12px">${victory ? "🏆 Victory!" : "💀 Defeated"}</h2>
+      <p style="color:#888; margin-bottom:${xpGained?'8px':'20px'}">
+        ${victory
+          ? `The ${combatEnemy.name} falls. Knowledge is power.`
+          : "The Pale Drift grows stronger. You retreat."}
+      </p>
+      ${xpGained ? `<p style="color:#f1c40f; margin-bottom:20px">+${xpGained} XP${levelUp?" · <b>LEVEL UP!</b>":""}</p>` : ""}
+      <button class="abtn" data-t="navigation" onclick="afterCombat()" style="max-width:220px; margin:0 auto">← Return to Overworld</button>
+    </div>
+    ${renderLog()}
+  `);
+
+  if (levelUp) showLevelUp(player.level);
+}
+
+async function afterCombat() {
+  combatId = null;
+  combatLocked = false;
+  renderOverworld();
+}
+
+function showLevelUp(level) {
+  const el = document.createElement("div");
+  el.className = "levelup-flash";
+  el.textContent = `⬆️ LEVEL ${level}!`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2600);
+}
+
+// ── Utils ──────────────────────────────────────────────────────────────────
+function escHtml(s) {
+  if (!s) return "";
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function escAttr(s) {
+  if (!s) return "";
+  return String(s).replace(/'/g,"\\'").replace(/"/g,'\\"');
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+renderStart();
+</script>
+</body>
+</html>

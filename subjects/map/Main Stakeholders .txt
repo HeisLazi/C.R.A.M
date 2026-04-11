@@ -1,0 +1,5 @@
+Main stakeholders 
+First year NUST students - The main users that will be grouped by the system
+NUST lecturers - They will assist in defining the grouping criteria 
+NUST IT support - They will manage, deploy and maintain the system 
+Program and faculty Coordinators -They will assist in defining the grouping criteria 

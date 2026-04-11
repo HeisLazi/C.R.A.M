@@ -8,9 +8,15 @@ This is a full-stack learning RPG I built to make practicing programming concept
 
 ## Features
 
-**Procedural World Generation** — A dynamically generated graph-based world with depth-scaled difficulty. Each playthrough creates a unique map with different node types (combat, challenge, utility, event, hub) and connections. The world spans 10 depth levels with bidirectional connections between nodes.
+**Procedural World Generation** — A dynamically generated graph-based world with depth-scaled difficulty. Each playthrough creates a unique map with different node types (combat, challenge, utility, event, hub) and connections. The world spans 10 depth levels with bidirectional connections between nodes, rendered as an interactive spatial map.
 
-**Question-Driven Combat** — Combat uses actual programming questions from topics like recursion, binary search, trees, and complexity analysis. Correct answers deal damage to enemies while wrong answers let enemies counterattack. The streak system rewards consecutive correct answers with increasing damage multipliers (1.10x at 2 streak, 1.25x at 3+ streak).
+**Question-Driven Combat** — Combat uses actual programming questions from topics like recursion, binary search, trees, and complexity analysis. Features include:
+
+- Multiple question types: multiple choice, true/false, and open-ended self-evaluation
+- Streak system rewarding consecutive correct answers with increasing damage multipliers
+- Visual combat arena with animated fighters and particle effects
+- Damage popups and hit animations
+- Insight system for revealing hints
 
 **Layered Modifier System** — Multiple systems interact to create varied gameplay:
 
@@ -18,16 +24,30 @@ This is a full-stack learning RPG I built to make practicing programming concept
 - God domains: Aurex (streak boost), Vyra (consecutive hits), Khalen (damage reduction), Thren (damage boost), Nyx (asymmetric boost)
 - Equipment abilities: Binary Blade, Recursive Staff, Balance Shift
 - Run modifiers: Glass Cannon, Focused Mind, Corrupted, Precision
+- Debuffs from anomaly failures
 
-**Anomaly Challenges** — Non-combat puzzles where you solve sequences, logic problems, and multiple-choice questions to earn XP rewards. Each anomaly has 2-4 steps and can be attempted at normal or hard difficulty.
+**Game Modes** — Multiple ways to play:
 
-**Equipment System** — Three weapon types (Binary Blade, Recursive Staff, Balance Edge) and two armor types (Data Vest, Stack Plate) with special abilities that synergize with god domains and level scaling.
+- **Run Mode**: Explore the world, fight enemies, complete challenges
+- **Past Papers Mode**: Timed quizzes with filtering by concept and difficulty
+- **Codex**: Review mistakes from previous runs
+- **Ancient Library**: Browse PDF resources from various subjects
 
-**Progression System** — Earn XP from completing anomalies to level up. Leveling increases your damage (+5% per level), max HP (+5 per level), and provides a full heal on level up. XP required per level: 50 \* level.
+**Anomaly Challenges** — Non-combat puzzles with multiple steps including logic problems and self-evaluation questions. Features warning screens and debuff system for failures.
 
-**Save System** — In-memory session storage lets you save and load your progress within a running server session.
+**Progression System** — Earn XP from completing challenges to level up. Features:
 
-**Codex Tracking** — Records all question attempts, tracking correct/incorrect answers and identifying areas needing improvement.
+- XP bars showing progress to next level
+- Level up animations
+- HP and damage scaling with level
+- Insight charges for hints
+- Upgrades and crafting system
+
+**Equipment System** — Weapon and armor selection with ability system that synergizes with god domains and level scaling.
+
+**Tavern / Site of Grace** — Rest area for healing, changing equipment, viewing bestiary, and accessing upgrades.
+
+**Subject System** — Switch between different JSON question sets (DSA2, etc.) for varied content.
 
 ## Tech Stack
 
@@ -36,7 +56,7 @@ This is a full-stack learning RPG I built to make practicing programming concept
 | Python      | Backend logic                |
 | FastAPI     | REST API framework           |
 | HTML/CSS/JS | Browser-based game interface |
-| Vite        | Optional frontend build      |
+| PDF.js      | PDF rendering in browser     |
 
 ## Getting Started
 
@@ -52,7 +72,12 @@ python -m uvicorn main:app --reload --port 8000
 
 Simply open `play.html` in your browser. The HTML file connects directly to the backend API at `http://localhost:8000`.
 
-Click "Start Game" to begin your adventure!
+Click "Begin Your Run" to start your adventure, or explore:
+
+- 📜 Past Papers Mode — Quick revision quizzes
+- 📕 Open Codex — Review your mistakes
+- 📚 Ancient Library — Browse PDF resources
+- 📂 Switch Subject — Change question sets
 
 ## Project Structure
 
@@ -64,15 +89,15 @@ backend/
 ├── anomaly.py           # Non-combat puzzle challenge system
 ├── progression.py      # XP and leveling system
 ├── equipment.py         # Weapons, armor, and ability effects
-├── node_effects.py     # Node action handlers (engage, investigate, etc.)
+├── node_effects.py     # Node action handlers
 ├── node_interaction.py # Action availability by node type
-├── run_modifiers.py    # Run-wide modifiers (Glass Cannon, etc.)
+├── run_modifiers.py    # Run-wide modifiers
 ├── save.py             # In-memory save/load system
 ├── codex.py           # Question attempt tracking
 ├── question_engine.py  # Question data and answer evaluation
-└── overworld.py        # Alternative world system (legacy)
+└── overworld.py       # Alternative world system
 
-play.html               # Browser-based game interface
+play.html               # Browser-based game interface (full UI overhaul)
 ```
 
 ## Key Implementation Details
@@ -93,14 +118,12 @@ play.html               # Browser-based game interface
 - Connect laterally: occasional same-depth connections
 - Enforce bidirectional connections
 
-**Anomaly Session Flow**:
+**Multiple Question Types**:
 
-- Player investigates/stabilizes at anomaly node
-- Generate 2-4 questions based on node seed
-- Player answers sequentially
-- Correct: progress to next step or complete
-- Wrong: fail and return to map
-- Completion awards XP (10 normal, 20 hard)
+- Multiple choice (4 options)
+- True/False
+- Open-ended self-evaluation with model answer reveal
+- PDF viewing for study materials
 
 ## Notes
 

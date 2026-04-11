@@ -1,0 +1,204 @@
+You are extending an EXISTING game.
+
+DO NOT redesign the project.
+DO NOT rewrite combat, equipment, or API structure.
+DO NOT create a new architecture.
+
+You must ONLY extend the existing overworld + node system.
+
+---
+
+CONTEXT:
+
+The game already has:
+
+* Overworld map with nodes
+* Combat system
+* Equipment system (weapons + armor + abilities)
+* Codex system
+
+We are upgrading the world to a dynamic, procedural node system.
+
+---
+
+GOAL:
+
+Implement a procedural overworld graph with dynamic nodes, depth-based difficulty, and varied node types.
+
+---
+
+1. NODE STRUCTURE
+
+All nodes must follow:
+
+{
+id: string,
+type: "combat" | "challenge" | "utility" | "event" | "hub",
+subtype: string,
+biome: string,
+difficulty: number,
+depth: number,
+modifiers: string[],
+connections: string[],
+state: "unvisited" | "visited" | "cleared",
+seed: number,
+god?: string
+}
+
+---
+
+2. HUB (CITADEL)
+
+* Single starting node
+* type: "hub"
+* depth = 0
+* positioned at center
+* connects to 3–4 starting nodes
+
+---
+
+3. MAP GENERATION
+
+Generate a graph (NOT a linear path):
+
+Rules:
+
+* max depth = 10
+* each node connects to 2–4 nodes
+* allow:
+
+  * forward connections (depth +1)
+  * lateral connections (same depth)
+  * rare back-links
+
+---
+
+4. DIFFICULTY SCALING
+
+difficulty = depth
+
+Optional smoothing:
+difficulty = clamp(1, 5, floor(depth / 2))
+
+---
+
+5. NODE TYPES
+
+Combat:
+
+* subtype: "standard", "trial", "forest", "dungeon"
+
+Challenge:
+
+* subtype: "anomaly"
+
+Utility:
+
+* subtype: "tavern"
+
+Event:
+
+* subtype: "lazi"
+
+Hub:
+
+* subtype: "citadel"
+
+---
+
+6. BIOME VARIATION
+
+Add biome field for flavor + mechanics:
+
+Examples:
+
+* "thornwood"
+* "echo_forest"
+* "binary_vault"
+* "fractured_depths"
+
+Biomes influence modifiers only (do NOT change core systems).
+
+---
+
+7. MODIFIERS
+
+Nodes can include modifiers:
+
+Examples:
+
+* "corrupted"
+* "fast"
+* "no_insight"
+* "topic_trees"
+
+These are passed into combat/challenge logic.
+
+---
+
+8. TRIAL (FORMER COLOSSEUM)
+
+type: "combat"
+subtype: "trial"
+
+DO NOT allow player to choose god.
+
+Instead:
+
+* Each trial node has a chance to be influenced by a god.
+
+GOD CHANCE:
+~25%
+
+If triggered:
+
+node.god = random from:
+
+* "aurex"
+* "vyra"
+* "khalen"
+* "thren"
+* "nyx"
+
+---
+
+9. GOD EFFECTS (PASS ONLY, DO NOT FULLY IMPLEMENT HERE)
+
+* aurex → stronger streak scaling
+* vyra → recursion effects
+* khalen → reduced penalties
+* thren → faster pacing
+* nyx → corruption effects
+
+Just attach god to node and pass into combat session.
+
+---
+
+10. DYNAMIC NODE CONTENT
+
+Nodes should NOT be static.
+
+Use seed to generate:
+
+* enemy type
+* modifiers
+* variation
+
+Same node structure → different outcomes across runs.
+
+---
+
+11. OUTPUT REQUIRED
+
+* Node generation function
+* Example generated map (JSON)
+* How nodes connect
+* Where seed is used
+
+DO NOT:
+
+* rewrite combat
+* rewrite frontend
+* change APIs drastically
+
+Keep it modular.

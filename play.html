@@ -47,7 +47,7 @@
       transition:transform 0.15s; user-select:none; cursor:default;
       background:#070b14; border:2px solid; overflow:visible;
     }
-    .map-node .mn-icon { font-size:14px; line-height:1; pointer-events:none; }
+    .map-node .mn-icon { font-size:16px; line-height:1; pointer-events:none; font-style:normal; }
     .map-node .mn-label {
       position:absolute; top:calc(100% + 4px); left:50%; transform:translateX(-50%);
       font-size:9px; color:#555; white-space:nowrap; pointer-events:none; text-align:center;
@@ -58,6 +58,7 @@
     .mn-fog      { opacity:0.15!important; pointer-events:none; }
     .mn-cleared  { opacity:0.4; }
     .mn-visited  { opacity:0.75; }
+    .mn-locked   { cursor:not-allowed!important; opacity:0.55; filter:sepia(0.6) hue-rotate(-20deg); }
     @keyframes pulse-cur    { 0%,100%{box-shadow:0 0 8px var(--nc,#888)}  50%{box-shadow:0 0 22px var(--nc,#888),0 0 44px var(--nc,#888)} }
     @keyframes breathe-reach{ 0%,100%{box-shadow:0 0 4px var(--nc,#888)}  50%{box-shadow:0 0 14px var(--nc,#888)} }
     /* Location card under map */
@@ -74,8 +75,18 @@
     .mlc-legend span { display:flex; align-items:center; gap:4px; }
 
     /* ── Node panel ─────────────────────────────────────────────────── */
-    .npanel { background:#0e0e1c; border:1px solid #1a1a30; border-radius:10px; padding:18px; margin-bottom:14px; }
-    .npanel h2 { color:#c8a2ff; font-size:17px; margin-bottom:3px; }
+    .npanel { background:#0a0b14; border:1px solid #1a1a30; border-radius:10px; padding:18px; margin-bottom:14px; transition:border-color 0.3s; }
+    .np-top { display:flex; align-items:flex-start; gap:14px; margin-bottom:12px; }
+    .np-icon { font-size:36px; line-height:1; flex-shrink:0; margin-top:2px; }
+    .np-info { flex:1; }
+    .npanel h2 { font-size:18px; margin-bottom:6px; }
+    .np-tags { display:flex; gap:6px; flex-wrap:wrap; }
+    .npill { font-size:10px; padding:2px 8px; border-radius:20px; background:#0d0d18; border:1px solid #1a1a28; color:#555; white-space:nowrap; }
+    .npill-cleared  { color:#338844!important; border-color:#1a3a22!important; background:#0a150a!important; }
+    .npill-visited  { color:#555588!important; border-color:#22223a!important; }
+    .npill-unvisited{ color:#333355!important; border-color:#15151e!important; }
+    .np-desc { color:#4a4a5a; font-size:13px; line-height:1.65; margin-bottom:16px; font-style:italic; border-left:2px solid #1a1a28; padding-left:12px; }
+    .np-actions { display:flex; flex-direction:column; gap:0; }
     .nmeta { color:#555; font-size:12px; margin-bottom:14px; }
     .nmeta span { margin-right:12px; }
 
@@ -89,41 +100,131 @@
     .abtn[data-t="challenge"] { border-left:3px solid #aa44ff; }
     .abtn[data-t="utility"]   { border-left:3px solid #44cc77; }
     .abtn[data-t="info"]      { border-left:3px solid #44aaff; }
+    .abtn[data-t="anomaly"]   { border-left:3px solid #aa00ee; color:#cc44ff; }
     .abtn[data-t="event"]     { border-left:3px solid #ffaa44; }
     .abtn[data-t="navigation"]{ border-left:3px solid #444; color:#777; }
 
-    /* ── Combat ─────────────────────────────────────────────────────── */
+    /* ── Combat (legacy) ───────────────────────────────────────────── */
     .cpanel { background:#0f0808; border:1px solid #2a1010; border-radius:10px; padding:18px; margin-bottom:14px; }
-    .cpanel h2 { color:#ff7070; font-size:18px; margin-bottom:12px; }
-
-    .hpbars { display:grid; grid-template-columns:1fr 40px 1fr; gap:10px; align-items:center; margin-bottom:16px; }
-    .combatant { }
-    .combatant .name { font-size:13px; color:#aaa; margin-bottom:5px; }
-    .combatant .hprow { display:flex; align-items:center; gap:8px; }
-    .combatant .bar { flex:1; height:12px; background:#1a0a0a; border-radius:6px; overflow:hidden; }
-    .combatant .fill { height:100%; border-radius:6px; transition:width 0.5s ease; }
-    .combatant.player .fill { background:linear-gradient(90deg,#e74c3c,#ff6b6b); }
-    .combatant.enemy .fill  { background:linear-gradient(90deg,#8e44ad,#c0392b); }
-    .combatant .hpnum { font-size:12px; color:#888; white-space:nowrap; }
-    .vs { text-align:center; font-size:20px; color:#444; }
-
-    .streak-bar { text-align:center; margin-bottom:12px; font-size:13px; color:#f1c40f; height:20px; }
-
-    .qbox { background:#0a0a14; border:1px solid #1a1a28; border-radius:8px; padding:14px; }
-    .qtext { color:#ddd; font-size:14px; margin-bottom:12px; line-height:1.5; }
-    .opt {
-      display:block; width:100%; text-align:left; padding:10px 14px; margin-bottom:6px;
-      background:#111120; border:1px solid #22223a; border-radius:6px;
-      color:#ccc; font-size:13px; cursor:pointer; transition:all 0.12s;
-    }
-    .opt:hover:not(:disabled) { background:#1a1a30; border-color:#44449a; color:#fff; }
-    .opt:disabled { cursor:default; opacity:0.7; }
-    .opt.correct  { background:#0a2a0a!important; border-color:#2a7a2a!important; color:#8f8!important; }
-    .opt.wrong    { background:#2a0a0a!important; border-color:#7a2a2a!important; color:#f88!important; }
-
     .expl { margin-top:10px; padding:10px; border-radius:6px; font-size:13px; line-height:1.5; }
     .expl.good { background:#0a1f0a; border:1px solid #1a4a1a; color:#8d8; }
     .expl.bad  { background:#1f0a0a; border:1px solid #4a1a1a; color:#d88; }
+
+    /* ── Battle Arena ──────────────────────────────────────────────── */
+    .battle-wrap { margin-bottom:14px; }
+    .battle-arena {
+      position:relative; overflow:hidden;
+      background:linear-gradient(175deg,#020208 0%,#06030f 40%,#0a0420 75%,#0d0828 100%);
+      border:1px solid #1a0838; border-radius:10px; margin-bottom:10px;
+    }
+    .battle-fighters {
+      display:flex; align-items:flex-end; justify-content:space-between;
+      padding:18px 20px 38px; min-height:220px; position:relative;
+    }
+    .battle-ground { position:absolute; bottom:28px; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,transparent,#2a0f50 20%,#5a1aaa 50%,#2a0f50 80%,transparent); }
+    /* Center area */
+    .bc { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; padding:0 10px; }
+    .bc-round { color:#1e1e30; font-size:9px; letter-spacing:2px; text-transform:uppercase; }
+    .bc-streak { font-size:15px; min-height:20px; text-align:center; }
+    .bc-equip { font-size:9px; color:#1c1c2c; text-align:center; margin-top:2px; }
+    /* Fighter wrapper */
+    .fw { display:flex; flex-direction:column; align-items:center; gap:8px; }
+    .fw-hprow { display:flex; flex-direction:column; align-items:center; gap:3px; width:136px; }
+    .fw-name { font-size:9px; color:#555; letter-spacing:1.5px; text-transform:uppercase; }
+    .fw-track { width:100%; height:8px; background:#060610; border-radius:4px; overflow:hidden; border:1px solid #12121e; }
+    .fw-fill { height:100%; border-radius:4px; transition:width 0.55s ease; }
+    .fw-fill.plr { background:linear-gradient(90deg,#7a1515,#c0392b,#e74c3c,#ff7070); }
+    .fw-fill.enm { background:linear-gradient(90deg,#3a0860,#7a2aaa,#9b44cc,#bb66ee); }
+    .fw-hpnum { font-size:10px; color:#3a3a4a; }
+    /* Sprite area */
+    .sp-area {
+      position:relative; display:flex; align-items:flex-end; justify-content:center;
+      width:80px; height:118px; animation:sp-float 3.2s ease-in-out infinite;
+    }
+    .sp-area.boss-sz { width:104px; height:140px; }
+    .sp-area svg { max-width:100%; max-height:100%; }
+    .sp-shadow { position:absolute; bottom:-6px; width:55%; height:7px; background:rgba(0,0,0,0.45); border-radius:50%; filter:blur(3px); }
+    /* Particles */
+    .bp { position:absolute; width:2px; height:2px; border-radius:50%; opacity:0; pointer-events:none;
+          animation:bp-rise var(--pd,4s) ease-in-out var(--bd,0s) infinite;
+          left:var(--bx); top:var(--by); background:var(--bc,#c8a2ff); }
+    /* Animations */
+    @keyframes sp-float  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+    @keyframes bp-rise   { 0%,100%{opacity:0;transform:translateY(0) scale(1)} 30%{opacity:.7} 80%{opacity:.2} 100%{opacity:0;transform:translateY(-28px) scale(.3)} }
+    @keyframes fw-lunge  { 0%{transform:translateX(0)} 35%{transform:translateX(68px) scaleX(1.06)} 65%{transform:translateX(68px)} 100%{transform:translateX(0)} }
+    @keyframes fw-phurt  { 0%,100%{transform:translateX(0);filter:brightness(1)} 20%{transform:translateX(-14px);filter:brightness(1.6) sepia(1) hue-rotate(290deg) saturate(8)} 50%{transform:translateX(8px);filter:brightness(2) sepia(1) hue-rotate(290deg) saturate(10)} 75%{transform:translateX(-5px);filter:brightness(1.3)} }
+    @keyframes fw-ehurt  { 0%,100%{transform:translateX(0);filter:brightness(1)} 20%{transform:translateX(18px);filter:brightness(3.5) saturate(6) hue-rotate(255deg)} 50%{transform:translateX(-10px);filter:brightness(2)} 75%{transform:translateX(6px)} }
+    @keyframes fw-edie   { 0%{transform:translateX(0) rotate(0deg) translateY(0);opacity:1} 25%{transform:translateX(12px) rotate(8deg) translateY(-6px);opacity:.8;filter:brightness(2)} 60%{transform:translateX(38px) rotate(48deg) translateY(22px);opacity:.4} 100%{transform:translateX(70px) rotate(88deg) translateY(52px);opacity:0} }
+    .fw.attacking  { animation:fw-lunge .55s ease; }
+    .fw.plr-hit    { animation:fw-phurt .65s ease; }
+    .fw.enm-hit    { animation:fw-ehurt .55s ease; }
+    .fw.enm-dying  { animation:fw-edie 1.4s ease forwards; }
+    .fw.attacking .sp-area,.fw.plr-hit .sp-area,.fw.enm-hit .sp-area,.fw.enm-dying .sp-area { animation:none; }
+    /* Battle question box */
+    .bqbox { background:#070710; border:1px solid #11112a; border-radius:10px; padding:16px; }
+    .bqconcept { font-size:10px; color:#44446a; text-transform:uppercase; letter-spacing:1px; margin-bottom:9px; display:flex; gap:5px; align-items:center; flex-wrap:wrap; }
+    .bqtext { color:#ddd; font-size:14px; line-height:1.65; margin-bottom:13px; }
+    .bqtext-lg { font-size:15px; line-height:1.75; }
+    .boptgrid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+    .bopt { padding:10px 12px; background:#0c0c1e; border:1px solid #1c1c32; border-radius:7px; color:#bbb; font-size:13px; cursor:pointer; transition:all .12s; text-align:left; width:100%; }
+    .bopt:hover:not(:disabled) { background:#141428; border-color:#3a3a66; color:#eee; }
+    .bopt:disabled { cursor:default; opacity:.7; }
+    .bopt.correct { background:#0a2a0a!important; border-color:#2a7a2a!important; color:#8f8!important; }
+    .bopt.wrong   { background:#2a0a0a!important; border-color:#7a2a2a!important; color:#f88!important; }
+    .bfoot { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-top:8px; flex-wrap:wrap; }
+
+    /* ── Question type badges ─────────────────────────────────────── */
+    .qbadge { display:inline-block; padding:2px 7px; border-radius:3px; font-size:9px; font-weight:bold; letter-spacing:0.5px; color:#fff; }
+
+    /* ── True/False layout ──────────────────────────────────────────── */
+    .tf-grid { grid-template-columns:1fr 1fr; }
+    .tf-opt  { padding:14px 12px; font-size:15px; text-align:center; font-weight:bold; }
+
+    /* ── Open-ended question input ──────────────────────────────────── */
+    .open-q-wrap  { display:flex; flex-direction:column; gap:8px; margin-bottom:10px; }
+    .open-q-frame { font-size:11px; color:#6060a0; font-style:italic; }
+    .open-q-input { background:#08080f; border:1px solid #1a1a2e; border-radius:6px; color:#ccc; font-size:13px; padding:10px 12px; resize:vertical; min-height:70px; font-family:inherit; line-height:1.5; }
+    .open-q-lg    { min-height:130px; }
+    .open-q-input:focus { outline:none; border-color:#3a3a66; }
+    .open-q-submit { align-self:flex-end; padding:8px 20px; background:#0f0f24; border:1px solid #3030aa; color:#88aaff; border-radius:6px; cursor:pointer; font-size:13px; }
+    .open-q-submit:hover { background:#1a1a3a; }
+
+    /* ── Self-eval panel ────────────────────────────────────────────── */
+    .self-eval-panel { background:#06060e; border:1px solid #1e1e3e; border-radius:8px; padding:14px; }
+    .sep-loading  { color:#555; font-size:13px; }
+    .sep-title    { font-size:11px; color:#7a5aaa; font-weight:bold; letter-spacing:1px; margin-bottom:8px; }
+    .sep-body     { color:#ccc; font-size:13px; line-height:1.6; margin-bottom:8px; background:#0a0a18; padding:10px; border-radius:5px; }
+    .sep-expl     { color:#888; font-size:12px; font-style:italic; margin-bottom:10px; }
+    .sep-question { color:#777; font-size:12px; margin-bottom:4px; }
+
+    /* ── Anomaly warning screen ─────────────────────────────────────── */
+    .anomaly-warning { background:linear-gradient(175deg,#06000f,#0d0022,#140035);
+      border:1px solid #4a007a; border-radius:12px; padding:36px 24px; text-align:center; margin-bottom:14px; }
+    .aw-icon  { font-size:44px; margin-bottom:12px; }
+    .aw-title { font-size:24px; color:#cc44ff; letter-spacing:3px; margin-bottom:8px; font-weight:bold; }
+    .aw-sub   { color:#9955cc; font-size:14px; margin-bottom:18px; }
+    .aw-body  { color:#aaa; font-size:14px; line-height:1.8; max-width:380px; margin:0 auto 14px; }
+    .aw-debuffs { color:#5a3a7a; font-size:11px; font-style:italic; margin-bottom:4px; }
+
+    /* ── Anomaly combat badge ────────────────────────────────────────── */
+    .anomaly-badge { background:#1a003a; border:1px solid #5a0088; color:#cc44ff; font-size:10px;
+      padding:4px 10px; border-radius:4px; margin-bottom:10px; letter-spacing:1px; text-align:center; }
+
+    /* ── Debuff display ─────────────────────────────────────────────── */
+    .debuff-row   { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+    .debuff-chip  { background:#1a0028; border:1px solid #4a0066; color:#cc44ff; font-size:9px;
+      padding:2px 8px; border-radius:3px; white-space:nowrap; }
+    .debuff-result { background:#1a0028; border:1px solid #4a0066; border-radius:8px; padding:16px; margin:16px auto; max-width:340px; }
+    .dr-icon  { font-size:32px; margin-bottom:8px; }
+    .dr-name  { color:#cc44ff; font-size:16px; font-weight:bold; margin-bottom:6px; }
+    .dr-desc  { color:#999; font-size:13px; line-height:1.5; }
+
+    /* Victory / defeat screen */
+    .battle-result { background:linear-gradient(175deg,#020208,#060318,#0a0420); border:1px solid; border-radius:10px; padding:36px 20px; text-align:center; margin-bottom:14px; }
+    .br-title { font-size:30px; margin-bottom:10px; }
+    .br-sub { color:#555; font-size:13px; margin-bottom:18px; }
+    .br-xp { color:#f1c40f; font-size:16px; margin-bottom:22px; }
 
     /* ── Damage flash ───────────────────────────────────────────────── */
     @keyframes pop { 0%{transform:translateY(0);opacity:1} 100%{transform:translateY(-30px);opacity:0} }
@@ -143,7 +244,184 @@
            max-height:120px; overflow-y:auto; font-size:11px; font-family:monospace; color:#444; margin-top:12px; }
     .log div { padding:1px 0; }
 
-    /* ── Start ──────────────────────────────────────────────────────── */
+    /* ── Start Screen (overhauled) ──────────────────────────────────── */
+    .start-screen {
+      min-height:90vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:40px 20px; position:relative; overflow:hidden;
+    }
+    .start-screen::before {
+      content:''; position:absolute; inset:0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 30%, rgba(120,60,220,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 20% 80%, rgba(80,20,180,0.08) 0%, transparent 60%);
+      pointer-events:none;
+    }
+    .start-logo { position:relative; margin-bottom:8px; }
+    .start-logo h1 {
+      font-size:42px; letter-spacing:4px; font-weight:900;
+      background:linear-gradient(135deg, #c8a2ff 0%, #8866cc 50%, #5533aa 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    }
+    .start-logo .sub-title { color:#4a3a6a; font-size:12px; letter-spacing:6px; text-transform:uppercase; margin-top:2px; text-align:center; }
+    .start-divider { width:200px; height:1px; background:linear-gradient(90deg,transparent,#4a2a7a,transparent); margin:20px auto; }
+    .start-lore { color:#3a2a5a; font-size:13px; text-align:center; max-width:320px; margin-bottom:32px; font-style:italic; line-height:1.7; }
+    .start-menu { display:flex; flex-direction:column; gap:10px; width:100%; max-width:340px; }
+    .start-btn-main {
+      padding:16px 24px; border-radius:10px; cursor:pointer; transition:all 0.2s;
+      text-align:left; display:flex; align-items:center; gap:14px; border:1px solid;
+      font-size:15px; font-weight:600; letter-spacing:0.5px;
+    }
+    .start-btn-main:hover { transform:translateX(4px); }
+    .sb-run   { background:#120820; border-color:#5a2a9a; color:#c8a2ff; }
+    .sb-run:hover { background:#1a1030; border-color:#8a50cc; }
+    .sb-pp    { background:#0a1820; border-color:#1a4a6a; color:#88ccff; }
+    .sb-pp:hover { background:#0e2030; border-color:#3a8abb; }
+    .sb-codex { background:#0a1a0a; border-color:#1a4a1a; color:#88cc88; }
+    .sb-codex:hover { background:#0e200e; border-color:#2a6a2a; }
+    .sb-subject { background:#110a05; border-color:#3a2a0a; color:#cc9944; }
+    .sb-subject:hover { background:#180e08; border-color:#6a4a1a; }
+    .sb-library { background:#070d18; border-color:#1a3a5a; color:#7ab8dd; }
+    .sb-library:hover { background:#0a1525; border-color:#2a6a9a; }
+    /* Subject Switcher screen */
+    .subject-switcher { max-width:460px; margin:0 auto; padding:0 4px; }
+    .subject-switcher h2 { color:#cc9944; font-size:18px; letter-spacing:1px; margin-bottom:4px; }
+    .subject-switcher p  { color:#5a4a2a; font-size:12px; margin-bottom:18px; }
+    .subject-card { background:#0d0800; border:1px solid #2a1a05; border-radius:10px; padding:14px 16px;
+      cursor:pointer; transition:all 0.15s; display:flex; align-items:center; gap:14px; margin-bottom:8px; }
+    .subject-card:hover { border-color:#6a4a1a; background:#130e04; }
+    .subject-card.active-subject { border-color:#cc9944; background:#120c02; }
+    .subject-card-icon { font-size:26px; flex-shrink:0; }
+    .subject-card-info { flex:1; }
+    .subject-card-name { color:#cc9944; font-size:15px; font-weight:bold; letter-spacing:0.5px; }
+    .subject-card-meta { color:#4a3a1a; font-size:11px; margin-top:2px; }
+    .subject-card-active-badge { background:#2a1a00; border:1px solid #6a4a1a; color:#cc9944;
+      font-size:10px; padding:2px 8px; border-radius:10px; letter-spacing:0.5px; flex-shrink:0; }
+    .subject-hint { background:#080500; border:1px dashed #2a1a05; border-radius:8px;
+      padding:16px 18px; color:#3a2a10; font-size:12px; margin-top:12px; line-height:1.6; }
+    .subject-hint code { color:#6a4a1a; background:#0f0a00; border-radius:3px; padding:1px 5px; font-size:11px; }
+    .start-btn-main .sb-icon { font-size:22px; flex-shrink:0; }
+    .start-btn-main .sb-text { flex:1; }
+    .start-btn-main .sb-label { font-size:14px; font-weight:700; }
+    .start-btn-main .sb-desc  { font-size:11px; opacity:0.6; font-weight:400; margin-top:2px; }
+    .start-btn-main .sb-arr   { color:#ffffff22; font-size:18px; }
+    .start-version { color:#2a2a3a; font-size:10px; margin-top:24px; letter-spacing:2px; }
+
+    /* ── Back button ─────────────────────────────────────────────────── */
+    .back-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px;
+      background:transparent; border:1px solid #222; border-radius:6px; color:#444;
+      font-size:12px; cursor:pointer; transition:all 0.15s; margin-bottom:14px; }
+    .back-btn:hover { border-color:#555; color:#888; background:#111; }
+
+    /* ── Past Papers Mode ───────────────────────────────────────────── */
+    .pp-screen { padding:0; }
+    .pp-header { background:linear-gradient(135deg,#070018,#0d0030,#070018); border:1px solid #2a1a5a;
+      border-radius:12px; padding:28px 24px; margin-bottom:16px; text-align:center; }
+    .pp-header h2 { color:#c8a2ff; font-size:24px; letter-spacing:2px; margin-bottom:6px; }
+    .pp-header p  { color:#5a4a7a; font-size:13px; }
+    .pp-tabs { display:flex; gap:8px; margin-bottom:16px; }
+    .pp-tab { flex:1; padding:10px; background:#0a0a18; border:1px solid #1a1a30; border-radius:8px;
+      color:#666; font-size:13px; cursor:pointer; text-align:center; transition:all 0.15s; }
+    .pp-tab.active { background:#14103a; border-color:#5a3a9a; color:#c8a2ff; }
+    .pp-tab:hover:not(.active) { border-color:#2a2a44; color:#888; }
+    .pp-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .pp-opt-group { background:#0a0a16; border:1px solid #181830; border-radius:8px; padding:14px; }
+    .pp-opt-group label { color:#555; font-size:10px; letter-spacing:1px; text-transform:uppercase; display:block; margin-bottom:8px; }
+    .pp-opt-group select { background:#06060f; border:1px solid #1a1a2e; color:#bbb; padding:7px 10px;
+      border-radius:5px; font-size:13px; width:100%; cursor:pointer; }
+    .pp-start-btn { width:100%; padding:14px; background:#140a2e; border:1px solid #5a2a9a; color:#c8a2ff;
+      border-radius:8px; font-size:15px; cursor:pointer; transition:all 0.2s; letter-spacing:1px; }
+    .pp-start-btn:hover { background:#1e1040; border-color:#8a50cc; }
+
+    /* ── Ancient Library ─────────────────────────────────────────────── */
+    .library-header { display:flex; align-items:center; gap:14px; margin-bottom:18px; padding:18px 20px;
+      background:linear-gradient(135deg,#06010e,#0f0326); border:1px solid #2a1040; border-radius:10px; }
+    .library-header .lib-icon { font-size:32px; }
+    .library-header h2 { color:#c8a2ff; font-size:20px; margin-bottom:3px; }
+    .library-header p  { color:#5a4a7a; font-size:12px; }
+    .concept-list { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+    .concept-card { background:#080810; border:1px solid #14142a; border-radius:8px;
+      padding:14px 16px; cursor:pointer; transition:all 0.15s; }
+    .concept-card:hover { border-color:#3a2a6a; background:#0e0e1e; }
+    .concept-card.active { border-color:#7a4acc; background:#0d0824; }
+    .cc-top { display:flex; align-items:center; gap:10px; margin-bottom:0; }
+    .cc-icon { font-size:18px; }
+    .cc-name { color:#bbb; font-size:14px; font-weight:600; flex:1; }
+    .cc-diff { font-size:10px; color:#3a2a5a; }
+    .concept-detail { margin-top:12px; padding-top:12px; border-top:1px solid #1a1a2e; display:none; }
+    .concept-card.active .concept-detail { display:block; }
+    .cd-summary { color:#888; font-size:13px; line-height:1.7; margin-bottom:10px; }
+    .cd-notes { color:#666; font-size:12px; line-height:1.8; white-space:pre-wrap; margin-bottom:10px;
+      background:#050508; padding:10px 12px; border-radius:6px; border-left:2px solid #2a1a4a; }
+    .cd-examples { margin-top:8px; }
+    .cd-examples .cde-label { color:#4a3a6a; font-size:10px; letter-spacing:1px; text-transform:uppercase; margin-bottom:5px; }
+    .cd-ex-item { color:#6688aa; font-size:12px; padding:4px 0; border-bottom:1px solid #0e0e18; line-height:1.5; }
+    .cd-complexity { margin-top:8px; padding:6px 10px; background:#060611; border:1px solid #1a1a30;
+      border-radius:4px; color:#5a7a9a; font-size:11px; font-style:italic; }
+
+    /* ── Past Papers Quiz ────────────────────────────────────────────── */
+    .pp-quiz-header { display:flex; justify-content:space-between; align-items:center;
+      padding:12px 16px; background:#080810; border:1px solid #14142a; border-radius:8px; margin-bottom:14px; }
+    .pp-quiz-score  { font-size:18px; color:#c8a2ff; font-weight:bold; }
+    .pp-quiz-meta   { font-size:11px; color:#444; text-align:right; }
+    .pp-qbox { background:#080810; border:1px solid #1a1a2e; border-radius:10px; padding:20px; margin-bottom:14px; }
+    .pp-concept-tag { font-size:10px; color:#4a3a7a; letter-spacing:1px; text-transform:uppercase; margin-bottom:10px; }
+    .pp-question    { color:#ddd; font-size:15px; line-height:1.7; margin-bottom:16px; }
+    .pp-result-box  { padding:14px 16px; border-radius:8px; margin:10px 0; font-size:13px; line-height:1.6; }
+    .pp-result-box.correct { background:#082008; border:1px solid #1a5a1a; color:#8dcc8d; }
+    .pp-result-box.wrong   { background:#200808; border:1px solid #5a1a1a; color:#cc8d8d; }
+    .pp-end-screen { text-align:center; padding:40px 20px; background:#080810; border:1px solid #1a1a2e; border-radius:12px; }
+    .pp-grade { font-size:48px; margin-bottom:8px; }
+    .pp-grade-label { font-size:20px; color:#c8a2ff; margin-bottom:6px; }
+    .pp-grade-sub   { font-size:13px; color:#555; margin-bottom:24px; }
+
+    /* ── Tavern / Site of Grace ──────────────────────────────────────── */
+    .tavern-screen { }
+    .tavern-header {
+      background:linear-gradient(175deg,#06030a,#0e0518,#150828);
+      border:1px solid #2a1040; border-radius:12px; padding:28px 20px 20px; margin-bottom:16px;
+      text-align:center; position:relative; overflow:hidden;
+    }
+    .tavern-header::before {
+      content:''; position:absolute; inset:0;
+      background:radial-gradient(ellipse 60% 80% at 50% 100%, rgba(255,180,50,0.05) 0%, transparent 60%);
+    }
+    .tavern-fire { font-size:36px; margin-bottom:10px; animation:flicker 2s ease-in-out infinite; }
+    @keyframes flicker {
+      0%,100%{ filter:brightness(1) drop-shadow(0 0 8px rgba(255,160,30,0.6)); }
+      50%    { filter:brightness(1.3) drop-shadow(0 0 16px rgba(255,200,60,0.9)); }
+    }
+    .tavern-name { color:#f0c060; font-size:22px; letter-spacing:2px; font-weight:bold; margin-bottom:4px; }
+    .tavern-sub  { color:#6a4a20; font-size:12px; font-style:italic; }
+    .tavern-menu { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+    .tavern-btn {
+      display:flex; align-items:center; gap:14px; padding:14px 18px;
+      background:#0a0810; border:1px solid #1e1428; border-radius:9px;
+      cursor:pointer; transition:all 0.15s; text-align:left;
+    }
+    .tavern-btn:hover { background:#110e18; border-color:#4a3060; transform:translateX(3px); }
+    .tavern-btn:disabled { opacity:0.4; cursor:default; transform:none; }
+    .tb-icon  { font-size:20px; flex-shrink:0; }
+    .tb-text  { flex:1; }
+    .tb-label { color:#ddd; font-size:14px; font-weight:600; }
+    .tb-desc  { color:#554; font-size:11px; margin-top:2px; }
+    .tb-badge { font-size:11px; padding:3px 8px; border-radius:3px; font-weight:bold; flex-shrink:0; }
+    .tb-badge.gold   { background:#2a1a00; color:#f0a020; border:1px solid #4a2a00; }
+    .tb-badge.purple { background:#1a0a2a; color:#b070ff; border:1px solid #3a1a5a; }
+    .tb-badge.green  { background:#0a2a0a; color:#70cc70; border:1px solid #1a5a1a; }
+
+    /* ── Upgrades / Crafting ─────────────────────────────────────────── */
+    .upgrade-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+    .upgrade-card { background:#08080f; border:1px solid #141424; border-radius:8px; padding:14px; cursor:pointer; transition:all 0.15s; }
+    .upgrade-card:hover:not(.owned):not(.cant-afford) { border-color:#5a3a8a; background:#0e0e1e; }
+    .upgrade-card.owned   { border-color:#1a4a1a; background:#060f06; cursor:default; }
+    .upgrade-card.cant-afford { opacity:0.5; cursor:not-allowed; }
+    .uc-icon  { font-size:22px; margin-bottom:6px; }
+    .uc-name  { color:#ccc; font-size:13px; font-weight:700; margin-bottom:4px; }
+    .uc-desc  { color:#666; font-size:11px; line-height:1.5; margin-bottom:8px; }
+    .uc-cost  { font-size:11px; color:#887744; }
+    .uc-owned { font-size:11px; color:#44884a; font-weight:bold; }
+
+    /* ── Old start (keep for compat) ───────────────────────────────── */
     .start { text-align:center; padding:80px 20px; }
     .start h1 { color:#c8a2ff; font-size:34px; margin-bottom:8px; letter-spacing:2px; }
     .start p { color:#555; margin-bottom:30px; font-size:14px; }
@@ -191,12 +469,98 @@
     .codex-ok { color:#5a5; }
     .codex-bad { color:#a55; }
     .codex-empty { color:#445; font-size:13px; text-align:center; padding:30px; }
+    /* ── Flee dice roll ──────────────────────────────────────────────── */
+    .flee-panel { background:#0a0510; border:1px solid #3a1a1a; border-radius:10px;
+      padding:18px 16px; margin-top:12px; }
+    .flee-title { color:#cc6666; font-size:14px; letter-spacing:1px; margin-bottom:12px; text-align:center; }
+    .dice-row { display:flex; align-items:center; justify-content:center; gap:18px; margin:16px 0; }
+    .dice-block { text-align:center; }
+    .dice-face { font-size:42px; display:block; line-height:1;
+      animation:diceRoll 0.4s ease-out; }
+    @keyframes diceRoll {
+      0%  { transform:rotate(0deg)   scale(0.6); opacity:0; }
+      60% { transform:rotate(20deg)  scale(1.1); opacity:1; }
+      100%{ transform:rotate(0deg)   scale(1);   opacity:1; }
+    }
+    .dice-label { font-size:11px; color:#4a3a3a; margin-top:4px; letter-spacing:0.5px; }
+    .dice-val   { font-size:24px; font-weight:bold; margin-top:4px; }
+    .dice-vs    { color:#3a2a2a; font-size:18px; }
+    .flee-result { text-align:center; font-size:14px; padding:10px 16px; border-radius:6px; margin-top:10px; }
+    .flee-result.success { background:#0a1a0a; border:1px solid #2a5a2a; color:#88cc88; }
+    .flee-result.fail    { background:#1a0a0a; border:1px solid #5a1a1a; color:#cc6666; }
+    .flee-dmg { color:#ff6666; font-weight:bold; font-size:16px; }
+    /* ── PDF Viewer (Ancient Library) ───────────────────────────────── */
+    .pdf-library { display:flex; flex-direction:column; gap:10px; }
+    .pdf-empty-msg { background:#07040f; border:1px dashed #2a1a4a; border-radius:10px;
+      padding:30px 20px; text-align:center; color:#4a3a6a; }
+    .pdf-empty-msg h3 { color:#7a5aaa; margin-bottom:8px; font-size:16px; }
+    .pdf-empty-msg code { background:#0d0a1a; border:1px solid #2a1a3a; border-radius:4px;
+      padding:2px 6px; color:#c8a2ff; font-size:12px; }
+    .pdf-card { background:#08040f; border:1px solid #1e1035; border-radius:10px;
+      padding:14px 16px; cursor:pointer; transition:all 0.15s; }
+    .pdf-card:hover { border-color:#5a3a9a; background:#0d0720; }
+    .pdf-card-header { display:flex; align-items:center; gap:12px; }
+    .pdf-card-icon { font-size:28px; flex-shrink:0; }
+    .pdf-card-info { flex:1; }
+    .pdf-card-name { color:#c8a2ff; font-size:14px; font-weight:bold; letter-spacing:0.5px; margin-bottom:3px; }
+    .pdf-card-meta { color:#4a3a6a; font-size:11px; }
+    .pdf-card-btn { background:#14103a; border:1px solid #5a3a9a; color:#c8a2ff; padding:6px 14px;
+      border-radius:6px; font-size:12px; cursor:pointer; flex-shrink:0; transition:all 0.15s; }
+    .pdf-card-btn:hover { background:#1e1040; border-color:#8a50cc; }
+    .pdf-viewer-wrap { margin-top:10px; border:1px solid #2a1a4a; border-radius:8px; overflow:hidden;
+      background:#050010; animation:fadeIn 0.2s ease; }
+    .pdf-viewer-toolbar { display:flex; align-items:center; justify-content:space-between;
+      background:#0a0520; border-bottom:1px solid #2a1a4a; padding:8px 12px; }
+    .pdf-viewer-title { color:#9a7acc; font-size:12px; letter-spacing:0.5px; }
+    .pdf-viewer-close { background:none; border:1px solid #3a1a5a; color:#7a5aaa; padding:4px 10px;
+      border-radius:5px; font-size:11px; cursor:pointer; }
+    .pdf-viewer-close:hover { background:#1a0a2a; border-color:#7a3aaa; color:#c8a2ff; }
+    .pdf-canvas-wrap { max-height:640px; overflow-y:auto; padding:6px;
+      background:#1a1a2a; scrollbar-width:thin; scrollbar-color:#3a2a5a #0a0a14; }
+    /* ── Library subject tabs ────────────────────────────────────────── */
+    .lib-subject-tabs { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;
+      padding-bottom:12px; border-bottom:1px solid #1a0a3a; }
+    .lib-subject-tab { background:#0a041a; border:1px solid #2a1a4a; color:#6a4a9a;
+      padding:6px 14px; border-radius:20px; font-size:11px; cursor:pointer;
+      letter-spacing:0.5px; transition:all 0.15s; }
+    .lib-subject-tab:hover { border-color:#5a3a9a; color:#9a70cc; background:#10062a; }
+    .lib-subject-tab.active { background:#1a0a3a; border-color:#8a50cc; color:#c8a2ff;
+      box-shadow:0 0 8px rgba(140,80,200,0.25); }
+    .lib-subject-content { min-height:80px; }
+    /* ── Codex tabs ─────────────────────────────────────────────────── */
+    .codex-tabs { display:flex; gap:8px; margin-bottom:14px; }
+    .codex-tab { flex:1; padding:8px; background:#0a0c0a; border:1px solid #1a2a1a; border-radius:7px;
+      color:#445; font-size:12px; cursor:pointer; text-align:center; transition:all 0.15s; letter-spacing:0.5px; }
+    .codex-tab.active { background:#0f1f0f; border-color:#3a6a3a; color:#88cc88; }
+    .codex-tab:hover:not(.active) { border-color:#2a3a2a; color:#667; }
+    /* ── Bestiary ────────────────────────────────────────────────────── */
+    .bestiary-list { display:flex; flex-direction:column; gap:8px; }
+    .bestiary-card { background:#060c06; border:1px solid #182818; border-radius:8px; padding:12px 14px;
+      cursor:pointer; transition:all 0.15s; }
+    .bestiary-card:hover { border-color:#3a6a3a; background:#080e08; }
+    .bestiary-card.open { border-color:#4a8a4a; }
+    .bc-top { display:flex; align-items:center; gap:10px; }
+    .bc-sprite { font-size:22px; flex-shrink:0; }
+    .bc-name { color:#88cc88; font-size:14px; font-weight:bold; flex:1; }
+    .bc-tier { font-size:10px; padding:2px 8px; border-radius:10px; letter-spacing:0.5px; font-weight:bold; }
+    .bc-tier.standard { background:#0a1a0a; border:1px solid #2a4a2a; color:#5a8a5a; }
+    .bc-tier.elite    { background:#1a1a0a; border:1px solid #4a4a0a; color:#aaaa50; }
+    .bc-tier.boss     { background:#1a0a0a; border:1px solid #4a0a0a; color:#cc5555; }
+    .bc-tier.anomaly  { background:#0a0a1a; border:1px solid #2a0a4a; color:#aa55ff; }
+    .bc-detail { margin-top:10px; display:none; grid-template-columns:1fr 1fr; gap:6px; }
+    .bestiary-card.open .bc-detail { display:grid; }
+    .bc-stat { background:#040804; border:1px solid #141e14; border-radius:5px; padding:7px 10px; }
+    .bc-stat-label { color:#2a4a2a; font-size:10px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; }
+    .bc-stat-val   { color:#88cc88; font-size:13px; }
+    .bc-concepts { grid-column:1/-1; background:#040804; border:1px solid #141e14; border-radius:5px; padding:7px 10px; }
     /* ── Level up ───────────────────────────────────────────────────── */
     @keyframes levelup { 0%{opacity:0;transform:scale(0.8)} 50%{opacity:1;transform:scale(1.05)} 100%{opacity:0;transform:scale(1)} }
     .levelup-flash { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%);
                      font-size:36px; color:#f1c40f; font-weight:bold; text-shadow:0 0 20px #f1c40f;
                      pointer-events:none; animation:levelup 2.5s ease forwards; z-index:1000; }
   </style>
+  <!-- PDF.js — renders PDFs as canvas, bypasses iframe security restrictions -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
 <div id="app"></div>
@@ -217,6 +581,29 @@ let combatEnemy = { name:"Enemy" };
 let combatRound = 1;
 let combatStreak = 0;
 let combatLocked = false;  // prevent double-clicks while animating
+let isAnomalyCombat = false;   // true when fighting The Pale Drift (anomaly node)
+let combatXpReward  = 30;      // XP granted on victory (from enemy.xp_reward)
+let playerDebuffs   = [];      // permanent debuffs from anomaly losses
+let pendingOpenAnswer = null;  // for self-eval: stores {qid} while showing model answer
+let playerUpgrades  = [];      // list of purchased upgrade IDs
+
+// ── Navigation back-button ─────────────────────────────────────────────────
+let navBack = null;            // function to call when "← Back" is pressed
+
+function goBack() {
+  if (typeof navBack === 'function') { const fn = navBack; navBack = null; fn(); }
+  else renderStart();
+}
+
+// ── Past Papers state ──────────────────────────────────────────────────────
+let ppState = {
+  active: false,        // in quiz mode (library locked)
+  score: 0, total: 0,
+  seenIds: [],
+  currentQ: null,
+  locked: false,        // prevent double-submit
+  filters: { concept: '', type: '', tier: '' },
+};
 
 let logs = [];
 
@@ -252,6 +639,11 @@ function pct(v, max) { return Math.max(0, Math.min(100, Math.round((v/max)*100))
 function playerBar() {
   const hp = player.hp, mhp = player.max_hp;
   const xpInLevel = player.xp % 50, xpNeeded = 50;
+  const debuffHtml = playerDebuffs.length
+    ? `<span class="s debuff-row" title="${playerDebuffs.map(d=>d.name+': '+d.desc).join(' | ')}">
+        ${playerDebuffs.map(d=>`<span class="debuff-chip">${d.icon} ${d.name}</span>`).join('')}
+       </span>`
+    : '';
   return `<div class="pbar">
     <span class="s">Lv <b>${player.level}</b></span>
     <span class="s">
@@ -263,6 +655,7 @@ function playerBar() {
       <span class="hp-bar"><span class="hp-fill" style="width:${pct(hp,mhp)}%"></span></span>
     </span>
     <span class="s">💡 <b>${player.insight||0}</b></span>
+    ${debuffHtml}
   </div>`;
 }
 
@@ -278,18 +671,180 @@ function dmgPop(text, type, el) {
 }
 
 // ── Start Screen ───────────────────────────────────────────────────────────
+let _activeSubjectName = 'DSA2'; // display name, updated when subject loads
+
 function renderStart() {
-  render(`<div class="start">
-    <h1>C.R.A.M — The Unbound</h1>
-    <p>Enter the Unread World. Answer to survive.</p>
-    <button class="start-btn" onclick="startGame()">Begin Your Run</button>
-    <br><br>
-    <button class="start-btn" onclick="renderCodex()" style="font-size:13px;padding:10px 24px;background:#0a1a0a;border-color:#2a4a2a;color:#88cc88">📕 Open Codex</button>
-  </div>`);
+  navBack = null; // start screen has no back
+  render(`
+    <div class="start-screen">
+      <div class="start-logo">
+        <h1>C.R.A.M</h1>
+        <div class="sub-title">The Unbound</div>
+      </div>
+      <div class="start-divider"></div>
+      <div class="start-lore">"Knowledge is the only weapon that sharpens itself on the enemy."</div>
+
+      <div class="start-menu">
+        <button class="start-btn-main sb-run" onclick="startGame()">
+          <span class="sb-icon">⚔️</span>
+          <span class="sb-text">
+            <div class="sb-label">Begin Your Run</div>
+            <div class="sb-desc">Enter the Unbound World. Fight. Learn. Survive.</div>
+          </span>
+          <span class="sb-arr">›</span>
+        </button>
+
+        <button class="start-btn-main sb-pp" onclick="renderPastPapers()">
+          <span class="sb-icon">📜</span>
+          <span class="sb-text">
+            <div class="sb-label">Past Papers Mode</div>
+            <div class="sb-desc">Quick revision. Study the Ancient Library. Answer past questions.</div>
+          </span>
+          <span class="sb-arr">›</span>
+        </button>
+
+        <button class="start-btn-main sb-codex" onclick="renderCodex(renderStart)">
+          <span class="sb-icon">📕</span>
+          <span class="sb-text">
+            <div class="sb-label">Open Codex</div>
+            <div class="sb-desc">Review your mistakes from the last run.</div>
+          </span>
+          <span class="sb-arr">›</span>
+        </button>
+
+        <button class="start-btn-main sb-library" onclick="renderAncientLibrary()">
+          <span class="sb-icon">📚</span>
+          <span class="sb-text">
+            <div class="sb-label">Ancient Library</div>
+            <div class="sb-desc">Browse PDFs and past papers from every subject folder.</div>
+          </span>
+          <span class="sb-arr">›</span>
+        </button>
+
+        <button class="start-btn-main sb-subject" onclick="renderSubjectSwitcher()">
+          <span class="sb-icon">📂</span>
+          <span class="sb-text">
+            <div class="sb-label">Switch Subject</div>
+            <div class="sb-desc">Active: <b id="active-subject-label">${escHtml(_activeSubjectName)}</b> — change which JSON the game reads from.</div>
+          </span>
+          <span class="sb-arr">›</span>
+        </button>
+      </div>
+
+      <div class="start-version">C.R.A.M · ${escHtml(_activeSubjectName)} · v2.0</div>
+    </div>
+  `);
+}
+
+// ── Subject Switcher ─────────────────────────────────────────────────────────
+async function renderSubjectSwitcher() {
+  navBack = renderStart;
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    <button class="back-btn" onclick="goBack()">← Back to Menu</button>
+    <div class="subject-switcher">
+      <h2>📂 Switch Subject</h2>
+      <p>Choose which subject JSON the game reads questions and concepts from. Drop new subject folders into the <code>subjects/</code> directory to add them.</p>
+      <div id="subject-list"><div style="color:#4a3a1a;text-align:center;padding:20px">Loading subjects…</div></div>
+    </div>
+  `);
+
+  const data = await api("/api/subjects");
+  if (!data) return;
+
+  const { active, subjects } = data;
+
+  // Update global display name
+  const activeSub = subjects.find(s => s.id === active);
+  if (activeSub) _activeSubjectName = activeSub.name;
+
+  const cards = subjects.map(s => {
+    const isActive = s.id === active;
+    const metaParts = [
+      `${s.question_count} questions`,
+      s.has_concepts ? 'concepts ✓' : 'no concepts',
+      s.pdf_count > 0 ? `${s.pdf_count} PDF${s.pdf_count !== 1 ? 's' : ''}` : 'no PDFs',
+    ];
+    return `
+      <div class="subject-card ${isActive ? 'active-subject' : ''}"
+           onclick="${isActive ? '' : `switchSubject('${s.id}')`}"
+           style="${isActive ? 'cursor:default' : ''}">
+        <span class="subject-card-icon">${s.pdf_count > 0 ? '📂' : '📁'}</span>
+        <div class="subject-card-info">
+          <div class="subject-card-name">${escHtml(s.name)}</div>
+          <div class="subject-card-meta">${metaParts.join(' · ')}</div>
+        </div>
+        ${isActive
+          ? `<span class="subject-card-active-badge">✓ ACTIVE</span>`
+          : `<span style="color:#3a2a0a;font-size:18px">›</span>`}
+      </div>`;
+  }).join('');
+
+  const noSubjects = subjects.length === 0
+    ? `<div style="color:#3a2a0a;text-align:center;padding:20px">No subjects found.</div>`
+    : '';
+
+  document.getElementById('subject-list').innerHTML = `
+    ${noSubjects || cards}
+    <div class="subject-hint">
+      <b style="color:#6a4a1a">Adding a new subject:</b><br>
+      Create a folder inside <code>subjects/</code> (e.g. <code>subjects/svv/</code>) and add:<br>
+      • <code>questions.json</code> — your questions (required)<br>
+      • <code>concepts.json</code> — concept notes for the Field Notes tab (optional)<br>
+      • Any <code>.pdf</code> files you want readable in the Ancient Library (optional)<br><br>
+      Restart the backend or hit Switch Subject to reload.
+    </div>
+  `;
+}
+
+async function switchSubject(subjectId) {
+  const card = document.querySelector(`.subject-card[onclick*="${subjectId}"]`);
+  if (card) card.style.opacity = '0.5';
+
+  const data = await api("/api/set_subject", "POST", { subject_id: subjectId });
+  if (!data) { if (card) card.style.opacity = ''; return; }
+
+  // Clear the cached library data so it reloads for the new subject
+  _libraryData = null;
+
+  // Load and merge any custom weapons/armors/upgrades/enemies for this subject
+  await loadSubjectGameConfig();
+
+  // Update active subject display name
+  const subjects = (await api("/api/subjects"))?.subjects || [];
+  const active = subjects.find(s => s.id === subjectId);
+  if (active) _activeSubjectName = active.name;
+
+  // Re-render the switcher to show new active state
+  await renderSubjectSwitcher();
+}
+
+// ── Ancient Library — standalone PDF reader (accessible from start + citadel) ─
+async function renderAncientLibrary(backFn) {
+  navBack = backFn || (gameId ? renderOverworld : renderStart);
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <div class="pp-header" style="margin-bottom:16px">
+      <h2 style="color:#7ab8dd">📚 Ancient Library</h2>
+      <p>All PDFs from every subject folder. Drop <code style="color:#5a9acc;background:#06101a;border-radius:3px;padding:1px 5px;font-size:11px">.pdf</code> files into a subject folder to add them here.</p>
+    </div>
+    <div id="lib-pdf-content"><div style="color:#3a4a5a;text-align:center;padding:20px">Loading…</div></div>
+  `);
+
+  if (!_libraryData) {
+    const r = await api("/api/library");
+    _libraryData = { concepts: r?.concepts || [], pdf_groups: r?.pdf_groups || [] };
+  }
+
+  document.getElementById('lib-pdf-content').innerHTML =
+    renderLibraryPDFsHTML(_libraryData.pdf_groups);
 }
 
 async function startGame() {
   render(`<div class="start"><p style="color:#555">Generating world...</p></div>`);
+  // Load subject-specific custom content (weapons/armors/upgrades/enemies) before world gen
+  await loadSubjectGameConfig();
   const data = await api("/api/game/start","POST");
   if (!data) { renderStart(); return; }
   gameId  = data.session_id;
@@ -307,11 +862,15 @@ async function syncPlayer() {
               weapon_id: d.weapon_id||"none", armor_id: d.armor_id||"none" };
   world   = d.world;
   curNode = d.current_node;
+  if (d.debuffs)   playerDebuffs  = d.debuffs;
+  if (d.upgrades)  playerUpgrades = d.upgrades;
 }
 
 // ── Overworld ──────────────────────────────────────────────────────────────
 function renderOverworld() {
   const conns = world[curNode]?.connections || [];
+  // cur must be declared before nodeEls map (used inside for combat-lock logic)
+  const cur = world[curNode] || {};
 
   // Build depth groups
   const depths = {};
@@ -329,7 +888,7 @@ function renderOverworld() {
   const PAD_BOT = 44;
   const MAP_H   = 320;
   const AREA_H  = MAP_H - PAD_TOP - PAD_BOT;
-  const NODE_R  = 22;
+  const NODE_R  = 24;
 
   // Assign x,y positions per node
   const positions = {};
@@ -347,8 +906,8 @@ function renderOverworld() {
   const mapH = MAP_H;
 
   // Node visuals
-  const TYPE_ICON  = {combat:'⚔', challenge:'📖', utility:'⛺', event:'✦', hub:'🏰'};
-  const TYPE_COLOR = {combat:'#bb3333', challenge:'#7733bb', utility:'#228844', event:'#bb7722', hub:'#c8a2ff'};
+  const TYPE_ICON  = {combat:'⚔️', challenge:'🔮', utility:'❤️', event:'⚡', hub:'🏰', anomaly:'⚠️'};
+  const TYPE_COLOR = {combat:'#bb3333', challenge:'#7733bb', utility:'#228844', event:'#bb7722', hub:'#c8a2ff', anomaly:'#aa00ee'};
 
   // Build SVG connection paths
   const drawnLines = new Set();
@@ -391,10 +950,14 @@ function renderOverworld() {
     const pos = positions[id];
     if (!pos) return '';
     const isCurrent   = id === curNode;
-    const isReachable = !isCurrent && conns.includes(id);
+    // Lock forward movement if standing on uncleared combat/anomaly node
+    const curIsBlocker = (cur.type === 'combat' || cur.type === 'anomaly') && cur.state !== 'cleared';
+    const isForwardNode = (n.depth ?? 0) > (cur.depth ?? 0);
+    const isLockedForward = curIsBlocker && isForwardNode && conns.includes(id);
+    const isReachable = !isCurrent && conns.includes(id) && !isLockedForward;
     const isCleared   = n.state === 'cleared';
     const isVisited   = n.state === 'visited';
-    const isFog       = n.state === 'unvisited' && !isCurrent && !isReachable;
+    const isFog       = n.state === 'unvisited' && !isCurrent && !isReachable && !isLockedForward;
 
     const icon  = TYPE_ICON[n.type]  || '?';
     const color = TYPE_COLOR[n.type] || '#555';
@@ -402,14 +965,15 @@ function renderOverworld() {
     const displayLabel = isFog ? '???' : label;
 
     let cls = 'map-node';
-    if (isCurrent)    cls += ' mn-current';
-    else if (isReachable) cls += ' mn-reachable';
-    else if (isCleared)   cls += ' mn-cleared';
-    else if (isVisited)   cls += ' mn-visited';
-    else                  cls += ' mn-fog';
+    if (isCurrent)         cls += ' mn-current';
+    else if (isReachable)  cls += ' mn-reachable';
+    else if (isLockedForward) cls += ' mn-locked';
+    else if (isCleared)    cls += ' mn-cleared';
+    else if (isVisited)    cls += ' mn-visited';
+    else                   cls += ' mn-fog';
 
-    const onClick    = (isCurrent || isReachable) ? `onclick="moveTo('${id}')"` : '';
-    const borderCol  = isFog ? '#131320' : color;
+    const onClick    = isReachable ? `onclick="moveTo('${id}')"` : isCurrent ? `onclick="enterNode()"` : isLockedForward ? `onclick="showBlockedMsg()"` : '';
+    const borderCol  = isLockedForward ? '#5a1a1a' : isFog ? '#131320' : color;
     const bgCol      = isCurrent ? '#110820' : isCleared ? '#060608' : '#070b14';
     const borderW    = isCurrent ? '2.5px' : '2px';
     const size       = NODE_R * 2;
@@ -418,15 +982,25 @@ function renderOverworld() {
       style="left:${pos.x-NODE_R}px;top:${pos.y-NODE_R}px;width:${size}px;height:${size}px;
              border-color:${borderCol};border-width:${borderW};background:${bgCol};--nc:${color}"
       ${onClick} title="${id} · ${n.type}/${n.subtype} · depth ${n.depth}">
-      <div class="mn-icon">${isFog ? '?' : icon}</div>
+      <div class="mn-icon">${isFog ? (n.type==='anomaly' ? '⚠️' : '?') : icon}</div>
       <div class="mn-label">${displayLabel}</div>
     </div>`;
   }).join('');
 
+  // Player pin SVG — pulsing ring above current node
+  const pinPos = positions[curNode];
+  const playerPin = pinPos ? `
+    <circle cx="${pinPos.x}" cy="${pinPos.y - NODE_R - 10}" r="5" fill="#fff" opacity="0.9"/>
+    <circle cx="${pinPos.x}" cy="${pinPos.y - NODE_R - 10}" r="5" fill="none" stroke="#fff" stroke-width="1.5" opacity="0.5">
+      <animate attributeName="r" from="5" to="13" dur="1.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" from="0.5" to="0" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <line x1="${pinPos.x}" y1="${pinPos.y - NODE_R - 5}" x2="${pinPos.x}" y2="${pinPos.y - NODE_R}" stroke="#fff" stroke-width="1" opacity="0.6"/>
+  ` : '';
+
   // Current node summary card
-  const cur     = world[curNode] || {};
   const curColor = TYPE_COLOR[cur.type] || '#888';
-  const curIcon  = TYPE_ICON[cur.type]  || '?';
+  const curIcon  = TYPE_ICON[cur.type]  || '📍';
   const locName  = curNode==='citadel' ? '🏰 The Citadel' : `${curIcon} ${cur.subtype||cur.type}`;
 
   render(`
@@ -438,6 +1012,7 @@ function renderOverworld() {
         <div class="map-canvas" style="width:${mapW}px;height:${mapH}px">
           <svg class="map-svg" width="${mapW}" height="${mapH}">
             ${linePaths.join('')}
+            ${playerPin}
           </svg>
           ${nodeEls}
           ${colLabels}
@@ -464,13 +1039,25 @@ function renderOverworld() {
     ${renderLog()}
   `);
 
-  // Auto-scroll map to keep current node visible
+  // Auto-scroll to current node + wire up drag-to-scroll
   setTimeout(() => {
     const scroll = document.getElementById('mapScroll');
     const pos = positions[curNode];
-    if (scroll && pos) {
-      scroll.scrollLeft = Math.max(0, pos.x - scroll.clientWidth / 2);
-    }
+    if (!scroll) return;
+    if (pos) scroll.scrollLeft = Math.max(0, pos.x - scroll.clientWidth / 2);
+    // Drag-to-scroll (mouse)
+    let isDragging = false, startX = 0, startLeft = 0;
+    scroll.addEventListener('mousedown', e => {
+      isDragging = true; startX = e.pageX; startLeft = scroll.scrollLeft;
+      scroll.style.cursor = 'grabbing'; e.preventDefault();
+    });
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      scroll.scrollLeft = startLeft - (e.pageX - startX);
+    });
+    window.addEventListener('mouseup', () => {
+      isDragging = false; if (scroll) scroll.style.cursor = 'grab';
+    });
   }, 40);
 }
 
@@ -485,26 +1072,109 @@ async function moveTo(nodeId) {
 }
 
 // ── Node Screen ────────────────────────────────────────────────────────────
+const NODE_FLAVOR = {
+  combat: {
+    drone:      { title:"Patrol Drone",      desc:"A mindless sentinel drifts through the static. It will not let you pass without a fight.",        icon:"🤖" },
+    guard:      { title:"Knowledge Guard",   desc:"A hardened warden of forgotten lore. Its strikes carry the weight of every question you've dodged.",icon:"⚔️" },
+    elite:      { title:"Elite Enforcer",    desc:"Dangerous. Fast. Precise. This one has read everything you haven't.",                               icon:"🗡️" },
+    boss:       { title:"Domain Boss",       desc:"The apex predator of this depth. Failure here echoes all the way back to the Citadel.",            icon:"💀" },
+  },
+  challenge: {
+    puzzle:     { title:"Ancient Puzzle",    desc:"Glyphs shift across crumbling stone. The answer is in the logic — not the noise.",                 icon:"🧩" },
+    quiz:       { title:"Trial Chamber",     desc:"A room of floating questions. Only correct answers keep the walls from closing in.",               icon:"📜" },
+    time_trial: { title:"Timed Gauntlet",    desc:"The clock is already running. Every second you hesitate costs you.",                               icon:"⏱️" },
+  },
+  utility: {
+    healer:     { title:"Healer's Outpost",  desc:"Smells like old herbs and static. Someone left a bedroll. Rest here — you've earned it.",          icon:"❤️" },
+    shop:       { title:"Wandering Trader",  desc:"A cloaked figure sits behind a collapsed wall, wares spread across a glowing cloth.",              icon:"🛒" },
+    save_point: { title:"Beacon of Recall",  desc:"A faint pulse of light marks this spot. The world remembers you standing here.",                   icon:"💾" },
+  },
+  event: {
+    treasure:   { title:"Unmarked Cache",    desc:"Dust and silence. Something valuable was left behind by someone who didn't make it out.",           icon:"📦" },
+    ambush:     { title:"Ambush Point",      desc:"You feel it before you see it. Movement in the shadows. Too many of them.",                        icon:"⚠️" },
+    story:      { title:"Echo Fragment",     desc:"A residual memory loops here. Something that happened before you arrived. Worth listening to.",    icon:"🔮" },
+  },
+  hub: {
+    citadel:    { title:"The Citadel",       desc:"Your base of operations. The last safe place between you and the unread depths.",                  icon:"🏰" },
+    base:       { title:"Forward Base",      desc:"A rough encampment at the edge of known territory. Others have been here. Not all returned.",      icon:"🏕️" },
+    crossroads: { title:"Crossroads",        desc:"Paths branch in every direction. Choose carefully — each one leads somewhere different.",           icon:"🔀" },
+    sanctuary:  { title:"Sanctuary",         desc:"A rare pocket of calm in the chaos. Breathe. Regroup. Then keep moving.",                          icon:"✨" },
+  },
+  anomaly: {
+    rift:       { title:"Pale Rift",         desc:"Reality tears here. The Pale Drift seeps through. Enormous risk. Enormous reward.",                icon:"⚠️" },
+    void_tear:  { title:"Void Tear",         desc:"A wound in the fabric of the world. The hardest questions leak from its edges like black light.",  icon:"🌀" },
+    pale_gate:  { title:"Pale Gate",         desc:"The threshold between knowledge and oblivion. Cross it only if you're ready to be marked.",        icon:"🚪" },
+  },
+};
+
+function getNodeFlavor(node) {
+  const byType    = NODE_FLAVOR[node.type]    || {};
+  const flavor    = byType[node.subtype] || byType[node.id] || null;
+  const TYPE_COLOR= {combat:'#bb3333', challenge:'#7733bb', utility:'#228844', event:'#bb7722', hub:'#c8a2ff', anomaly:'#aa00ee'};
+  return {
+    title: flavor?.title || node.subtype || node.type,
+    desc:  flavor?.desc  || "The air is thick here. Tread carefully.",
+    icon:  flavor?.icon  || "📍",
+    color: TYPE_COLOR[node.type] || '#888',
+  };
+}
+
 async function enterNode() {
   const r = await api(`/api/game/node/${gameId}`);
   if (!r) return;
   const node = r.node, actions = r.actions;
   log(`Entered ${node.id} (${node.type}/${node.subtype})`);
 
-  const diffStars = "⭐".repeat(Math.min(node.difficulty||1,5));
+  // ── Route tavern-type nodes to the Site of Grace screen ──────────────────
+  const isTavern = (node.type === 'utility' && ['healer','save_point'].includes(node.subtype))
+                || (node.type === 'hub' && node.subtype === 'citadel');
+  if (isTavern) {
+    // Mark visited
+    await api("/api/game/node/action","POST",{session_id:gameId, action_id:'rest'}).catch(()=>{});
+    await syncPlayer();
+    renderTavern(node);
+    return;
+  }
+
+  const fl   = getNodeFlavor(node);
+  const diff = node.difficulty || 1;
+  const diffBar = Array.from({length:5}, (_,i) =>
+    `<span style="color:${i<diff?fl.color:'#222'};font-size:13px">◆</span>`
+  ).join('');
+  const statePill = node.state === 'cleared'
+    ? `<span class="npill npill-cleared">✓ Cleared</span>`
+    : node.state === 'visited'
+    ? `<span class="npill npill-visited">◎ Visited</span>`
+    : `<span class="npill npill-unvisited">◌ Unvisited</span>`;
+
   render(`
     <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
     ${playerBar()}
-    <div class="npanel">
-      <h2>${node.id==="citadel"?"🏰 The Citadel":"📍 "+node.id}</h2>
-      <div class="nmeta">
-        <span>Type: ${node.type}</span>
-        <span>Subtype: ${node.subtype}</span>
-        <span>Biome: ${node.biome}</span>
-        <span>Difficulty: ${diffStars}</span>
-        ${node.god?`<span>God: ${node.god}</span>`:""}
+    <div class="npanel" style="border-color:${fl.color}22">
+      <div class="np-top">
+        <div class="np-icon" style="color:${fl.color}">${fl.icon}</div>
+        <div class="np-info">
+          <h2 style="color:${fl.color}">${fl.title}</h2>
+          <div class="np-tags">
+            ${statePill}
+            <span class="npill" style="color:#444">${node.biome}</span>
+            <span class="npill" style="color:#444">depth ${node.depth}</span>
+            <span class="npill" style="color:#444">${diffBar}</span>
+            ${node.god ? `<span class="npill" style="color:#8844aa">god: ${node.god}</span>` : ''}
+          </div>
+        </div>
       </div>
-      ${actions.map(a=>`<button class="abtn" data-t="${a.type}" onclick="doAction('${a.id}')">${a.label}</button>`).join("")}
+      <p class="np-desc">${fl.desc}</p>
+      <div class="np-actions">
+        ${actions.map(a => {
+          if (a.type === 'flee') {
+            const diff = a.difficulty ?? node.difficulty ?? 1;
+            return `<button class="abtn" data-t="flee" onclick="attemptFlee(${diff})">${a.label}</button>`;
+          }
+          return `<button class="abtn" data-t="${a.type}" onclick="doAction('${a.id}')">${a.label}</button>`;
+        }).join("")}
+      </div>
+      <div id="flee-result-panel"></div>
     </div>
     ${renderLog()}
   `);
@@ -542,14 +1212,146 @@ async function doAction(actionId) {
     injectResult("info","🌀 " + (r.message||"Anomaly started."));
     return;
   }
-  if (r.type==="codex_view") { renderCodex(); return; }
-  if (r.type==="equipment_menu") { renderEquipment(); return; }
+  if (r.type==="codex_view") { renderCodex(enterNode); return; }
+  if (r.type==="equipment_menu") { renderEquipment(enterNode); return; }
   if (r.type==="map_view") { renderOverworld(); return; }
   if (r.type==="flee") { injectResult("info","🏃 " + (r.message||"You fled!")); setTimeout(()=>renderOverworld(),1200); return; }
   if (r.type==="save_prompt") { injectResult("good","💾 " + (r.message||"Saved.")); return; }
   if (r.type==="shop_menu") { injectResult("info","🛒 " + (r.message||"Shop coming soon.")); return; }
   if (r.message) { injectResult("info", r.message); return; }
   renderOverworld();
+}
+
+function showBlockedMsg() {
+  const panel = document.querySelector(".npanel");
+  if (!panel) return;
+  // Flash a brief warning near the map
+  let warn = document.getElementById('map-blocked-warn');
+  if (!warn) {
+    warn = document.createElement('div');
+    warn.id = 'map-blocked-warn';
+    warn.style.cssText = 'position:fixed;top:60px;left:50%;transform:translateX(-50%);background:#1a0505;border:1px solid #5a1a1a;color:#cc4444;padding:8px 18px;border-radius:8px;font-size:13px;z-index:999;pointer-events:none;transition:opacity 0.4s';
+    document.body.appendChild(warn);
+  }
+  warn.textContent = '⚔️ Defeat this enemy or flee first — path is blocked';
+  warn.style.opacity = '1';
+  clearTimeout(warn._t);
+  warn._t = setTimeout(() => { warn.style.opacity = '0'; }, 2200);
+}
+
+// ── Flee mechanic ─────────────────────────────────────────────────────────────
+// Enemy flee dice by difficulty (1–5). Diff 5 always rolls 20 (Grand Examiner level).
+// Enemy flee dice by node difficulty (index = difficulty 0–5).
+// Diff 5 is handled separately — enemy always rolls 20 (anomaly / Grand Examiner).
+const FLEE_ENEMY_DICE = [0, 8, 10, 12, 16, 20];
+
+// MAX_LEVEL reference for flee scaling. Level beyond this still caps at die=19.
+const FLEE_MAX_LEVEL = 20;
+
+/**
+ * Player flee die scales with level:
+ *   Level  1  → d16  (worst)
+ *   Level 20+ → d19  (best normal roll)
+ *   A natural 20 is always possible but rare (~2% at lv1, ~8% at lv20).
+ *   Player must roll STRICTLY MORE than enemy to escape.
+ *   Difficulty 5 enemies (anomaly / boss) always roll 20 — impossible to flee.
+ */
+function playerFleeDie() {
+  const lv = Math.max(1, player.level || 1);
+  // Linear scale: lv1→16, lv20→19, capped at 19
+  const dieSides = Math.min(16 + Math.floor((lv - 1) / (FLEE_MAX_LEVEL - 1) * 3), 19);
+  // Independent small chance of a natural 20 (rare at low level, slightly more at high)
+  const nat20Chance = 0.02 + Math.min(lv, FLEE_MAX_LEVEL) * 0.003; // 2.3%–8%
+  if (Math.random() < nat20Chance) return { roll: 20, die: dieSides, nat20: true };
+  return { roll: Math.floor(Math.random() * dieSides) + 1, die: dieSides, nat20: false };
+}
+
+async function attemptFlee(difficulty) {
+  const btn = document.querySelector('.abtn[data-t="flee"]');
+  if (btn) { btn.disabled = true; btn.textContent = '🎲 Rolling…'; }
+
+  const { roll: playerRoll, die: playerDie, nat20 } = playerFleeDie();
+
+  const enemyDieMax = FLEE_ENEMY_DICE[Math.min(difficulty, 5)] || 8;
+  // Difficulty 5 = anomaly / Grand Examiner: always rolls perfect 20 → cannot flee
+  const enemyRoll   = difficulty >= 5 ? 20 : Math.floor(Math.random() * enemyDieMax) + 1;
+
+  // Strict greater-than: must roll MORE than enemy, never equal
+  const success = playerRoll > enemyRoll;
+
+  // Build enemy label
+  const enemyLabel = difficulty >= 5
+    ? 'Grand Examiner (∞ — cannot flee)'
+    : `Enemy (d${enemyDieMax})`;
+
+  // Natural 20 special glow label
+  const playerLabel = nat20
+    ? `You ✨ NAT 20!`
+    : `You (d${playerDie}, lv${player.level || 1})`;
+
+  // Show the dice roll panel
+  const panel = document.getElementById('flee-result-panel');
+  if (panel) {
+    const playerColor = success ? '#88cc88' : (nat20 && !success ? '#f1c40f' : '#cc6666');
+    const enemyColor  = success ? '#cc6666' : '#88cc88';
+    panel.innerHTML = `
+      <div class="flee-panel">
+        <div class="flee-title">🎲 Flee Attempt — need strictly more than enemy</div>
+        <div class="dice-row">
+          <div class="dice-block">
+            <span class="dice-face" style="${nat20 ? 'filter:drop-shadow(0 0 8px gold)' : ''}">🎲</span>
+            <div class="dice-label">${escHtml(playerLabel)}</div>
+            <div class="dice-val" style="color:${playerColor};${nat20?'text-shadow:0 0 10px gold':''}">${playerRoll}${nat20 ? ' ✨' : ''}</div>
+          </div>
+          <div class="dice-vs">vs</div>
+          <div class="dice-block">
+            <span class="dice-face">💀</span>
+            <div class="dice-label">${escHtml(enemyLabel)}</div>
+            <div class="dice-val" style="color:${enemyColor}">${enemyRoll}</div>
+          </div>
+        </div>
+        <div id="flee-outcome"></div>
+      </div>`;
+  }
+
+  // Small delay for visual effect, then show outcome
+  await new Promise(r => setTimeout(r, 600));
+
+  const outcome = document.getElementById('flee-outcome');
+  if (success) {
+    if (outcome) outcome.innerHTML = `<div class="flee-result success">✅ You slipped away into the dark. Path back is clear.</div>`;
+    await new Promise(r => setTimeout(r, 1200));
+    renderOverworld();
+  } else {
+    // Flee failed — enemy deals free damage
+    const freeDmg = Math.max(5, Math.floor(difficulty * 6 + Math.random() * difficulty * 6));
+    let dmgResult = null;
+    if (gameId) {
+      dmgResult = await api("/api/game/damage", "POST", { session_id: gameId, amount: freeDmg });
+      await syncPlayer();
+    }
+    const hpText = dmgResult ? ` (${dmgResult.hp}/${player.max_hp} HP remaining)` : '';
+    const dead   = dmgResult?.dead || false;
+
+    if (outcome) outcome.innerHTML = `
+      <div class="flee-result fail">
+        ❌ Caught! The enemy strikes for <span class="flee-dmg">${freeDmg} damage</span> while you run.${hpText}
+        ${dead ? '<br><b style="color:#ff4444">You have fallen.</b>' : ''}
+      </div>`;
+
+    if (dead) {
+      await new Promise(r => setTimeout(r, 2000));
+      // Reuse the defeat screen — fake minimal combat state so endCombat renders correctly
+      combatRound = 0; isAnomalyCombat = false;
+      combatEnemy = { name: "the Dark", concept: "", subtype: "guard", tier: "standard" };
+      endCombat(false);
+      return;
+    }
+
+    // Re-enable the flee button after the punishment
+    await new Promise(r => setTimeout(r, 800));
+    if (btn) { btn.disabled = false; btn.textContent = '🏃 Attempt Flee'; }
+  }
 }
 
 function injectResult(type, msg) {
@@ -560,26 +1362,332 @@ function injectResult(type, msg) {
   panel.insertAdjacentHTML("beforeend",`<div class="rbox ${type}">${msg}</div>`);
 }
 
+// ── Sprites ────────────────────────────────────────────────────────────────
+function getPlayerSprite() {
+  return `<svg viewBox="0 0 60 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="30" cy="97" rx="18" ry="4" fill="rgba(0,0,0,.4)"/>
+  <!-- Cape -->
+  <path d="M8,92 L11,52 Q14,40 22,37 Q30,34 38,37 Q46,40 49,52 L52,92 Q40,97 30,98 Q20,97 8,92Z" fill="#100626"/>
+  <path d="M10,58 Q15,50 20,47" stroke="#220a40" stroke-width="1" opacity=".5"/>
+  <path d="M50,58 Q45,50 40,47" stroke="#220a40" stroke-width="1" opacity=".5"/>
+  <!-- Legs -->
+  <rect x="19" y="73" width="9" height="18" rx="3" fill="#080814"/>
+  <rect x="32" y="73" width="9" height="18" rx="3" fill="#080814"/>
+  <rect x="20" y="75" width="3" height="9" rx="1.5" fill="#12122a" opacity=".7"/>
+  <rect x="33" y="75" width="3" height="9" rx="1.5" fill="#12122a" opacity=".7"/>
+  <rect x="17" y="71" width="13" height="5" rx="2" fill="#101020"/>
+  <rect x="30" y="71" width="13" height="5" rx="2" fill="#101020"/>
+  <!-- Torso armor -->
+  <rect x="17" y="47" width="26" height="26" rx="4" fill="#180a28"/>
+  <path d="M19,49 L41,49 L39,63 L21,63Z" fill="#220d35" stroke="#3a1860" stroke-width=".5"/>
+  <!-- Chest rune -->
+  <path d="M24,52 L30,48 L36,52 L30,58Z" fill="none" stroke="#c8a2ff" stroke-width=".8" opacity=".7"/>
+  <line x1="30" y1="48" x2="30" y2="58" stroke="#c8a2ff" stroke-width=".5" opacity=".5"/>
+  <line x1="24" y1="52" x2="36" y2="52" stroke="#c8a2ff" stroke-width=".5" opacity=".5"/>
+  <!-- Rune inner glow -->
+  <circle cx="30" cy="53" r="2" fill="#c8a2ff" opacity=".25"/>
+  <!-- Pauldrons -->
+  <ellipse cx="16" cy="51" rx="7" ry="5.5" fill="#280e4a"/>
+  <ellipse cx="44" cy="51" rx="7" ry="5.5" fill="#280e4a"/>
+  <path d="M11,46 L8,41 L13,44Z" fill="#361566"/>
+  <path d="M49,46 L52,41 L47,44Z" fill="#361566"/>
+  <!-- Belt -->
+  <rect x="15" y="67" width="30" height="6" rx="2" fill="#8a6020"/>
+  <rect x="25" y="66" width="10" height="8" rx="2" fill="#f1c40f"/>
+  <rect x="27" y="68" width="6" height="4" rx="1" fill="#c8a200" opacity=".5"/>
+  <!-- Arms -->
+  <rect x="43" y="51" width="8" height="18" rx="3" fill="#180a28" transform="rotate(-8,47,60)"/>
+  <rect x="9" y="51" width="8" height="18" rx="3" fill="#180a28" transform="rotate(8,13,60)"/>
+  <ellipse cx="12" cy="69" rx="4" ry="3" fill="#180a28"/>
+  <ellipse cx="48" cy="67" rx="4" ry="3" fill="#180a28"/>
+  <!-- Sword (right, angled) -->
+  <rect x="49" y="26" width="3.5" height="34" rx="1.5" fill="#d8b8ff" transform="rotate(7,50.5,43)"/>
+  <rect x="49" y="26" width="3.5" height="34" rx="1.5" fill="#c8a2ff" opacity=".35" transform="rotate(7,50.5,43)" style="filter:blur(2px)"/>
+  <rect x="44" y="44" width="14" height="3" rx="1" fill="#8a6020"/>
+  <ellipse cx="52" cy="26" rx="3.5" ry="3.5" fill="#c8a2ff" opacity=".8" transform="rotate(7,50.5,43)"/>
+  <!-- Sword glow particles -->
+  <circle cx="53" cy="34" r="1.5" fill="#c8a2ff" opacity=".6"/>
+  <circle cx="56" cy="42" r="1" fill="#c8a2ff" opacity=".4"/>
+  <circle cx="51" cy="50" r="1.2" fill="#9966cc" opacity=".5"/>
+  <!-- Neck -->
+  <rect x="24" y="33" width="12" height="10" rx="3" fill="#c4956a"/>
+  <!-- Hood base -->
+  <ellipse cx="30" cy="24" rx="14" ry="14.5" fill="#280e4a"/>
+  <!-- Face -->
+  <ellipse cx="30" cy="26" rx="9" ry="10" fill="#c4956a"/>
+  <!-- Hood shadow top -->
+  <path d="M17,21 Q30,8 43,21 Q38,17 30,18.5 Q22,17 17,21Z" fill="#180830" opacity=".9"/>
+  <!-- Hood sides -->
+  <path d="M16,19 Q20,30 22,37 L24,33 Q22,25 20,21Z" fill="#280e4a"/>
+  <path d="M44,19 Q40,30 38,37 L36,33 Q38,25 40,21Z" fill="#280e4a"/>
+  <!-- Eyes (glowing purple) -->
+  <ellipse cx="26" cy="25" rx="3" ry="2" fill="#8822bb"/>
+  <ellipse cx="34" cy="25" rx="3" ry="2" fill="#8822bb"/>
+  <ellipse cx="26" cy="25" rx="1.6" ry="1.1" fill="#cc88ff"/>
+  <ellipse cx="34" cy="25" rx="1.6" ry="1.1" fill="#cc88ff"/>
+  <ellipse cx="26" cy="25" rx="3" ry="2" fill="#9933dd" opacity=".4" style="filter:blur(2px)"/>
+  <ellipse cx="34" cy="25" rx="3" ry="2" fill="#9933dd" opacity=".4" style="filter:blur(2px)"/>
+  <!-- Hood peak -->
+  <path d="M24,14 Q30,3 36,14 Q32,11 30,13 Q28,11 24,14Z" fill="#280e4a"/>
+  <!-- Collar -->
+  <path d="M17,37 Q24,34.5 30,34 Q36,34.5 43,37 Q36,41 30,42 Q24,41 17,37Z" fill="#1e0a32" stroke="#361566" stroke-width=".5"/>
+</svg>`;
+}
+
+function getEnemySprite(subtype) {
+  if (subtype === 'drone') return `<svg viewBox="0 0 60 100" fill="none">
+  <ellipse cx="30" cy="93" rx="12" ry="4" fill="rgba(0,0,0,.3)"/>
+  <!-- Tendrils -->
+  <path d="M20,72 Q14,82 9,90" stroke="#2255aa" stroke-width="2" opacity=".5" stroke-linecap="round"/>
+  <path d="M40,72 Q46,82 51,90" stroke="#2255aa" stroke-width="2" opacity=".5" stroke-linecap="round"/>
+  <path d="M15,62 Q7,68 5,78" stroke="#1a3a7a" stroke-width="1.5" opacity=".35" stroke-linecap="round"/>
+  <path d="M45,62 Q53,68 55,78" stroke="#1a3a7a" stroke-width="1.5" opacity=".35" stroke-linecap="round"/>
+  <!-- Rings -->
+  <ellipse cx="30" cy="58" rx="24" ry="8" fill="none" stroke="#2255aa" stroke-width="1.5" opacity=".35" transform="rotate(25,30,58)"/>
+  <ellipse cx="30" cy="58" rx="24" ry="8" fill="none" stroke="#3366cc" stroke-width="1" opacity=".25" transform="rotate(-25,30,58)"/>
+  <!-- Orb body -->
+  <circle cx="30" cy="58" r="21" fill="#08101e"/>
+  <circle cx="30" cy="58" r="19" fill="#0c1628"/>
+  <circle cx="30" cy="58" r="11" fill="#162240"/>
+  <circle cx="30" cy="58" r="6" fill="#1e3a6a"/>
+  <circle cx="30" cy="58" r="3" fill="#3366cc"/>
+  <!-- Highlight -->
+  <ellipse cx="24" cy="50" rx="6" ry="4" fill="#fff" opacity=".07"/>
+  <!-- Eye -->
+  <ellipse cx="30" cy="58" r="5.5" fill="#cc3300"/>
+  <ellipse cx="30" cy="58" r="3.5" fill="#ff6600"/>
+  <ellipse cx="30" cy="58" r="2" fill="#ffcc00"/>
+  <ellipse cx="30" cy="58" r=".8" fill="#fff" opacity=".9"/>
+  <!-- Glow -->
+  <circle cx="30" cy="58" r="6" fill="#cc3300" opacity=".2" style="filter:blur(3px)"/>
+</svg>`;
+
+  if (subtype === 'elite') return `<svg viewBox="0 0 60 110" fill="none">
+  <ellipse cx="30" cy="107" rx="13" ry="4" fill="rgba(0,0,0,.35)"/>
+  <!-- Legs -->
+  <rect x="20" y="74" width="8" height="27" rx="3" fill="#040610"/>
+  <rect x="32" y="74" width="8" height="27" rx="3" fill="#040610"/>
+  <line x1="22" y1="76" x2="22" y2="96" stroke="#1144ee" stroke-width=".7" opacity=".55"/>
+  <line x1="34" y1="76" x2="34" y2="96" stroke="#1144ee" stroke-width=".7" opacity=".55"/>
+  <rect x="18" y="98" width="12" height="5" rx="2" fill="#08081a"/>
+  <rect x="30" y="98" width="12" height="5" rx="2" fill="#08081a"/>
+  <!-- Torso -->
+  <rect x="15" y="48" width="30" height="28" rx="5" fill="#040610"/>
+  <line x1="17" y1="54" x2="43" y2="54" stroke="#1144ee" stroke-width=".6" opacity=".45"/>
+  <line x1="17" y1="60" x2="43" y2="60" stroke="#1144ee" stroke-width=".6" opacity=".3"/>
+  <line x1="17" y1="66" x2="43" y2="66" stroke="#1144ee" stroke-width=".6" opacity=".2"/>
+  <ellipse cx="30" cy="59" rx="4.5" ry="5.5" fill="#1133cc" opacity=".7"/>
+  <ellipse cx="30" cy="59" rx="2" ry="3" fill="#4488ff"/>
+  <!-- Shoulder spikes -->
+  <path d="M14,50 L8,44 L12,52 L5,54 L14,58Z" fill="#06060e"/>
+  <path d="M46,50 L52,44 L48,52 L55,54 L46,58Z" fill="#06060e"/>
+  <!-- Arms -->
+  <rect x="6" y="54" width="8" height="22" rx="3" fill="#040610"/>
+  <rect x="46" y="54" width="8" height="22" rx="3" fill="#040610"/>
+  <!-- Claws -->
+  <path d="M7,74 L4,81 M9,75 L8,82 M11,75 L12,81" stroke="#4488ff" stroke-width="1.4" opacity=".7" stroke-linecap="round"/>
+  <path d="M53,74 L56,81 M51,75 L52,82 M49,75 L48,81" stroke="#4488ff" stroke-width="1.4" opacity=".7" stroke-linecap="round"/>
+  <!-- Belt -->
+  <rect x="15" y="74" width="30" height="4" rx="2" fill="#080820"/>
+  <!-- Neck -->
+  <rect x="25" y="40" width="10" height="10" rx="3" fill="#040610"/>
+  <!-- Head -->
+  <path d="M17,32 L30,17 L43,32 L41,48 L19,48Z" fill="#04060c"/>
+  <!-- Visor -->
+  <path d="M19,34 L41,34 L39,44 L21,44Z" fill="#080820"/>
+  <line x1="20" y1="39" x2="40" y2="39" stroke="#4488ff" stroke-width="2" opacity=".85"/>
+  <line x1="20" y1="39" x2="40" y2="39" stroke="#88aaff" stroke-width=".8" opacity=".4"/>
+  <!-- Head spike -->
+  <path d="M27,17 L30,8 L33,17" fill="#04060c"/>
+</svg>`;
+
+  if (subtype === 'boss') return `<svg viewBox="0 0 80 120" fill="none">
+  <ellipse cx="40" cy="117" rx="28" ry="5" fill="rgba(0,0,0,.5)"/>
+  <!-- Dark energy arms (back layer) -->
+  <path d="M20,82 Q5,93 2,110" stroke="#440088" stroke-width="3" opacity=".5" stroke-linecap="round"/>
+  <path d="M60,82 Q75,93 78,110" stroke="#440088" stroke-width="3" opacity=".5" stroke-linecap="round"/>
+  <path d="M15,67 Q2,73 0,88" stroke="#330066" stroke-width="2" opacity=".4" stroke-linecap="round"/>
+  <path d="M65,67 Q78,73 80,88" stroke="#330066" stroke-width="2" opacity=".4" stroke-linecap="round"/>
+  <!-- Robe base -->
+  <path d="M8,102 L14,68 L24,62 L40,60 L56,62 L66,68 L72,102 Q55,117 40,118 Q25,117 8,102Z" fill="#08001a"/>
+  <!-- Robe legs -->
+  <path d="M22,102 L18,118 M30,104 L28,118 M40,105 L40,118" stroke="#150030" stroke-width="5" opacity=".6" stroke-linecap="round"/>
+  <path d="M58,102 L62,118 M50,104 L52,118" stroke="#150030" stroke-width="5" opacity=".6" stroke-linecap="round"/>
+  <!-- Torso -->
+  <rect x="14" y="52" width="52" height="38" rx="7" fill="#0c0022"/>
+  <!-- Chest sigil hex -->
+  <path d="M25,58 L40,48 L55,58 L55,74 L40,84 L25,74Z" fill="none" stroke="#8800ee" stroke-width="1" opacity=".6"/>
+  <path d="M40,48 L40,84" stroke="#8800ee" stroke-width=".5" opacity=".4"/>
+  <path d="M25,58 L55,74 M55,58 L25,74" stroke="#8800ee" stroke-width=".5" opacity=".4"/>
+  <ellipse cx="40" cy="66" rx="10" ry="11" fill="#2a0066" opacity=".5"/>
+  <ellipse cx="40" cy="66" rx="5" ry="6" fill="#5500bb" opacity=".7"/>
+  <ellipse cx="40" cy="66" rx="2.5" ry="3" fill="#aa00ff"/>
+  <!-- Shoulder spikes cascade -->
+  <path d="M5,56 L0,44 L8,52 L4,40 L13,50 L9,36 L18,48 L15,34" stroke="#7700cc" stroke-width="1.5" fill="none" opacity=".7" stroke-linecap="round"/>
+  <path d="M75,56 L80,44 L72,52 L76,40 L67,50 L71,36 L62,48 L65,34" stroke="#7700cc" stroke-width="1.5" fill="none" opacity=".7" stroke-linecap="round"/>
+  <!-- Main arms -->
+  <rect x="4" y="54" width="14" height="24" rx="4" fill="#0c0022"/>
+  <rect x="62" y="54" width="14" height="24" rx="4" fill="#0c0022"/>
+  <!-- Upper floating arms -->
+  <rect x="7" y="40" width="11" height="18" rx="4" fill="#08001a" transform="rotate(-18,12.5,49)"/>
+  <rect x="62" y="40" width="11" height="18" rx="4" fill="#08001a" transform="rotate(18,67.5,49)"/>
+  <!-- Clawed hands -->
+  <path d="M3,76 L-1,85 M5,77 L3,86 M7,77 L7,87" stroke="#aa00ff" stroke-width="2" opacity=".75" stroke-linecap="round"/>
+  <path d="M77,76 L81,85 M75,77 L77,86 M73,77 L73,87" stroke="#aa00ff" stroke-width="2" opacity=".75" stroke-linecap="round"/>
+  <!-- Collar -->
+  <rect x="28" y="42" width="24" height="14" rx="5" fill="#0a001e"/>
+  <!-- Dark halo rings -->
+  <ellipse cx="40" cy="26" rx="28" ry="9" fill="none" stroke="#7700cc" stroke-width="1" opacity=".4"/>
+  <ellipse cx="40" cy="26" rx="24" ry="7" fill="none" stroke="#aa00ff" stroke-width=".8" opacity=".3"/>
+  <!-- Head -->
+  <ellipse cx="40" cy="30" rx="19" ry="21" fill="#0a001e"/>
+  <ellipse cx="40" cy="32" rx="13" ry="15" fill="#130032"/>
+  <!-- Three eyes -->
+  <ellipse cx="40" cy="23" rx="5.5" ry="4.5" fill="#cc00ff"/><ellipse cx="40" cy="23" rx="3" ry="2.5" fill="#ff44ff"/><ellipse cx="40" cy="23" rx="1.5" ry="1.5" fill="#fff" opacity=".9"/>
+  <ellipse cx="31" cy="33" rx="4.5" ry="3.5" fill="#cc00ff"/><ellipse cx="31" cy="33" rx="2.5" ry="2" fill="#ff44ff"/><ellipse cx="31" cy="33" rx="1.2" ry="1.2" fill="#fff" opacity=".9"/>
+  <ellipse cx="49" cy="33" rx="4.5" ry="3.5" fill="#cc00ff"/><ellipse cx="49" cy="33" rx="2.5" ry="2" fill="#ff44ff"/><ellipse cx="49" cy="33" rx="1.2" ry="1.2" fill="#fff" opacity=".9"/>
+  <!-- Eye glow -->
+  <ellipse cx="40" cy="23" rx="5.5" ry="4.5" fill="#cc00ff" opacity=".3" style="filter:blur(3px)"/>
+  <!-- Crown spikes -->
+  <path d="M26,19 L22,8 L28,16" fill="#1a0040"/><path d="M36,14 L34,3 L39,12" fill="#1a0040"/>
+  <path d="M46,14 L47,3 L51,12" fill="#1a0040"/><path d="M54,19 L58,8 L52,16" fill="#1a0040"/>
+  <!-- Floating jaw -->
+  <path d="M29,44 Q35,52 40,53 Q45,52 51,44" fill="none" stroke="#7700cc" stroke-width="1.5" opacity=".5" stroke-linecap="round"/>
+  <!-- Aura ring -->
+  <ellipse cx="40" cy="66" rx="44" ry="58" fill="none" stroke="#330066" stroke-width="1" opacity=".15"/>
+</svg>`;
+
+  // Default: guard
+  return `<svg viewBox="0 0 60 100" fill="none">
+  <ellipse cx="30" cy="97" rx="18" ry="4" fill="rgba(0,0,0,.4)"/>
+  <!-- Legs -->
+  <rect x="18" y="68" width="10" height="22" rx="3" fill="#181828"/>
+  <rect x="32" y="68" width="10" height="22" rx="3" fill="#181828"/>
+  <rect x="17" y="72" width="12" height="5" rx="2" fill="#222235"/>
+  <rect x="31" y="72" width="12" height="5" rx="2" fill="#222235"/>
+  <rect x="16" y="86" width="14" height="6" rx="3" fill="#1a1a2a"/>
+  <rect x="30" y="86" width="14" height="6" rx="3" fill="#1a1a2a"/>
+  <!-- Torso -->
+  <rect x="13" y="42" width="34" height="28" rx="4" fill="#1c1c2e"/>
+  <path d="M15,44 L45,44 L43,64 L17,64Z" fill="#242438" stroke="#38385a" stroke-width=".5"/>
+  <!-- Red cross -->
+  <line x1="30" y1="46" x2="30" y2="62" stroke="#cc2233" stroke-width="1.5"/>
+  <line x1="17" y1="54" x2="43" y2="54" stroke="#cc2233" stroke-width="1.5"/>
+  <!-- Shoulder guards -->
+  <rect x="5" y="42" width="12" height="14" rx="3" fill="#242438"/>
+  <rect x="43" y="42" width="12" height="14" rx="3" fill="#242438"/>
+  <!-- Arms -->
+  <rect x="5" y="54" width="10" height="16" rx="3" fill="#181828"/>
+  <rect x="45" y="54" width="10" height="16" rx="3" fill="#181828"/>
+  <rect x="4" y="68" width="12" height="8" rx="3" fill="#222235"/>
+  <rect x="44" y="68" width="12" height="8" rx="3" fill="#222235"/>
+  <!-- Belt -->
+  <rect x="13" y="68" width="34" height="5" rx="2" fill="#2e2e45"/>
+  <!-- Neck -->
+  <rect x="24" y="34" width="12" height="10" rx="3" fill="#181828"/>
+  <!-- Helmet -->
+  <ellipse cx="30" cy="25" rx="14" ry="15" fill="#181828"/>
+  <!-- Visor -->
+  <path d="M17,23 L43,23 L41,30 L19,30Z" fill="#cc1122" opacity=".85"/>
+  <path d="M18,24 L42,24 L40,29 L20,29Z" fill="#ff3344" opacity=".25"/>
+  <!-- Helmet ridge -->
+  <rect x="28" y="12" width="4" height="12" rx="2" fill="#222235"/>
+  <!-- Shield -->
+  <path d="M1,44 L1,78 Q1,84 8,84 L14,72 L14,44Z" fill="#1c1c2e" stroke="#38385a" stroke-width="1"/>
+  <path d="M4,50 L4,76 Q4,80 9,80 L12,70 L12,50Z" fill="#242438"/>
+  <circle cx="8" cy="63" r="4" fill="none" stroke="#cc2233" stroke-width="1.5"/>
+</svg>`;
+}
+
+// ── Particles (arena atmosphere) ───────────────────────────────────────────
+function generateParticles() {
+  const colors = ['#c8a2ff','#9966cc','#6644aa','#4422aa','#aa66ff'];
+  return Array.from({length:18},(_,i)=>{
+    const x = (10+Math.random()*80).toFixed(1);
+    const y = (10+Math.random()*80).toFixed(1);
+    const delay = (Math.random()*5).toFixed(2);
+    const dur = (3+Math.random()*3.5).toFixed(2);
+    const color = colors[i%colors.length];
+    const size = Math.random() > .7 ? 3 : 2;
+    return `<div class="bp" style="--bx:${x}%;--by:${y}%;--bd:${delay}s;--pd:${dur}s;--bc:${color};width:${size}px;height:${size}px"></div>`;
+  }).join('');
+}
+
+// ── Animation triggers ─────────────────────────────────────────────────────
+function triggerFW(id, cls, ms) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.remove('attacking','plr-hit','enm-hit','enm-dying');
+  void el.offsetWidth;
+  el.classList.add(cls);
+  if (cls !== 'enm-dying') setTimeout(()=>el.classList.remove(cls), ms);
+}
+function triggerPlayerAttack() { triggerFW('fwPlayer','attacking',580); }
+function triggerPlayerHit()    { triggerFW('fwPlayer','plr-hit',680); }
+function triggerEnemyHit()     { triggerFW('fwEnemy','enm-hit',580); }
+function triggerEnemyDeath()   { triggerFW('fwEnemy','enm-dying',1500); }
+
 // ── Combat ─────────────────────────────────────────────────────────────────
 let combatInsightUses = 2;
 
 async function beginCombat(info) {
-  combatLocked = false;
+  combatLocked    = false;
+  isAnomalyCombat = !!(info.is_anomaly);
+
+  // ── Anomaly: show warning screen before entering ──────────────────────────
+  if (isAnomalyCombat) {
+    render(`
+      <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+      ${playerBar()}
+      <div class="anomaly-warning">
+        <div class="aw-icon">⚠️</div>
+        <div class="aw-title">ANOMALY DETECTED</div>
+        <div class="aw-sub">The Pale Drift stirs in the rift.</div>
+        <div class="aw-body">
+          Anomaly combat uses the <b>hardest questions in the archive</b>.<br>
+          Victory grants <b>legendary rewards</b>.<br>
+          Defeat brands you with a <b>permanent debuff</b> — no exceptions.
+        </div>
+        <div class="aw-debuffs">Possible curses: Pale Mark · Shattered Focus · XP Curse · Void Wound</div>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:18px">
+          <button class="abtn" data-t="combat" onclick="doBeginCombat(window._pendingCombatInfo)">⚠️ Enter the Rift</button>
+          <button class="abtn" data-t="navigation" onclick="renderOverworld()">← Retreat</button>
+        </div>
+      </div>
+      ${renderLog()}
+    `);
+    window._pendingCombatInfo = info;
+    return;
+  }
+  await doBeginCombat(info);
+}
+
+async function doBeginCombat(info) {
+  const nodeSubtype = info.is_anomaly ? 'boss' : (info.subtype || 'guard');
   const r = await api("/start_combat","POST",{
-    concept_id: info.concept_id||null,
-    weapon_id:  player.weapon_id || info.weapon_id || "none",
-    armor_id:   player.armor_id  || info.armor_id  || "none",
-    node_god:   info.god||null,
+    concept_id:     info.concept_id||null,
+    weapon_id:      player.weapon_id || info.weapon_id || "none",
+    armor_id:       player.armor_id  || info.armor_id  || "none",
+    node_god:       info.god||null,
     node_modifiers: [],
-    bonus_insight: player.insight||0,
+    bonus_insight:  player.insight||0,
+    is_anomaly:     !!(info.is_anomaly),
+    node_difficulty: info.difficulty||1,
   });
   if (!r) { renderOverworld(); return; }
 
-  combatId      = r.session_id;
-  combatRound   = r.round||1;
-  combatStreak  = r.streak||0;
+  combatId          = r.session_id;
+  combatRound       = r.round||1;
+  combatStreak      = r.streak||0;
   combatInsightUses = r.insight_uses ?? 2;
-  combatEnemy   = { name: r.enemy_name||"Enemy", concept: r.enemy_concept||"" };
+  combatXpReward    = r.xp_reward || 30;
+  isAnomalyCombat   = r.is_anomaly || false;
+  combatEnemy       = {
+    name:    r.enemy_name||"Enemy",
+    concept: r.enemy_concept||"",
+    subtype: r.enemy_subtype || nodeSubtype,
+    tier:    r.question_tier || "standard",
+  };
   combatHp = {
     player: r.player_hp, playerMax: r.player_max_hp,
     enemy:  r.enemy_hp,  enemyMax:  r.enemy_max_hp,
@@ -588,28 +1696,136 @@ async function beginCombat(info) {
   renderCombat(r.question);
 }
 
+// ── Question type helpers ──────────────────────────────────────────────────
+const Q_TYPE_LABELS = {
+  multiple_choice: { label:"MCQ",    color:"#4a6fa5", icon:"🔲" },
+  true_false:      { label:"T/F",    color:"#5a7a3a", icon:"⚖️" },
+  define:          { label:"DEFINE", color:"#7a5a9a", icon:"📖" },
+  short_exam:      { label:"SHORT",  color:"#8a6a2a", icon:"✏️" },
+  long_exam:       { label:"ESSAY",  color:"#9a3a3a", icon:"📝" },
+};
+const TIER_LABELS = {
+  standard: { label:"",        color:"transparent" },
+  elite:    { label:"ELITE",   color:"#3a5a7a" },
+  boss:     { label:"BOSS",    color:"#7a2a2a" },
+  anomaly:  { label:"ANOMALY", color:"#4a1a6a" },
+};
+
+function renderQTypeBadge(q) {
+  const qt = Q_TYPE_LABELS[q.type] || Q_TYPE_LABELS.multiple_choice;
+  const tier = TIER_LABELS[q.tier] || TIER_LABELS.standard;
+  const tierBadge = tier.label
+    ? `<span class="qbadge" style="background:${tier.color}">${tier.label}</span>`
+    : '';
+  return `<span class="qbadge" style="background:${qt.color}">${qt.icon} ${qt.label}</span>${tierBadge}`;
+}
+
+function renderQuestionInput(q) {
+  const type = q.type || 'multiple_choice';
+
+  // True/False — 2 big buttons
+  if (type === 'true_false') {
+    return `<div class="boptgrid tf-grid">
+      <button class="bopt tf-opt" id="optTrue"  onclick="submitAnswer('${escAttr(q.id)}','True')">✅ True</button>
+      <button class="bopt tf-opt" id="optFalse" onclick="submitAnswer('${escAttr(q.id)}','False')">❌ False</button>
+    </div>`;
+  }
+
+  // Multiple choice — 2-column grid
+  if (type === 'multiple_choice') {
+    return `<div class="boptgrid">
+      ${(q.options||[]).map((opt,i)=>`
+        <button class="bopt" id="opt${i}" onclick="submitAnswer('${escAttr(q.id)}','${escAttr(opt)}')">${escHtml(opt)}</button>
+      `).join('')}
+    </div>`;
+  }
+
+  // Open-ended: define / short_exam / long_exam
+  const isLong = type === 'long_exam';
+  return `<div class="open-q-wrap">
+    ${type === 'define' ? `<div class="open-q-frame">Define the term or concept above in your own words.</div>` : ''}
+    ${type === 'short_exam' ? `<div class="open-q-frame">Provide a concise answer (2–4 sentences).</div>` : ''}
+    ${type === 'long_exam'  ? `<div class="open-q-frame">Write a detailed explanation or analysis.</div>` : ''}
+    <textarea id="openAns" class="open-q-input ${isLong?'open-q-lg':''}"
+      placeholder="Type your answer here..."
+      onkeydown="if(event.ctrlKey&&event.key==='Enter')submitOpenAnswer('${escAttr(q.id)}')"></textarea>
+    <button class="abtn open-q-submit" onclick="submitOpenAnswer('${escAttr(q.id)}')">Submit Answer →</button>
+  </div>`;
+}
+
 function renderCombat(q) {
   if (!q) { endCombat(false); return; }
 
+  const pp = pct(combatHp.player, combatHp.playerMax);
+  const ep = pct(combatHp.enemy,  combatHp.enemyMax);
+  const subtype = combatEnemy.subtype || 'guard';
+  const isBoss  = subtype === 'boss';
+  const wpnName = WEAPONS_CATALOG[player.weapon_id]?.name || 'Unarmed';
+  const armName = ARMORS_CATALOG[player.armor_id]?.name  || 'None';
+
   render(`
-    <div class="header"><h1>C.R.A.M — The Unbound</h1><div class="sub">Combat</div></div>
-    <div class="cpanel">
-      <h2>⚔️ ${combatEnemy.name}</h2>
-      ${hpBarsHtml()}
-      <div class="streak-bar" id="sbar">${streakHtml()}</div>
-      <div class="qbox">
-        <div class="qtext">${escHtml(q.question)}</div>
-        ${(q.options||[]).map((opt,i)=>`
-          <button class="opt" id="opt${i}" onclick="submitAnswer('${escAttr(q.id)}','${escAttr(opt)}')">${escHtml(opt)}</button>
-        `).join("")}
-        <button class="insight-btn" id="insightBtn" ${combatInsightUses<=0?"disabled":""} onclick="useInsight()">
-          💡 Use Insight (${combatInsightUses} left)
-        </button>
-        <div id="insightHint"></div>
-        <div id="expl"></div>
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    ${playerBar()}
+    <div class="battle-wrap">
+
+      <!-- ── Arena ── -->
+      <div class="battle-arena">
+        ${generateParticles()}
+        <div class="battle-ground"></div>
+        <div class="battle-fighters">
+
+          <!-- Player -->
+          <div class="fw" id="fwPlayer">
+            <div class="fw-hprow">
+              <div class="fw-name">CPT SHANYOK</div>
+              <div class="fw-track"><div class="fw-fill plr" id="php" style="width:${pp}%"></div></div>
+              <div class="fw-hpnum" id="phpnum">${combatHp.player}/${combatHp.playerMax}</div>
+            </div>
+            <div class="sp-area">
+              <div class="sp-shadow"></div>
+              ${getPlayerSprite()}
+            </div>
+          </div>
+
+          <!-- Center -->
+          <div class="bc">
+            <div class="bc-round">ROUND ${combatRound}</div>
+            <div class="bc-streak" id="sbar">${streakHtml()}</div>
+            <div class="bc-equip">⚔ ${wpnName} &nbsp;🛡 ${armName}</div>
+          </div>
+
+          <!-- Enemy -->
+          <div class="fw" id="fwEnemy">
+            <div class="fw-hprow">
+              <div class="fw-name">${combatEnemy.name.toUpperCase()}</div>
+              <div class="fw-track"><div class="fw-fill enm" id="ehp" style="width:${ep}%"></div></div>
+              <div class="fw-hpnum" id="ehpnum">${combatHp.enemy}/${combatHp.enemyMax}</div>
+            </div>
+            <div class="sp-area${isBoss?' boss-sz':''}">
+              <div class="sp-shadow"></div>
+              ${getEnemySprite(subtype)}
+            </div>
+          </div>
+
+        </div>
       </div>
+
+      <!-- ── Question box ── -->
+      <div class="bqbox">
+        ${isAnomalyCombat ? `<div class="anomaly-badge">⚠️ ANOMALY — Failure = Permanent Debuff</div>` : ''}
+        <div class="bqconcept">${renderQTypeBadge(q)} ${combatEnemy.concept||''}</div>
+        <div class="bqtext ${q.type==='long_exam'?'bqtext-lg':''}">${escHtml(q.question)}</div>
+        ${renderQuestionInput(q)}
+        <div class="bfoot">
+          <button class="insight-btn" id="insightBtn" ${combatInsightUses<=0?"disabled":""} onclick="useInsight()">
+            💡 Insight (${combatInsightUses} left)
+          </button>
+          <div id="expl" style="flex:1"></div>
+        </div>
+        <div id="insightHint"></div>
+      </div>
+
     </div>
-    <div style="font-size:12px;color:#444;margin-top:8px;text-align:center">Round ${combatRound}</div>
     ${renderLog()}
   `);
 }
@@ -658,61 +1874,122 @@ function updateBars() {
   if (sb) sb.innerHTML = streakHtml();
 }
 
+// ── Open-ended question: show model answer then self-evaluate ─────────────
+function submitOpenAnswer(qid) {
+  if (combatLocked) return;
+  const ta = document.getElementById("openAns");
+  if (!ta) return;
+  const userAnswer = ta.value.trim();
+  if (!userAnswer) return;
+  combatLocked = true;
+  pendingOpenAnswer = { qid };
+  ta.disabled = true;
+
+  // Hide the submit button and show the model-answer panel
+  const wrap = ta.closest(".open-q-wrap");
+  if (wrap) {
+    const submitBtn = wrap.querySelector(".open-q-submit");
+    if (submitBtn) submitBtn.style.display = "none";
+    // We need the model answer — call backend to evaluate with a placeholder
+    // so we get back the correct_answer field, then show self-eval UI
+    const modelPanel = document.createElement("div");
+    modelPanel.className = "self-eval-panel";
+    modelPanel.id = "selfEvalPanel";
+    modelPanel.innerHTML = `<div class="sep-loading">Revealing answer...</div>`;
+    wrap.appendChild(modelPanel);
+
+    // Fetch model answer WITHOUT affecting combat state
+    (async () => {
+      const r = await api("/peek_answer","POST",{question_id:qid});
+      const modelAns = r?.correct_answer || "(no answer available)";
+      modelPanel.innerHTML = `
+        <div class="sep-title">📖 Model Answer</div>
+        <div class="sep-body">${escHtml(modelAns)}</div>
+        ${r?.explanation ? `<div class="sep-expl">${escHtml(r.explanation)}</div>` : ''}
+        <div class="sep-question">Did your answer capture the key ideas?</div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="bopt correct" style="flex:1" onclick="selfEvaluate('${escAttr(qid)}',true)">✅ I got it</button>
+          <button class="bopt wrong"  style="flex:1" onclick="selfEvaluate('${escAttr(qid)}',false)">❌ I missed it</button>
+        </div>
+      `;
+      combatLocked = false;
+    })();
+  }
+}
+
+async function selfEvaluate(qid, correct) {
+  if (combatLocked) return;
+  combatLocked = true;
+  document.querySelectorAll(".bopt").forEach(b => b.disabled = true);
+  await _processAnswer(qid, correct ? "self:correct" : "self:incorrect");
+}
+
 async function submitAnswer(qid, answer) {
   if (combatLocked) return;
   combatLocked = true;
+  document.querySelectorAll(".bopt").forEach(b => b.disabled = true);
+  await _processAnswer(qid, answer);
+}
 
-  // Disable all option buttons
-  document.querySelectorAll(".opt").forEach(b => b.disabled = true);
-
+async function _processAnswer(qid, answer) {
   const r = await api("/answer","POST",{session_id:combatId, question_id:qid, answer:answer});
   if (!r) { combatLocked = false; return; }
 
-  // ── Update HP ────────────────────────────────────────────────────────────
+  // ── Update HP ─────────────────────────────────────────────────────────────
   combatHp.player = r.player_hp;
   combatHp.enemy  = r.enemy_hp;
   combatStreak    = r.streak||0;
   combatRound     = r.round||combatRound;
   updateBars();
 
-  // ── Highlight answers ────────────────────────────────────────────────────
-  document.querySelectorAll(".opt").forEach(btn => {
-    if (btn.textContent === answer) {
-      btn.classList.add(r.correct ? "correct" : "wrong");
-    }
-    if (btn.textContent === r.correct_answer && !r.correct) {
-      btn.classList.add("correct");
+  // ── Highlight answers (only for button-based questions) ───────────────────
+  document.querySelectorAll(".bopt").forEach(btn => {
+    const t = btn.textContent.trim();
+    const isSelfEval = answer.startsWith("self:");
+    if (!isSelfEval) {
+      if (t === answer.trim())                 btn.classList.add(r.correct ? "correct" : "wrong");
+      if (t === r.correct_answer && !r.correct) btn.classList.add("correct");
     }
   });
 
-  // ── Damage pops ──────────────────────────────────────────────────────────
+  // ── Animations + damage pops ───────────────────────────────────────────────
   const eEl = document.getElementById("ehp");
   const pEl = document.getElementById("php");
   if (r.correct && r.damage_dealt > 0) {
+    triggerPlayerAttack();
+    setTimeout(() => triggerEnemyHit(), 220);
     dmgPop(`-${r.damage_dealt}`, "good", eEl);
     log(`✅ Correct! Dealt ${r.damage_dealt} dmg. Streak ×${combatStreak}`);
   } else if (!r.correct) {
-    dmgPop(`-${r.enemy_damage}`, "bad", pEl);
-    log(`❌ Wrong. Took ${r.enemy_damage} dmg. Streak broken.`);
+    triggerPlayerHit();
+    if (r.enemy_damage > 0) dmgPop(`-${r.enemy_damage}`, "bad", pEl);
+    log(`❌ Wrong. Took ${r.enemy_damage||0} dmg. Streak broken.`);
   }
   if (r.streak_feedback) {
     const sb = document.getElementById("sbar");
     if (sb) sb.innerHTML = `<span style="color:#f1c40f">${r.streak_feedback}</span>`;
   }
 
-  // ── Show explanation ──────────────────────────────────────────────────────
+  // ── Show explanation ───────────────────────────────────────────────────────
   const explEl = document.getElementById("expl");
   if (explEl && r.explanation) {
     explEl.innerHTML = `<div class="expl ${r.correct?'good':'bad'}">${escHtml(r.explanation)}</div>`;
   }
 
-  // ── Combat over? ─────────────────────────────────────────────────────────
+  // ── Combat over? ──────────────────────────────────────────────────────────
   if (r.combat_over) {
-    setTimeout(() => endCombat(r.winner === "player"), 2000);
+    if (r.winner === "player") {
+      triggerEnemyHit();
+      setTimeout(() => triggerEnemyDeath(), 380);
+      setTimeout(() => endCombat(true), 2400);
+    } else {
+      triggerPlayerHit();
+      setTimeout(() => endCombat(false), 2000);
+    }
     return;
   }
 
-  // ── Next question ─────────────────────────────────────────────────────────
+  // ── Next question ──────────────────────────────────────────────────────────
   const next = r.next_question;
   setTimeout(() => {
     combatLocked = false;
@@ -733,29 +2010,72 @@ async function endCombat(victory) {
   }
 
   let xpGained = 0;
-  let levelUp = false;
+  let levelUp  = false;
+  let debuff   = null;
 
   if (victory) {
-    // Award XP proportional to enemy difficulty
-    xpGained = 15 + combatRound * 3;
+    // Use server-determined XP reward (scales with enemy tier)
+    xpGained = combatXpReward;
     const xpR = await api("/api/game/xp","POST",{session_id:gameId, amount:xpGained});
     if (xpR?.level_up) { levelUp = true; }
+  } else if (isAnomalyCombat) {
+    // Anomaly loss → permanent debuff
+    const dr = await api("/api/game/anomaly/debuff","POST",{session_id:gameId});
+    if (dr?.debuff) debuff = dr.debuff;
   }
 
   await syncPlayer();
 
+  const isAnomaly = isAnomalyCombat;
+  const borderCol = victory
+    ? (isAnomaly ? '#4a1a6a' : '#1a4a1a')
+    : (isAnomaly ? '#6a0a0a' : '#4a1a1a');
+  const bgGrad = victory
+    ? (isAnomaly
+        ? 'linear-gradient(175deg,#050012,#0a0020,#100830)'
+        : 'linear-gradient(175deg,#020a02,#041204,#081a08)')
+    : (isAnomaly
+        ? 'linear-gradient(175deg,#120000,#1a0002,#200008)'
+        : 'linear-gradient(175deg,#080002,#120004,#1a0208)');
+  const brTitle = victory
+    ? (isAnomaly ? '✨ Rift Conquered' : '🏆 Victory')
+    : (isAnomaly ? '💀 Branded by the Drift' : '💀 Defeated');
+  const subtext = victory
+    ? (isAnomaly
+        ? `The Pale Drift recoils. You claim its forbidden knowledge.`
+        : `The ${combatEnemy.name} falls. Knowledge is power.`)
+    : (isAnomaly
+        ? `The Pale Drift has marked you. Its curse is permanent.`
+        : 'The enemy overwhelms you. You retreat to the shadows.');
+  const statsLine = `${combatRound} round${combatRound!==1?'s':''} fought`;
+
+  const debuffHtml = debuff ? `
+    <div class="debuff-result">
+      <div class="dr-icon">${debuff.icon}</div>
+      <div class="dr-name">${debuff.name}</div>
+      <div class="dr-desc">${debuff.desc}</div>
+    </div>
+  ` : '';
+
+  const actionBtn = victory
+    ? `<button class="abtn" data-t="navigation" onclick="afterCombat()" style="max-width:240px;margin:0 auto">← Return to Overworld</button>`
+    : `<div style="display:flex;flex-direction:column;gap:10px;align-items:center;width:100%;max-width:280px;margin:0 auto">
+        <button class="abtn" data-t="combat" onclick="resetRun()" style="width:100%;background:#1a0505;border-color:#6a1a1a;color:#ff6666;letter-spacing:1px">
+          💀 Accept Death — Start Over
+        </button>
+        <div style="color:#2a1a1a;font-size:11px;text-align:center">Your run ends here. All progress is lost.</div>
+       </div>`;
+
   render(`
     <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
-    ${playerBar()}
-    <div class="cpanel" style="text-align:center; padding:30px">
-      <h2 style="font-size:26px; margin-bottom:12px">${victory ? "🏆 Victory!" : "💀 Defeated"}</h2>
-      <p style="color:#888; margin-bottom:${xpGained?'8px':'20px'}">
-        ${victory
-          ? `The ${combatEnemy.name} falls. Knowledge is power.`
-          : "The Pale Drift grows stronger. You retreat."}
-      </p>
-      ${xpGained ? `<p style="color:#f1c40f; margin-bottom:20px">+${xpGained} XP${levelUp?" · <b>LEVEL UP!</b>":""}</p>` : ""}
-      <button class="abtn" data-t="navigation" onclick="afterCombat()" style="max-width:220px; margin:0 auto">← Return to Overworld</button>
+    ${victory ? playerBar() : ''}
+    <div class="battle-result" style="border-color:${borderCol};background:${bgGrad}">
+      <div class="br-title">${brTitle}</div>
+      <div class="br-sub">${subtext}</div>
+      ${xpGained ? `<div class="br-xp">+${xpGained} XP${levelUp ? ' &nbsp;·&nbsp; <b style="color:#fff">LEVEL UP!</b>' : ''}</div>` : ''}
+      ${debuffHtml}
+      <div style="color:#333;font-size:11px;margin-bottom:24px">${statsLine}</div>
+      ${actionBtn}
     </div>
     ${renderLog()}
   `);
@@ -767,6 +2087,28 @@ async function afterCombat() {
   combatId = null;
   combatLocked = false;
   renderOverworld();
+}
+
+function resetRun() {
+  // Wipe all run state — fresh start
+  gameId        = null;
+  world         = null;
+  curNode       = null;
+  combatId      = null;
+  combatLocked  = false;
+  combatRound   = 1;
+  combatStreak  = 0;
+  isAnomalyCombat = false;
+  combatXpReward  = 30;
+  playerDebuffs   = [];
+  playerUpgrades  = [];
+  pendingOpenAnswer = null;
+  navBack       = null;
+  logs          = [];
+  _libraryData  = null;   // force library reload for new run
+  player        = { level:1, xp:0, hp:100, max_hp:100, insight:0,
+                    weapon_id:'none', armor_id:'none' };
+  renderStart();
 }
 
 function showLevelUp(level) {
@@ -796,34 +2138,48 @@ async function useInsight() {
 }
 
 // ── Codex viewer ────────────────────────────────────────────────────────────
-async function renderCodex() {
+async function renderCodex(backFn) {
+  // Save back destination
+  navBack = backFn || (gameId ? renderOverworld : renderStart);
+
   if (!gameId) {
-    // No active game — show placeholder
     render(`
       <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
-      <div class="codex-panel">
+      <button class="back-btn" onclick="goBack()">← Back</button>
+      <div class="codex-tabs">
+        <button class="codex-tab active" id="ctab-journal"  onclick="switchCodexTab('journal')">📕 Mistake Journal</button>
+        <button class="codex-tab"        id="ctab-bestiary" onclick="switchCodexTab('bestiary')">🐉 Bestiary</button>
+      </div>
+      <div id="cpanel-journal" class="codex-panel">
         <h2>📕 Codex — Mistake Journal</h2>
         <div class="codex-sub">Your mistakes from this run will appear here. Start a run first.</div>
         <div class="codex-empty">No active session. Begin a run to start tracking.</div>
       </div>
-      <button class="abtn" data-t="navigation" onclick="renderStart()" style="max-width:180px">← Back</button>
+      <div id="cpanel-bestiary" class="codex-panel" style="display:none">
+        <h2>🐉 Bestiary — Enemy Compendium</h2>
+        <div class="codex-sub">All known entities of the Unbound World. Tap an entry to reveal its stats.</div>
+        ${renderBestiaryHTML()}
+      </div>
     `);
     return;
   }
+
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    <div class="codex-panel"><div class="codex-sub" style="color:#444">Loading codex…</div></div>
+  `);
 
   const [all, mistakes] = await Promise.all([
     api(`/codex/${gameId}`),
     api(`/codex/${gameId}/mistakes`),
   ]);
 
-  const entries = all?.entries || [];
-  const wrongOnes = mistakes?.entries || [];
-  const accuracy = entries.length > 0
+  const entries    = all?.entries     || [];
+  const wrongOnes  = mistakes?.entries || [];
+  const accuracy   = entries.length > 0
     ? Math.round(((entries.length - wrongOnes.length) / entries.length) * 100)
     : null;
-
-  // Group by concept
-  const concepts = [...new Set(entries.map(e => e.concept_id || e.question_id?.split('_')[0] || 'unknown'))];
 
   const rowsHtml = entries.length === 0
     ? `<tr><td colspan="5" class="codex-empty">No questions answered yet this run.</td></tr>`
@@ -840,7 +2196,15 @@ async function renderCodex() {
 
   render(`
     <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
-    <div class="codex-panel">
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    ${playerBar()}
+    <div class="codex-tabs">
+      <button class="codex-tab active" id="ctab-journal"   onclick="switchCodexTab('journal')">📕 Mistake Journal</button>
+      <button class="codex-tab"        id="ctab-bestiary"  onclick="switchCodexTab('bestiary')">🐉 Bestiary</button>
+    </div>
+
+    <!-- Mistake Journal -->
+    <div id="cpanel-journal" class="codex-panel">
       <h2>📕 Codex — Mistake Journal</h2>
       <div class="codex-sub">
         ${entries.length} questions answered this run.
@@ -848,9 +2212,9 @@ async function renderCodex() {
         ${accuracy !== null ? `Accuracy: <b style="color:#88cc88">${accuracy}%</b>` : ''}
       </div>
       ${wrongOnes.length > 0 ? `
-      <div style="background:#1a0a0a;border:1px solid #3a1a1a;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#c88">
-        ⚠️ Weakest concept this run: <b>${getMostMistaken(wrongOnes)}</b>
-      </div>` : ''}
+        <div style="background:#1a0a0a;border:1px solid #3a1a1a;border-radius:6px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#c88">
+          ⚠️ Weakest concept this run: <b>${getMostMistaken(wrongOnes)}</b>
+        </div>` : ''}
       <div style="overflow-x:auto">
         <table class="codex-table">
           <thead><tr>
@@ -860,8 +2224,15 @@ async function renderCodex() {
         </table>
       </div>
     </div>
-    <button class="abtn" data-t="navigation" onclick="renderOverworld()" style="max-width:180px">← Overworld</button>
-    ${renderLog()}
+
+    <!-- Bestiary -->
+    <div id="cpanel-bestiary" class="codex-panel" style="display:none">
+      <h2>🐉 Bestiary — Enemy Compendium</h2>
+      <div class="codex-sub">All known entities of the Unbound World. Tap an entry to reveal its stats.</div>
+      ${renderBestiaryHTML()}
+    </div>
+
+    ${gameId ? renderLog() : ''}
   `);
 }
 
@@ -874,20 +2245,139 @@ function getMostMistaken(wrongEntries) {
   return Object.entries(counts).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'unknown';
 }
 
+function switchCodexTab(tab) {
+  ['journal','bestiary'].forEach(t => {
+    const btn = document.getElementById('ctab-'+t);
+    const pnl = document.getElementById('cpanel-'+t);
+    if (btn) btn.classList.toggle('active', t===tab);
+    if (pnl) pnl.style.display = t===tab ? '' : 'none';
+  });
+}
+
+// ── Bestiary data (mirrors backend ENEMIES list) ─────────────────────────────
+const BESTIARY = [
+  { name:"Recursive Wraith",  sprite:"🌀", tier:"standard", hp:60,  dmg:"15–25", xp:20,
+    concepts:["recursion"], types:["Multiple Choice","True/False"], lore:"A looping phantom born from stack overflows." },
+  { name:"Complexity Specter", sprite:"📈", tier:"standard", hp:60,  dmg:"15–25", xp:20,
+    concepts:["big_o"], types:["Multiple Choice","True/False"], lore:"Its form grows with every step you take." },
+  { name:"Binary Shade",      sprite:"🔍", tier:"standard", hp:80,  dmg:"18–30", xp:30,
+    concepts:["binary_search","sorting"], types:["Multiple Choice","True/False"], lore:"Halves your hope with every question." },
+  { name:"BST Revenant",      sprite:"🌳", tier:"standard", hp:80,  dmg:"18–30", xp:30,
+    concepts:["bst","avl_tree"], types:["Multiple Choice","True/False"], lore:"Unbalanced and hungry. Watch the branches." },
+  { name:"Sort Daemon",       sprite:"🔢", tier:"standard", hp:85,  dmg:"19–32", xp:35,
+    concepts:["sorting","big_o"], types:["Multiple Choice","Define"], lore:"Endlessly reorders the dead." },
+  { name:"Graph Lurker",      sprite:"🕸️", tier:"standard", hp:95,  dmg:"21–35", xp:40,
+    concepts:["graphs"], types:["Multiple Choice","True/False","Define"], lore:"Weaves through the node-web at will." },
+  { name:"Hash Wraith",       sprite:"#️⃣", tier:"standard", hp:95,  dmg:"20–34", xp:40,
+    concepts:["hashing"], types:["Multiple Choice","Define"], lore:"Collides with your confidence." },
+  { name:"AVL Titan",         sprite:"⚖️", tier:"standard", hp:100, dmg:"22–37", xp:45,
+    concepts:["avl_tree","bst"], types:["Multiple Choice","Short Answer"], lore:"Self-balancing. Terrifyingly efficient." },
+  { name:"DP Colossus",       sprite:"🧩", tier:"elite",    hp:120, dmg:"26–44", xp:60,
+    concepts:["dp","recursion"], types:["Multiple Choice","Short Answer","Define"], lore:"Remembers every wrong answer you've given." },
+  { name:"Void Examiner",     sprite:"🌑", tier:"elite",    hp:115, dmg:"25–42", xp:65,
+    concepts:["big_o","sorting","graphs","hashing"], types:["Multiple Choice","Short Answer"], lore:"It draws from the whole archive." },
+  { name:"Grand Examiner",    sprite:"👁️", tier:"boss",     hp:180, dmg:"35–60", xp:150,
+    concepts:["all"], types:["Multiple Choice","Short Answer","Essay"], lore:"The final test. It knows everything you don't." },
+  { name:"The Pale Drift",    sprite:"💀", tier:"anomaly",  hp:160, dmg:"40–70", xp:200,
+    concepts:["all"], types:["Multiple Choice","True/False","Short Answer"],
+    lore:"It came from outside the system. Defeat it for legendary rewards — fail and be cursed forever." },
+];
+
+const TIER_SPRITE = { standard:'🗡️', elite:'⚡', boss:'💀', anomaly:'⚠️' };
+
+function renderBestiaryHTML() {
+  const cards = BESTIARY.map((e, idx) => {
+    const tierLabel = e.tier.charAt(0).toUpperCase() + e.tier.slice(1);
+    return `
+      <div class="bestiary-card" id="bc-${idx}" onclick="toggleBestiaryCard(${idx})">
+        <div class="bc-top">
+          <span class="bc-sprite">${e.sprite}</span>
+          <span class="bc-name">${escHtml(e.name)}</span>
+          <span class="bc-tier ${e.tier}">${TIER_SPRITE[e.tier]||''} ${tierLabel}</span>
+        </div>
+        <div class="bc-detail">
+          <div class="bc-stat">
+            <div class="bc-stat-label">HP</div>
+            <div class="bc-stat-val">${e.hp}</div>
+          </div>
+          <div class="bc-stat">
+            <div class="bc-stat-label">Damage</div>
+            <div class="bc-stat-val">${e.dmg}</div>
+          </div>
+          <div class="bc-stat">
+            <div class="bc-stat-label">XP Reward</div>
+            <div class="bc-stat-val">${e.xp} XP</div>
+          </div>
+          <div class="bc-stat">
+            <div class="bc-stat-label">Question Types</div>
+            <div class="bc-stat-val" style="font-size:11px">${e.types.join(', ')}</div>
+          </div>
+          <div class="bc-concepts">
+            <div class="bc-stat-label">Topics</div>
+            <div class="bc-stat-val" style="font-size:11px">${e.concepts.join(', ')}</div>
+          </div>
+          <div class="bc-concepts" style="grid-column:1/-1;margin-top:2px;background:transparent;border-color:#0a1a0a">
+            <div class="bc-stat-val" style="color:#4a6a4a;font-size:11px;font-style:italic">${escHtml(e.lore)}</div>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+  return `<div class="bestiary-list">${cards}</div>`;
+}
+
+function toggleBestiaryCard(idx) {
+  const el = document.getElementById('bc-' + idx);
+  if (el) el.classList.toggle('open');
+}
+
 // ── Equipment picker ─────────────────────────────────────────────────────────
-const WEAPONS_CATALOG = {
+// BASE catalogs — never mutated. Custom subject entries are MERGED on top.
+const _BASE_WEAPONS = {
   "none":            { name:"Bare Hands",      stat:"+0% damage",    ability:"None" },
   "binary_blade":    { name:"Binary Blade",    stat:"+15% damage",   ability:"Binary Strike: +50% on hit" },
   "recursive_staff": { name:"Recursive Staff", stat:"+10% damage",   ability:"Recursive Echo: deal 30% of last hit again" },
   "balance_edge":    { name:"Balance Edge",    stat:"+8% damage",    ability:"Balance Shift: +40% damage reduction on wrong" },
 };
-const ARMORS_CATALOG = {
+const _BASE_ARMORS = {
   "none":        { name:"No Armor",    stat:"0% reduction" },
   "data_vest":   { name:"Data Vest",   stat:"15% damage reduction" },
   "stack_plate": { name:"Stack Plate", stat:"25% damage reduction" },
 };
 
-async function renderEquipment() {
+// Live catalogs — used everywhere in the game. Rebuilt on each subject switch.
+const WEAPONS_CATALOG = { ..._BASE_WEAPONS };
+const ARMORS_CATALOG  = { ..._BASE_ARMORS  };
+
+// ── Subject game config loader ────────────────────────────────────────────────
+// Fetches /api/subject_config and merges any extra weapons/armors/upgrades
+// into the live catalogs. Called on game start and after every subject switch.
+async function loadSubjectGameConfig() {
+  try {
+    const r = await api("/api/subject_config");
+    const cfg = r?.game_config || {};
+
+    // Reset live catalogs to base first, then apply subject additions
+    Object.keys(WEAPONS_CATALOG).forEach(k => delete WEAPONS_CATALOG[k]);
+    Object.assign(WEAPONS_CATALOG, _BASE_WEAPONS, cfg.extra_weapons || {});
+
+    Object.keys(ARMORS_CATALOG).forEach(k => delete ARMORS_CATALOG[k]);
+    Object.assign(ARMORS_CATALOG, _BASE_ARMORS, cfg.extra_armors || {});
+
+    // Merge extra upgrades into UPGRADES_CATALOG (defined later in this file)
+    if (typeof UPGRADES_CATALOG !== 'undefined' && cfg.extra_upgrades) {
+      // Remove previously-added custom upgrades (those not in base)
+      Object.keys(UPGRADES_CATALOG).forEach(k => {
+        if (!_BASE_UPGRADES_IDS.has(k)) delete UPGRADES_CATALOG[k];
+      });
+      Object.assign(UPGRADES_CATALOG, cfg.extra_upgrades);
+    }
+  } catch (_) {
+    // Non-fatal — custom config is optional
+  }
+}
+
+async function renderEquipment(backFn) {
+  navBack = backFn || (gameId ? renderOverworld : renderStart);
   const selectedWeapon = player.weapon_id || "none";
   const selectedArmor  = player.armor_id  || "none";
 
@@ -908,7 +2398,8 @@ async function renderEquipment() {
 
   render(`
     <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
-    ${playerBar()}
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    ${gameId ? playerBar() : ''}
     <div class="equip-panel">
       <h2>🔧 Equipment</h2>
       <div class="equip-section">
@@ -921,8 +2412,7 @@ async function renderEquipment() {
       </div>
       <div id="equip-confirm" style="margin-top:10px;font-size:13px;color:#888"></div>
     </div>
-    <button class="abtn" data-t="navigation" onclick="renderOverworld()" style="max-width:180px">← Overworld</button>
-    ${renderLog()}
+    ${gameId ? renderLog() : ''}
   `);
 }
 
@@ -932,7 +2422,7 @@ async function selectWeapon(id) {
   if (!r) return;
   player.weapon_id = r.weapon_id;
   log(`⚔️ Equipped: ${WEAPONS_CATALOG[id]?.name}`);
-  renderEquipment();
+  renderEquipment(navBack); // preserve back destination
 }
 
 async function selectArmor(id) {
@@ -941,8 +2431,752 @@ async function selectArmor(id) {
   if (!r) return;
   player.armor_id = r.armor_id;
   log(`🛡️ Equipped: ${ARMORS_CATALOG[id]?.name}`);
-  renderEquipment();
+  renderEquipment(navBack);
 }
+
+// ── Tavern / Site of Grace ─────────────────────────────────────────────────
+const TAVERN_NAMES = [
+  "The Pale Hearth", "Ember of the Lost", "The Still Flame",
+  "Last Light Tavern", "The Ashen Rest", "Waypoint of Echoes"
+];
+
+async function renderTavern(node) {
+  navBack = renderOverworld;
+  const tavernName = TAVERN_NAMES[node.depth % TAVERN_NAMES.length] || "Site of Grace";
+  const isCitadel  = node.subtype === 'citadel';
+  const backLabel  = isCitadel ? '← Leave Citadel' : '← Leave Tavern';
+
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    <button class="back-btn" onclick="goBack()">← Back to Map</button>
+    ${playerBar()}
+    <div class="tavern-screen">
+      <div class="tavern-header">
+        <div class="tavern-fire">🔥</div>
+        <div class="tavern-name">${isCitadel ? 'THE CITADEL' : escHtml(tavernName)}</div>
+        <div class="tavern-sub">${isCitadel ? 'Your stronghold at the edge of the Unbound World' : 'A site of grace in the darkness — rest here, traveller'}</div>
+        ${playerDebuffs.length ? `<div style="margin-top:10px;font-size:11px;color:#5a2a2a">Active curses: ${playerDebuffs.map(d=>d.icon+' '+d.name).join(' · ')}</div>` : ''}
+      </div>
+
+      <div class="tavern-menu">
+        <button class="tavern-btn" onclick="tavernAction('rest')">
+          <span class="tb-icon">❤️</span>
+          <span class="tb-text">
+            <div class="tb-label">Rest & Heal</div>
+            <div class="tb-desc">Restore HP to full. The fire drives back the Drift.</div>
+          </span>
+          <span class="tb-badge green">Full Heal</span>
+        </button>
+
+        <button class="tavern-btn" onclick="renderAncientLibrary(()=>renderTavern(window._tavernNode))">
+          <span class="tb-icon">📚</span>
+          <span class="tb-text">
+            <div class="tb-label">Ancient Library</div>
+            <div class="tb-desc">Read PDFs and past papers before the next encounter.</div>
+          </span>
+        </button>
+
+        <button class="tavern-btn" onclick="renderCodex(()=>renderTavern(window._tavernNode))">
+          <span class="tb-icon">📕</span>
+          <span class="tb-text">
+            <div class="tb-label">Open Codex</div>
+            <div class="tb-desc">Review your mistakes. Study what defeated you.</div>
+          </span>
+        </button>
+
+        <button class="tavern-btn" onclick="renderEquipment(()=>renderTavern(window._tavernNode))">
+          <span class="tb-icon">🔧</span>
+          <span class="tb-text">
+            <div class="tb-label">Change Equipment</div>
+            <div class="tb-desc">Swap your weapon and armour before the next fight.</div>
+          </span>
+        </button>
+
+        <button class="tavern-btn" onclick="renderUpgrades(()=>renderTavern(window._tavernNode))">
+          <span class="tb-icon">⚗️</span>
+          <span class="tb-text">
+            <div class="tb-label">Ability Upgrades</div>
+            <div class="tb-desc">Spend XP or Insight to learn passive abilities.</div>
+          </span>
+          <span class="tb-badge purple">Craft</span>
+        </button>
+
+        <button class="tavern-btn" onclick="tavernAction('save')">
+          <span class="tb-icon">💾</span>
+          <span class="tb-text">
+            <div class="tb-label">Save Progress</div>
+            <div class="tb-desc">Etch your progress into the rift. It remembers.</div>
+          </span>
+        </button>
+
+        <button class="tavern-btn" onclick="renderOverworld()">
+          <span class="tb-icon">🗺️</span>
+          <span class="tb-text">
+            <div class="tb-label">${backLabel}</div>
+            <div class="tb-desc">Return to the overworld map.</div>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div id="tavern-msg"></div>
+    ${renderLog()}
+  `);
+  window._tavernNode = node;
+}
+
+async function tavernAction(action) {
+  const r = await api("/api/game/node/action","POST",{session_id:gameId, action_id: action === 'rest' ? 'rest' : 'save'});
+  const msg = document.getElementById("tavern-msg");
+  if (r?.type === 'heal') {
+    await syncPlayer();
+    if (msg) msg.innerHTML = `<div class="rbox good">❤️ ${r.message||'Healed!'}</div>`;
+    log(`❤️ Rested at tavern — full HP`);
+  } else if (r?.type === 'save_prompt') {
+    if (msg) msg.innerHTML = `<div class="rbox info">💾 ${r.message||'Saved.'}</div>`;
+  }
+  // Re-render tavern to update player bar
+  setTimeout(async () => {
+    await syncPlayer();
+    if (window._tavernNode) renderTavern(window._tavernNode);
+  }, 1200);
+}
+
+
+// ── Ability Upgrades / Crafting ────────────────────────────────────────────
+const UPGRADES_CATALOG = {
+  "iron_mind": {
+    name: "Iron Mind",
+    icon: "🧠",
+    desc: "Wrong answers deal 10% less damage to you.",
+    cost_type: "xp", cost: 40,
+    flavor: "The pain is still there. You just stop flinching.",
+  },
+  "scholars_eye": {
+    name: "Scholar's Eye",
+    icon: "👁️",
+    desc: "+1 Insight charge at the start of every combat.",
+    cost_type: "insight", cost: 2,
+    flavor: "You've learned to see the question behind the question.",
+  },
+  "streak_keeper": {
+    name: "Streak Keeper",
+    icon: "🔥",
+    desc: "Your answer streak only breaks after 2 consecutive wrong answers.",
+    cost_type: "xp", cost: 60,
+    flavor: "One slip doesn't define you. Two might.",
+  },
+  "void_step": {
+    name: "Void Step",
+    icon: "💨",
+    desc: "Once per combat, survive a lethal hit with 1 HP instead of dying.",
+    cost_type: "xp", cost: 90,
+    flavor: "Not immortality. Just a second chance you'll probably waste.",
+  },
+  "deep_memory": {
+    name: "Deep Memory",
+    icon: "🌀",
+    desc: "XP gained from all sources increased by 20%.",
+    cost_type: "xp", cost: 50,
+    flavor: "The more you remember, the more you become.",
+  },
+  "pale_resistance": {
+    name: "Pale Resistance",
+    icon: "🛡️",
+    desc: "Anomaly enemies deal 15% less damage.",
+    cost_type: "xp", cost: 75,
+    flavor: "You've stared into the Drift long enough to stop blinking.",
+  },
+};
+// Snapshot of base upgrade IDs so we can strip custom ones on subject switch
+const _BASE_UPGRADES_IDS = new Set(Object.keys(UPGRADES_CATALOG));
+
+async function renderUpgrades(backFn) {
+  navBack = backFn || renderOverworld;
+
+  const cards = Object.entries(UPGRADES_CATALOG).map(([id, u]) => {
+    const owned     = playerUpgrades.includes(id);
+    const canAfford = u.cost_type === 'xp'
+      ? player.xp     >= u.cost
+      : player.insight >= u.cost;
+    const cls = owned ? 'owned' : (!canAfford ? 'cant-afford' : '');
+    const costLabel = u.cost_type === 'xp' ? `${u.cost} XP` : `${u.cost} 💡 Insight`;
+    return `
+      <div class="upgrade-card ${cls}" onclick="${owned || !canAfford ? '' : `buyUpgrade('${id}')`}">
+        <div class="uc-icon">${u.icon}</div>
+        <div class="uc-name">${escHtml(u.name)}</div>
+        <div class="uc-desc">${escHtml(u.desc)}</div>
+        <div class="uc-desc" style="color:#4a3a2a;font-style:italic">"${escHtml(u.flavor)}"</div>
+        ${owned
+          ? `<div class="uc-owned">✓ Learned</div>`
+          : `<div class="uc-cost">Cost: ${costLabel}${!canAfford ? ' — insufficient' : ''}</div>`
+        }
+      </div>
+    `;
+  }).join('');
+
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    <button class="back-btn" onclick="goBack()">← Back</button>
+    ${playerBar()}
+    <div style="background:#07060e;border:1px solid #1a1428;border-radius:10px;padding:18px;margin-bottom:14px">
+      <h2 style="color:#c8a2ff;margin-bottom:4px">⚗️ Ability Upgrades</h2>
+      <p style="color:#4a3a6a;font-size:12px;margin-bottom:16px">Permanent abilities learned at sites of grace. Spend XP or Insight to unlock.</p>
+      <div class="upgrade-grid">${cards}</div>
+      <div id="upgrade-msg"></div>
+    </div>
+    ${renderLog()}
+  `);
+}
+
+async function buyUpgrade(id) {
+  const u = UPGRADES_CATALOG[id];
+  if (!u || !gameId) return;
+  const r = await api("/api/game/upgrade","POST",{
+    session_id: gameId,
+    upgrade_id: id,
+    cost_type: u.cost_type,
+    cost_amount: u.cost,
+  });
+  if (!r) return;
+  playerUpgrades = r.upgrades || playerUpgrades;
+  await syncPlayer();
+  log(`⚗️ Learned: ${u.name}`);
+  renderUpgrades(navBack);
+}
+
+
+// ── Past Papers Mode ───────────────────────────────────────────────────────
+let _libraryData = null; // cached library content
+
+async function renderPastPapers() {
+  navBack = renderStart;
+  ppState.active = false; // reset quiz lock when re-entering lobby
+
+  // Load library (concepts + PDFs) if not cached
+  if (!_libraryData) {
+    render(`<div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+      <div class="pp-screen"><div class="pp-header"><h2>📜 Past Papers Mode</h2><p>Loading library…</p></div></div>`);
+    const r = await api("/api/library");
+    _libraryData = { concepts: r?.concepts || [], pdf_groups: r?.pdf_groups || [] };
+  }
+
+  const conceptOpts = _libraryData.concepts.map(c =>
+    `<option value="${c.id}">${c.icon||'📖'} ${escHtml(c.name)}</option>`
+  ).join('');
+
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    <button class="back-btn" onclick="goBack()">← Back to Menu</button>
+    <div class="pp-screen">
+      <div class="pp-header">
+        <h2>📜 Past Papers Mode</h2>
+        <p>Read the Ancient Library, then test yourself. Once the quiz starts, the library is locked.</p>
+      </div>
+
+      <div class="pp-tabs">
+        <button class="pp-tab active" id="tab-lib"  onclick="switchPPTab('lib')">📚 Ancient Library</button>
+        <button class="pp-tab"        id="tab-notes" onclick="switchPPTab('notes')">🗒️ Field Notes</button>
+        <button class="pp-tab"        id="tab-quiz" onclick="switchPPTab('quiz')">✏️ Start Quiz</button>
+      </div>
+
+      <!-- PDF / Raw Documents tab -->
+      <div id="pp-lib-panel">
+        ${renderLibraryPDFsHTML(_libraryData.pdf_groups)}
+      </div>
+
+      <!-- Field Notes (concept summaries) -->
+      <div id="pp-notes-panel" style="display:none">
+        ${renderConceptNotesHTML(_libraryData.concepts)}
+      </div>
+
+      <!-- Quiz panel -->
+      <div id="pp-quiz-panel" style="display:none">
+        <div class="pp-options">
+          <div class="pp-opt-group">
+            <label>Topic / Concept</label>
+            <select id="pp-concept">
+              <option value="">— All Topics —</option>
+              ${conceptOpts}
+            </select>
+          </div>
+          <div class="pp-opt-group">
+            <label>Question Type</label>
+            <select id="pp-type">
+              <option value="">— All Types —</option>
+              <option value="multiple_choice">🔲 Multiple Choice</option>
+              <option value="true_false">⚖️ True / False</option>
+              <option value="define">📖 Define</option>
+              <option value="short_exam">✏️ Short Answer</option>
+              <option value="long_exam">📝 Essay</option>
+            </select>
+          </div>
+          <div class="pp-opt-group">
+            <label>Difficulty Tier</label>
+            <select id="pp-tier">
+              <option value="">— Any Tier —</option>
+              <option value="standard">Standard</option>
+              <option value="elite">Elite</option>
+              <option value="boss">Boss</option>
+              <option value="anomaly">Anomaly</option>
+            </select>
+          </div>
+          <div class="pp-opt-group" style="display:flex;align-items:flex-end">
+            <div style="color:#4a3a6a;font-size:11px">
+              Once started, the library is locked until you quit the session.
+            </div>
+          </div>
+        </div>
+        <button class="pp-start-btn" onclick="startPPQuiz()">⚔️ Begin Revision Session</button>
+      </div>
+    </div>
+  `);
+}
+
+function switchPPTab(tab) {
+  ['lib','notes','quiz'].forEach(t => {
+    const btn = document.getElementById('tab-'+t);
+    const pnl = document.getElementById('pp-'+t+'-panel');
+    if (btn) btn.classList.toggle('active', t===tab);
+    if (pnl) pnl.style.display = t===tab ? '' : 'none';
+  });
+}
+
+// ── Renders raw PDF cards for the Ancient Library tab ───────────────────────
+// Accepts pdf_groups: [{folder, folder_name, pdfs:[{name,filename,url,size_kb}]}]
+function renderLibraryPDFsHTML(pdfGroups) {
+  const groups = pdfGroups || [];
+  const totalPdfs = groups.reduce((n, g) => n + g.pdfs.length, 0);
+
+  if (totalPdfs === 0) {
+    return `
+      <div class="pdf-empty-msg">
+        <h3>📂 No PDFs Found</h3>
+        <p>Drop <code>.pdf</code> files into any subject folder to view them here.</p>
+        <p style="margin-top:8px;font-size:12px;color:#3a2a50">
+          e.g. <code>subjects/dsa2/exam_2023.pdf</code> or <code>subjects/svv/notes.pdf</code>
+        </p>
+      </div>`;
+  }
+
+  // Flat index for unique IDs across all groups
+  let globalIdx = 0;
+
+  // ── Tab buttons row ──────────────────────────────────────────────────────
+  const tabBtns = groups.map((group, gi) =>
+    `<button
+       class="lib-subject-tab${gi === 0 ? ' active' : ''}"
+       onclick="switchLibSubjectTab(${gi}, ${groups.length})"
+       id="lib-stab-${gi}">
+       📂 ${escHtml(group.folder_name)}
+       <span style="font-size:10px;opacity:0.65;margin-left:4px">(${group.pdfs.length})</span>
+     </button>`
+  ).join('');
+
+  // ── Tab content panels ───────────────────────────────────────────────────
+  const tabPanels = groups.map((group, gi) => {
+    const pdfCards = group.pdfs.map(pdf => {
+      const idx = globalIdx++;
+      // Build absolute URL so play.html opened as file:// can reach the server
+      // pdf.url is like "/subjects/dsa2/file.pdf" — prepend API base + encode each filename segment
+      const encodedUrl = API + '/' + pdf.url.split('/').filter(s => s !== '').map(seg => encodeURIComponent(seg)).join('/');
+      const safeUrl  = escHtml(encodedUrl);
+      const safeName = escHtml(pdf.name);
+      return `
+        <div class="pdf-card" id="pdfcard-${idx}">
+          <div class="pdf-card-header">
+            <span class="pdf-card-icon">📄</span>
+            <div class="pdf-card-info">
+              <div class="pdf-card-name">${safeName}</div>
+              <div class="pdf-card-meta">${pdf.size_kb ? pdf.size_kb + ' KB' : ''}</div>
+            </div>
+            <div style="display:flex;gap:6px;flex-shrink:0">
+              <button class="pdf-card-btn" id="pdfbtn-${idx}" onclick="togglePDFViewer(${idx}, '${safeUrl}', '${safeName}')">
+                📖 View
+              </button>
+              <a class="pdf-card-btn" href="${safeUrl}" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center">
+                ↗ Tab
+              </a>
+            </div>
+          </div>
+          <div id="pdfview-${idx}" class="pdf-viewer-wrap" style="display:none">
+            <div class="pdf-viewer-toolbar">
+              <span class="pdf-viewer-title" id="pdftitle-${idx}">📄 ${safeName}</span>
+              <div style="display:flex;gap:6px;align-items:center">
+                <span id="pdfpages-${idx}" style="color:#5a4a7a;font-size:11px"></span>
+                <a class="pdf-viewer-close" href="${safeUrl}" target="_blank" style="text-decoration:none">↗ Open in tab</a>
+                <button class="pdf-viewer-close" onclick="togglePDFViewer(${idx}, '${safeUrl}', '${safeName}')">✕ Close</button>
+              </div>
+            </div>
+            <div id="pdfcanvas-${idx}" class="pdf-canvas-wrap"></div>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="lib-subject-panel" id="lib-spanel-${gi}" style="display:${gi === 0 ? 'block' : 'none'}">
+        ${pdfCards}
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="pdf-library">
+      <div class="lib-subject-tabs">${tabBtns}</div>
+      <div class="lib-subject-content">${tabPanels}</div>
+    </div>`;
+}
+
+function switchLibSubjectTab(activeIdx, total) {
+  for (let i = 0; i < total; i++) {
+    const btn   = document.getElementById('lib-stab-' + i);
+    const panel = document.getElementById('lib-spanel-' + i);
+    if (btn)   btn.classList.toggle('active', i === activeIdx);
+    if (panel) panel.style.display = i === activeIdx ? 'block' : 'none';
+  }
+}
+
+// ── PDF.js viewer ─────────────────────────────────────────────────────────────
+// Set the worker source once PDF.js is loaded
+function _initPDFjs() {
+  if (typeof pdfjsLib !== 'undefined' && !pdfjsLib.GlobalWorkerOptions.workerSrc) {
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  }
+}
+
+function togglePDFViewer(idx, url, name) {
+  const wrap = document.getElementById('pdfview-' + idx);
+  const btn  = document.getElementById('pdfbtn-' + idx);
+  if (!wrap) return;
+  const opening = wrap.style.display === 'none';
+  wrap.style.display = opening ? '' : 'none';
+  if (btn) btn.textContent = opening ? '📖 Close' : '📖 View';
+  if (opening) {
+    const container = document.getElementById('pdfcanvas-' + idx);
+    // Only render once
+    if (container && !container.getAttribute('data-loaded')) {
+      container.setAttribute('data-loaded', '1');
+      renderPDFWithPDFjs(container, url, idx);
+    }
+  }
+}
+
+async function renderPDFWithPDFjs(container, url, idx) {
+  _initPDFjs();
+  if (typeof pdfjsLib === 'undefined') {
+    container.innerHTML = `<div style="padding:24px;text-align:center;color:#7a6a3a">
+      PDF.js not loaded. <a href="${url}" target="_blank" style="color:#aaa8ff">Open in new tab ↗</a></div>`;
+    return;
+  }
+
+  container.innerHTML = `<div style="padding:24px;text-align:center;color:#5a4a7a">
+    <div style="font-size:24px;margin-bottom:8px">⏳</div>Loading PDF…</div>`;
+
+  try {
+    const loadingTask = pdfjsLib.getDocument(url);
+    const pdf = await loadingTask.promise;
+
+    const pagesEl = document.getElementById('pdfpages-' + idx);
+    if (pagesEl) pagesEl.textContent = `${pdf.numPages} page${pdf.numPages !== 1 ? 's' : ''}`;
+
+    container.innerHTML = '';
+
+    // Render pages sequentially
+    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+
+      // Scale to fill the container width (max ~900px)
+      const containerW = container.clientWidth || 800;
+      const unscaled   = page.getViewport({ scale: 1 });
+      const scale      = Math.min((containerW - 8) / unscaled.width, 2.2);
+      const viewport   = page.getViewport({ scale });
+
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = 'position:relative;margin-bottom:6px;border-radius:4px;overflow:hidden;background:#fff';
+
+      const canvas = document.createElement('canvas');
+      canvas.width  = Math.floor(viewport.width);
+      canvas.height = Math.floor(viewport.height);
+      canvas.style.cssText = 'display:block;width:100%;';
+      wrapper.appendChild(canvas);
+
+      // Page number label
+      const label = document.createElement('div');
+      label.textContent = `Page ${pageNum} / ${pdf.numPages}`;
+      label.style.cssText = 'position:absolute;bottom:4px;right:8px;font-size:10px;color:#888;background:rgba(0,0,0,0.4);padding:1px 6px;border-radius:4px;pointer-events:none';
+      wrapper.appendChild(label);
+
+      container.appendChild(wrapper);
+
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    }
+  } catch (err) {
+    console.error('PDF.js error:', err);
+    container.innerHTML = `<div style="padding:24px;text-align:center;color:#cc7766">
+      <div style="font-size:20px;margin-bottom:8px">⚠️</div>
+      Could not render PDF.<br>
+      <a href="${url}" target="_blank" style="color:#aaaaff;font-size:13px">↗ Open in new tab instead</a>
+    </div>`;
+  }
+}
+
+// ── Renders concept summaries for the Field Notes tab ───────────────────────
+function renderConceptNotesHTML(concepts) {
+  if (!concepts || concepts.length === 0) {
+    return `<div style="color:#4a3a6a;text-align:center;padding:30px">No concept data found.</div>`;
+  }
+  return `
+    <div class="library-header">
+      <span class="lib-icon">🗒️</span>
+      <div>
+        <h2 style="color:#88aa88">Field Notes</h2>
+        <p>Quick-reference summaries for every topic. Tap a card to expand it.</p>
+      </div>
+    </div>
+    <div class="concept-list">
+      ${concepts.map(c => renderConceptCard(c, false)).join('')}
+    </div>
+  `;
+}
+
+function renderLibraryHTML(concepts, expandId=null) {
+  if (!concepts?.length) return `<div style="color:#444;text-align:center;padding:20px">No library data found.</div>`;
+  return `
+    <div class="library-header">
+      <span class="lib-icon">📚</span>
+      <div>
+        <h2>Ancient Library</h2>
+        <p>Study notes for the Unbound World's knowledge archive. Read before you fight.</p>
+      </div>
+    </div>
+    <div class="concept-list">
+      ${concepts.map(c => renderConceptCard(c, c.id === expandId)).join('')}
+    </div>
+  `;
+}
+
+function renderConceptCard(c, expanded=false) {
+  const diffDots = '◆'.repeat(c.difficulty||1) + '<span style="opacity:.2">' + '◆'.repeat(5-(c.difficulty||1)) + '</span>';
+  return `
+    <div class="concept-card ${expanded?'active':''}" id="cc-${c.id}" onclick="toggleConceptCard('${c.id}')">
+      <div class="cc-top">
+        <span class="cc-icon">${c.icon||'📖'}</span>
+        <span class="cc-name">${escHtml(c.name)}</span>
+        <span class="cc-diff">${diffDots}</span>
+      </div>
+      <div class="concept-detail">
+        <div class="cd-summary">${escHtml(c.explanation||'')}</div>
+        ${c.notes ? `<div class="cd-notes">${escHtml(c.notes)}</div>` : ''}
+        ${c.examples?.length ? `
+          <div class="cd-examples">
+            <div class="cde-label">Examples</div>
+            ${c.examples.map(ex=>`<div class="cd-ex-item">▸ ${escHtml(ex)}</div>`).join('')}
+          </div>` : ''}
+        ${c.complexity ? `<div class="cd-complexity">⏱ ${escHtml(c.complexity)}</div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function toggleConceptCard(id) {
+  const el = document.getElementById(`cc-${id}`);
+  if (el) el.classList.toggle('active');
+}
+
+async function startPPQuiz() {
+  if (ppState.active) { renderPPQuizScreen(); return; }
+  ppState.active  = true;
+  ppState.score   = 0;
+  ppState.total   = 0;
+  ppState.seenIds = [];
+  ppState.locked  = false;
+  ppState.filters = {
+    concept: document.getElementById('pp-concept')?.value || '',
+    type:    document.getElementById('pp-type')?.value    || '',
+    tier:    document.getElementById('pp-tier')?.value    || '',
+  };
+  navBack = null; // lock back while quiz is active
+  await loadNextPPQuestion();
+}
+
+async function loadNextPPQuestion() {
+  const q = await api("/api/past_papers/question","POST",{
+    concept_id:    ppState.filters.concept || null,
+    question_type: ppState.filters.type    || null,
+    tier:          ppState.filters.tier    || null,
+    seen_ids:      ppState.seenIds,
+  });
+  if (!q) {
+    renderPPEnd();
+    return;
+  }
+  ppState.currentQ = q;
+  ppState.seenIds.push(q.id);
+  renderPPQuizScreen();
+}
+
+function renderPPQuizScreen() {
+  const q = ppState.currentQ;
+  if (!q) { renderPPEnd(); return; }
+
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    <div class="pp-quiz-header">
+      <div class="pp-quiz-score">📜 ${ppState.score} / ${ppState.total}</div>
+      <div class="pp-quiz-meta">
+        <div style="color:#3a7a3a">✓ ${ppState.score} correct</div>
+        <div style="color:#7a3a3a">✗ ${ppState.total - ppState.score} wrong</div>
+      </div>
+      <button class="back-btn" style="margin:0" onclick="confirmQuitPP()">✕ Quit</button>
+    </div>
+
+    <div class="pp-qbox">
+      <div class="pp-concept-tag">${renderQTypeBadge(q)} &nbsp;${escHtml(q.concept||'')}</div>
+      <div class="pp-question ${q.type==='long_exam'?'bqtext-lg':''}">${escHtml(q.question)}</div>
+      ${renderPPInput(q)}
+      <div id="pp-result"></div>
+    </div>
+  `);
+}
+
+function renderPPInput(q) {
+  const type = q.type || 'multiple_choice';
+  if (type === 'true_false') {
+    return `<div class="boptgrid tf-grid">
+      <button class="bopt tf-opt" id="ppOptTrue"  onclick="submitPPAnswer('True')">✅ True</button>
+      <button class="bopt tf-opt" id="ppOptFalse" onclick="submitPPAnswer('False')">❌ False</button>
+    </div>`;
+  }
+  if (type === 'multiple_choice') {
+    return `<div class="boptgrid">
+      ${(q.options||[]).map((opt,i)=>`
+        <button class="bopt" id="ppOpt${i}" onclick="submitPPAnswer('${escAttr(opt)}')">${escHtml(opt)}</button>
+      `).join('')}
+    </div>`;
+  }
+  // Open-ended
+  return `<div class="open-q-wrap">
+    <div class="open-q-frame">${type==='define'?'Define the term or concept above.':type==='short_exam'?'Give a concise answer (2–4 sentences).':'Write a detailed explanation.'}</div>
+    <textarea id="ppOpenAns" class="open-q-input ${type==='long_exam'?'open-q-lg':''}" placeholder="Type your answer…"></textarea>
+    <button class="abtn open-q-submit" onclick="showPPModelAnswer()">Submit Answer →</button>
+  </div>`;
+}
+
+async function submitPPAnswer(answer) {
+  if (ppState.locked) return;
+  ppState.locked = true;
+  document.querySelectorAll(".bopt").forEach(b => b.disabled = true);
+
+  const r = await api("/api/past_papers/evaluate","POST",{
+    question_id: ppState.currentQ.id,
+    answer: answer,
+  });
+  if (!r) { ppState.locked = false; return; }
+
+  ppState.total++;
+  if (r.correct) ppState.score++;
+
+  // Highlight buttons
+  document.querySelectorAll(".bopt").forEach(btn => {
+    const t = btn.textContent.trim();
+    if (t === answer.trim())              btn.classList.add(r.correct ? 'correct' : 'wrong');
+    if (t === r.correct_answer && !r.correct) btn.classList.add('correct');
+  });
+
+  const resultEl = document.getElementById("pp-result");
+  if (resultEl) {
+    resultEl.innerHTML = `
+      <div class="pp-result-box ${r.correct?'correct':'wrong'}">
+        ${r.correct ? '✅ Correct!' : `❌ Wrong — correct answer: <b>${escHtml(r.correct_answer)}</b>`}
+        ${r.explanation ? `<div style="margin-top:6px;opacity:0.8;font-size:12px">${escHtml(r.explanation)}</div>` : ''}
+      </div>
+      <button class="abtn" data-t="info" onclick="ppNextQuestion()" style="margin-top:8px">Next Question →</button>
+    `;
+  }
+}
+
+async function showPPModelAnswer() {
+  if (ppState.locked) return;
+  ppState.locked = true;
+  const ta = document.getElementById("ppOpenAns");
+  if (ta) ta.disabled = true;
+
+  const r = await api("/peek_answer","POST",{question_id: ppState.currentQ.id});
+  const modelAns = r?.correct_answer || "(no answer available)";
+
+  const resultEl = document.getElementById("pp-result");
+  if (resultEl) {
+    resultEl.innerHTML = `
+      <div class="self-eval-panel" style="margin-top:10px">
+        <div class="sep-title">📖 Model Answer</div>
+        <div class="sep-body">${escHtml(modelAns)}</div>
+        ${r?.explanation ? `<div class="sep-expl">${escHtml(r.explanation)}</div>` : ''}
+        <div class="sep-question">Did your answer cover the key ideas?</div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="bopt correct" style="flex:1" onclick="submitPPSelfEval(true)">✅ I got it</button>
+          <button class="bopt wrong"  style="flex:1" onclick="submitPPSelfEval(false)">❌ I missed it</button>
+        </div>
+      </div>
+    `;
+  }
+  ppState.locked = false;
+}
+
+async function submitPPSelfEval(correct) {
+  if (ppState.locked) return;
+  ppState.locked = true;
+  ppState.total++;
+  if (correct) ppState.score++;
+
+  const resultEl = document.getElementById("pp-result");
+  const panel = resultEl?.querySelector(".self-eval-panel");
+  if (panel) {
+    panel.innerHTML += `<div style="margin-top:10px;color:${correct?'#8d8':'#d88'};font-size:13px">${correct?'✅ Marked correct':'❌ Marked wrong'}</div>`;
+  }
+  document.querySelectorAll(".bopt").forEach(b => b.disabled = true);
+  if (resultEl) {
+    resultEl.insertAdjacentHTML("beforeend",`
+      <button class="abtn" data-t="info" onclick="ppNextQuestion()" style="margin-top:12px">Next Question →</button>
+    `);
+  }
+}
+
+async function ppNextQuestion() {
+  ppState.locked = false;
+  await loadNextPPQuestion();
+}
+
+function confirmQuitPP() {
+  const ok = confirm("Quit this revision session? Your score will be lost.");
+  if (ok) {
+    ppState.active = false;
+    renderPastPapers();
+  }
+}
+
+function renderPPEnd() {
+  const pct = ppState.total > 0 ? Math.round((ppState.score/ppState.total)*100) : 0;
+  let grade = '💀', gradeLabel = 'Needs Work', gradeSub = 'The archive has not been kind. Study harder.';
+  if (pct >= 90) { grade='🏆'; gradeLabel='Mastery'; gradeSub='The Pale Drift bows before your knowledge.'; }
+  else if (pct >= 75) { grade='⭐'; gradeLabel='Proficient'; gradeSub='Strong foundation. A few gaps remain.'; }
+  else if (pct >= 60) { grade='📖'; gradeLabel='Developing'; gradeSub='You know more than you think. Keep drilling.'; }
+  else if (pct >= 40) { grade='⚠️'; gradeLabel='Struggling'; gradeSub='Return to the Library. Re-read the notes.'; }
+
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    <div class="pp-end-screen">
+      <div class="pp-grade">${grade}</div>
+      <div class="pp-grade-label">${gradeLabel}</div>
+      <div class="pp-grade-sub">${gradeSub}</div>
+      <div style="font-size:28px;color:#c8a2ff;margin-bottom:6px">${ppState.score} / ${ppState.total}</div>
+      <div style="font-size:14px;color:#555;margin-bottom:28px">${pct}% accuracy</div>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        <button class="pp-start-btn" style="max-width:200px" onclick="ppState.active=false; startPPQuiz()">🔁 Try Again</button>
+        <button class="abtn" data-t="navigation" style="max-width:200px" onclick="ppState.active=false; renderPastPapers()">← Back to Menu</button>
+      </div>
+    </div>
+  `);
+}
+
 
 // ── Utils ──────────────────────────────────────────────────────────────────
 function escHtml(s) {

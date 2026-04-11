@@ -1,0 +1,259 @@
+{
+  "_HOW_TO_USE": [
+    "════════════════════════════════════════════════════════════════════════════",
+    "  C.R.A.M — THE UNBOUND  ·  SUBJECT TEMPLATE  ·  v2.0",
+    "════════════════════════════════════════════════════════════════════════════",
+    "",
+    "WHAT THIS FILE IS:",
+    "  This is the master reference template for building a new subject for the",
+    "  game. It documents every field the game engine understands. Hand this file",
+    "  PLUS your subject notes/syllabus to an AI and ask it to generate a new",
+    "  questions.json and concepts.json for your subject.",
+    "",
+    "WHAT TO TELL THE AI:",
+    "  'Read CRAM_SUBJECT_TEMPLATE.json to understand the format. Then read my",
+    "   notes below and generate two files for the subject [SUBJECT NAME]:",
+    "   1. questions.json  — at least 80 questions covering all topics.',",
+    "   2. concepts.json   — one entry per topic with notes and examples.',",
+    "   Do NOT modify CRAM_SUBJECT_TEMPLATE.json itself.'",
+    "",
+    "OUTPUT FILE LOCATIONS:",
+    "  Place generated files at:  subjects/<your_subject_id>/questions.json",
+    "                             subjects/<your_subject_id>/concepts.json",
+    "  Example:  subjects/svv/questions.json",
+    "            subjects/svv/concepts.json",
+    "",
+    "DO NOT TOUCH THIS FILE — it is a reusable template.",
+    "════════════════════════════════════════════════════════════════════════════"
+  ],
+
+  "_meta": {
+    "subject": "YOUR_SUBJECT_NAME",
+    "subject_id": "your_subject_id",
+    "version": "2.0",
+    "format": "cram-questions",
+
+    "___SECTION___": "════════ AI GENERATION INSTRUCTIONS (copy this block into every generated questions.json) ════════",
+
+    "ai_generation_prompt": "You are generating study content for C.R.A.M — The Unbound, a dark fantasy roguelike learning RPG. Generate questions that genuinely test understanding — not trivia. Every question must be educationally sound.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nQUESTION TYPES\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n  multiple_choice  4 options (no A/B/C/D labels — use full sentence options).\n                   All wrong options must be plausible distractors, not obvious.\n\n  true_false       options must be exactly [\"True\", \"False\"].\n                   The question must be a STATEMENT, not a question.\n\n  define           'Define X' or 'Which best describes X?' style.\n                   All 4 options must be complete definition sentences.\n\n  short_exam       Concise exam-style question. Options are short, crisp.\n                   Used in elite encounters. Tests application, not recall.\n\n  long_exam        Full paragraph question with paragraph-length options.\n                   Used for boss fights only. Scenario or case-study based.\n                   The player reads model answer and self-evaluates (yes/no).\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nTIERS\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n  standard   Regular encounters. Difficulty 1–2. Recall and basic application.\n  elite      Tougher fights. Difficulty 2–3. Requires deeper understanding.\n  boss       The Grand Examiner. Difficulty 3. Long scenario questions.\n             One or two per major topic. Should feel like a real exam question.\n  anomaly    The Pale Drift. Difficulty 3. Edge cases, gotchas, trick questions.\n             A wrong answer debuffs the player permanently for the run.\n             These must be GENUINELY tricky — misleading wording is intentional.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nFORMAT RULES\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n  id             Format: 'q_<concept_id>_<3digit_number>' e.g. 'q_sorting_007'\n                 Must be unique within the file.\n\n  concept_id     Must match an 'id' field in concepts.json.\n                 This links the question to a study topic and enemy.\n\n  question       Clear, unambiguous question or statement text.\n\n  options        Array of 4 strings. No leading letters like 'A)' or '1.'.\n                 For true_false: must be exactly [\"True\", \"False\"].\n\n  correct_answer Exact string match of one option (copy-paste to be safe).\n\n  explanation    1–3 sentences. MUST state WHY the answer is correct.\n                 Avoid restating the question. Teach something.\n\n  tags           2–4 relevant keywords from the topic.\n\n  difficulty     1 = easy (recall), 2 = medium (understanding), 3 = hard (apply/analyse).\n\n  tier           standard | elite | boss | anomaly\n\n  type           multiple_choice | true_false | define | short_exam | long_exam\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nDISTRIBUTION TARGET (per concept_id)\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n  10  standard multiple_choice  (difficulty 1–2)\n   4  true_false                (difficulty 1–2)\n   4  define                    (difficulty 2)\n   4  short_exam                (difficulty 2–3)\n   2  elite                     (difficulty 3, tier: elite)\n   2  boss                      (difficulty 3, type: long_exam, tier: boss)\n   2  anomaly                   (difficulty 3, tier: anomaly — genuine gotchas)\n  ─────────────────────────────────────────\n  28 questions per concept — multiply by number of concepts for total.\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\nQUALITY RULES\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n  - Never use 'all of the above' or 'none of the above' as an option.\n  - Wrong options must require actual knowledge to eliminate.\n  - Anomaly questions should exploit common misconceptions.\n  - Boss long_exam questions must set a real scenario (e.g., 'Given this code...').\n  - correct_answer must be an EXACT copy of one of the options strings.\n",
+
+    "___SECTION___2": "════════ OPTIONAL: CUSTOM GAME CONFIG ════════",
+
+    "game_config": {
+      "___NOTE___": "This entire game_config block is OPTIONAL. Remove it if you only want questions + concepts. If present, the game will merge these into its live catalogs at runtime without replacing existing base content.",
+
+      "custom_enemies": [
+        {
+          "___NOTE___": "Custom enemies are ADDED to the existing enemy pool. They must reference concept_ids that exist in your concepts.json.",
+          "name": "EXAMPLE: Null Pointer Shade",
+          "concept_id": "your_concept_id_here",
+          "difficulty": 2,
+          "hp": 80,
+          "base_damage": 18,
+          "bonus_damage": 12,
+          "question_tier": "standard",
+          "preferred_types": ["multiple_choice", "true_false"],
+          "preferred_concepts": ["your_concept_id_here"],
+          "xp_reward": 30,
+          "___FIELDS_EXPLAINED___": {
+            "name": "Display name shown during combat",
+            "concept_id": "Primary concept — enemy draws questions from this topic",
+            "difficulty": "1=easy(depths 1-3), 2=mid(depths 3-6), 3=hard(depths 5-8), 4=elite, 5=boss/anomaly",
+            "hp": "Enemy health. Typical range: 60(easy) to 180(boss)",
+            "base_damage": "Guaranteed damage per wrong answer. Typical: 15–35",
+            "bonus_damage": "Extra damage added on top. Typical: 10–25",
+            "question_tier": "standard | elite | boss | anomaly — which tier pool to draw from",
+            "preferred_types": "Question types this enemy uses. Any of: multiple_choice, true_false, define, short_exam, long_exam",
+            "preferred_concepts": "Array of concept_ids — enemy pulls questions from these. Usually [concept_id] or 2-3 related ones",
+            "xp_reward": "XP player earns on kill. Standard: 20-50, Elite: 50-80, Boss: 150+",
+            "is_anomaly_enemy": "Set true ONLY if this enemy replaces The Pale Drift on anomaly nodes. Only one anomaly enemy allowed."
+          }
+        }
+      ],
+
+      "extra_weapons": {
+        "___NOTE___": "New weapon IDs are ADDED to the base weapons (Bare Hands, Binary Blade, Recursive Staff, Balance Edge). Use unique IDs that don't clash with base ones.",
+        "EXAMPLE_your_weapon_id": {
+          "name": "EXAMPLE: Theorem Blade",
+          "stat": "+12% damage",
+          "ability": "Proof Strike: +35% damage on first correct answer",
+          "___FIELDS_EXPLAINED___": {
+            "name": "Display name shown in equipment screen",
+            "stat": "Short stat description (cosmetic only — displayed to player)",
+            "ability": "Ability description (cosmetic — describes the weapon's flavour effect)"
+          }
+        }
+      },
+
+      "extra_armors": {
+        "___NOTE___": "New armor IDs are ADDED to the base armors (No Armor, Data Vest, Stack Plate). Use unique IDs.",
+        "EXAMPLE_your_armor_id": {
+          "name": "EXAMPLE: Scholar's Cloak",
+          "stat": "20% damage reduction",
+          "___FIELDS_EXPLAINED___": {
+            "name": "Display name shown in equipment screen",
+            "stat": "Short stat description (cosmetic — shown to player)"
+          }
+        }
+      },
+
+      "extra_upgrades": {
+        "___NOTE___": "New upgrades are ADDED to the base six. Use unique IDs. cost_type must be 'xp' or 'insight'.",
+        "EXAMPLE_your_upgrade_id": {
+          "name": "EXAMPLE: Domain Expert",
+          "icon": "🎓",
+          "desc": "Questions from your subject's hardest concept deal 20% less damage.",
+          "cost_type": "xp",
+          "cost": 55,
+          "flavor": "You've read every page. Twice.",
+          "___FIELDS_EXPLAINED___": {
+            "name": "Display name in upgrade screen",
+            "icon": "Single emoji shown as the upgrade icon",
+            "desc": "Mechanic description — what does it actually do?",
+            "cost_type": "'xp' or 'insight'",
+            "cost": "How much XP or insight it costs. XP range: 40-90. Insight range: 1-3.",
+            "flavor": "Flavour text shown in italic under the description"
+          }
+        }
+      }
+    }
+  },
+
+  "___SECTION___": "════════ QUESTIONS ARRAY — all questions go here ════════",
+
+  "questions": [
+
+    {
+      "___EXAMPLE_TYPE___": "multiple_choice — standard tier (most common question type)",
+      "id": "q_concept_id_001",
+      "concept_id": "concept_id",
+      "question": "What is the primary purpose of [concept]?",
+      "options": [
+        "The correct answer, stated clearly and completely",
+        "A plausible wrong answer that requires knowledge to dismiss",
+        "Another plausible wrong answer using related terminology",
+        "A fourth option that is subtly different from the correct answer"
+      ],
+      "correct_answer": "The correct answer, stated clearly and completely",
+      "explanation": "Explain WHY the correct answer is right. Mention what makes the wrong options incorrect. 1-3 sentences.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["concept", "tag2", "tag3"]
+    },
+
+    {
+      "___EXAMPLE_TYPE___": "true_false — standard tier",
+      "id": "q_concept_id_002",
+      "concept_id": "concept_id",
+      "question": "[A statement that is either true or false about the concept]. The question must be a STATEMENT.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "Explain why this statement is true (or false). Link to the underlying principle.",
+      "difficulty": 2,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["concept", "tag2"]
+    },
+
+    {
+      "___EXAMPLE_TYPE___": "define — standard/elite tier (tests precise understanding of terms)",
+      "id": "q_concept_id_003",
+      "concept_id": "concept_id",
+      "question": "Which of the following best defines [term or concept]?",
+      "options": [
+        "The correct technical definition, complete and precise",
+        "A definition that sounds right but misses a key nuance",
+        "A definition of a related but different concept",
+        "A definition with an important word swapped for the wrong term"
+      ],
+      "correct_answer": "The correct technical definition, complete and precise",
+      "explanation": "Explain the key words in the definition and why the others fall short.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["definition", "concept"]
+    },
+
+    {
+      "___EXAMPLE_TYPE___": "short_exam — elite tier (tests application, not just recall)",
+      "id": "q_concept_id_004",
+      "concept_id": "concept_id",
+      "question": "Given [brief scenario or small example], what is the result/output/outcome?",
+      "options": [
+        "Correct answer",
+        "Common wrong answer (off-by-one, wrong formula, etc.)",
+        "Answer from a related but different operation",
+        "Answer that would be right under different assumptions"
+      ],
+      "correct_answer": "Correct answer",
+      "explanation": "Walk through the reasoning step by step. Identify the trap in the wrong answers.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["application", "concept", "exam"]
+    },
+
+    {
+      "___EXAMPLE_TYPE___": "long_exam — boss tier only (scenario-based, paragraph length, self-evaluated)",
+      "id": "q_concept_id_005",
+      "concept_id": "concept_id",
+      "question": "A system/scenario is described in detail here. [2-4 sentences setting up a realistic problem or case study. Give enough context that the student must think, not just recall.] Which of the following best explains what is happening and what the correct approach should be?",
+      "options": [
+        "The correct full-paragraph answer. Should explain the diagnosis AND the solution clearly.",
+        "A paragraph that diagnoses correctly but prescribes the wrong solution.",
+        "A paragraph that identifies a real issue but misattributes the root cause.",
+        "A paragraph that sounds authoritative but contains a subtle conceptual error."
+      ],
+      "correct_answer": "The correct full-paragraph answer. Should explain the diagnosis AND the solution clearly.",
+      "explanation": "For long_exam, the player self-evaluates after reading the model answer. This explanation confirms what they should have identified and why the other options fail.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["scenario", "analysis", "concept", "boss"]
+    },
+
+    {
+      "___EXAMPLE_TYPE___": "anomaly — anomaly tier (genuine gotchas, exploits common misconceptions)",
+      "id": "q_concept_id_006",
+      "concept_id": "concept_id",
+      "question": "A statement or scenario that looks straightforward but has a subtle twist. The player's first instinct should be wrong.",
+      "options": [
+        "The answer that LOOKS wrong but is actually correct",
+        "The answer that LOOKS correct but isn't (the trap)",
+        "A reasonable alternative that is clearly wrong on reflection",
+        "Another plausible distractor"
+      ],
+      "correct_answer": "The answer that LOOKS wrong but is actually correct",
+      "explanation": "Explain the gotcha. Why does the obvious answer fail? What is the edge case or misconception being tested?",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "anomaly",
+      "tags": ["edge-case", "gotcha", "concept"]
+    }
+
+  ],
+
+  "___SECTION_CONCEPTS___": "════════ CONCEPTS (Field Notes) — goes in concepts.json, NOT here ════════",
+
+  "_concepts_format_reference": {
+    "___NOTE___": "This section shows the concepts.json format. The actual file is SEPARATE: subjects/<your_id>/concepts.json. It is a JSON array (not an object). Each entry is one study topic.",
+    "concepts_json_is_a_plain_array": true,
+    "example_entry": {
+      "id": "concept_id",
+      "___NOTE___": "Must match concept_id used in questions above",
+      "name": "Human-Readable Topic Name",
+      "icon": "🔍",
+      "difficulty": 2,
+      "___difficulty_scale___": "1 = introductory, 2 = intermediate, 3 = advanced",
+      "explanation": "One or two sentences. The elevator-pitch definition a student would write at the top of their notes.",
+      "notes": "The full study note. This is what appears in the Field Notes tab. Write it like a condensed lecture note: cover the key principles, common patterns, and things students typically get wrong. Use newlines for readability. Aim for 100-200 words.",
+      "examples": [
+        "Concrete example 1 — short, illustrative",
+        "Concrete example 2 — ideally shows a different use case",
+        "Concrete example 3 — ideally shows an edge case or counterexample"
+      ],
+      "complexity": "Time: O(...) | Space: O(...)  — if applicable, otherwise omit this field"
+    }
+  }
+}

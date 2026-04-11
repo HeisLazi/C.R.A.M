@@ -5,7 +5,70 @@ Node action effect handlers.
 Maps action IDs from node_interaction.py to actual game-state changes.
 """
 
+import random
 from typing import Optional
+
+# ── Anomaly debuff table ───────────────────────────────────────────────────────
+ANOMALY_DEBUFFS = [
+    {
+        "id": "pale_mark",
+        "name": "Pale Mark",
+        "desc": "The Drift has branded you. Max HP reduced by 15.",
+        "effect": "max_hp_down",
+        "value": 15,
+        "icon": "💀",
+    },
+    {
+        "id": "shattered_focus",
+        "name": "Shattered Focus",
+        "desc": "Your concentration fractures. Insight charges reduced by 1.",
+        "effect": "insight_down",
+        "value": 1,
+        "icon": "🧠",
+    },
+    {
+        "id": "xp_curse",
+        "name": "XP Curse",
+        "desc": "Knowledge bleeds from your mind. XP gains reduced by 25%.",
+        "effect": "xp_curse",
+        "value": 0.25,
+        "icon": "⚗️",
+    },
+    {
+        "id": "void_wound",
+        "name": "Void Wound",
+        "desc": "A wound that won't close. Lose 5 HP at the start of each combat.",
+        "effect": "combat_start_damage",
+        "value": 5,
+        "icon": "🩸",
+    },
+]
+
+
+def apply_anomaly_debuff(session) -> dict:
+    """Apply a random permanent debuff to the session. Returns the debuff applied."""
+    debuff = random.choice(ANOMALY_DEBUFFS)
+
+    if not hasattr(session, "debuffs"):
+        session.debuffs = []
+
+    # Don't stack the same debuff — skip if already applied
+    existing_ids = [d["id"] for d in session.debuffs]
+    available = [d for d in ANOMALY_DEBUFFS if d["id"] not in existing_ids]
+    if available:
+        debuff = random.choice(available)
+    # else: all debuffs already applied, still return one for display purposes
+
+    session.debuffs.append(debuff)
+
+    # Apply immediate numeric effects
+    if debuff["effect"] == "max_hp_down":
+        session.max_hp = max(10, session.max_hp - debuff["value"])
+        session.hp = min(session.hp, session.max_hp)
+    elif debuff["effect"] == "insight_down":
+        session.insight = max(0, getattr(session, "insight", 0) - debuff["value"])
+
+    return debuff
 
 
 def apply_node_action(session, action_id: str) -> dict:
@@ -15,6 +78,36 @@ def apply_node_action(session, action_id: str) -> dict:
 
     if node.state == "unvisited":
         node.state = "visited"
+
+    # ── Anomaly: face / study ─────────────────────────────────────────────
+    if action_id == "face_anomaly":
+        return {
+            "type": "combat_started",
+            "node_type": "anomaly",
+            "subtype": node.subtype,
+            "god": node.god,
+            "difficulty": node.difficulty,
+            "level": session.level,
+            "weapon_id": getattr(session, "weapon_id", "none"),
+            "armor_id":  getattr(session, "armor_id", "none"),
+            "is_anomaly": True,
+            "warning": (
+                "⚠️ ANOMALY — The Pale Drift stirs. "
+                "Defeat it for legendary rewards, "
+                "but failure brands you permanently."
+            ),
+        }
+
+    if action_id == "study_anomaly":
+        debuffs_desc = ", ".join(d["name"] for d in ANOMALY_DEBUFFS)
+        return {
+            "type": "info",
+            "message": (
+                f"The rift pulses with forbidden knowledge. "
+                f"Engaging risks a permanent curse: {debuffs_desc}. "
+                f"But those who endure claim the greatest rewards of all."
+            ),
+        }
 
     # ── Combat / engage ───────────────────────────────────────────────────
     if action_id == "engage":

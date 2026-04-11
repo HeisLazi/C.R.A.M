@@ -17,13 +17,16 @@ from backend.world import Node
 def get_node_actions(node: Node) -> list[dict]:
     # ── Combat nodes ──────────────────────────────────────────────────────
     if node.type == "combat":
+        if node.state == "cleared":
+            return [{"id": "leave", "label": "← Leave (Cleared)", "type": "navigation"}]
         actions = [
-            {"id": "engage", "label": "⚔️ Engage", "type": "combat"},
-            {"id": "study", "label": "📖 Study Enemy", "type": "info"},
+            {"id": "engage",        "label": "⚔️ Engage",        "type": "combat"},
+            {"id": "study",         "label": "📖 Study Enemy",   "type": "info"},
+            {"id": "flee_attempt",  "label": "🏃 Attempt Flee",  "type": "flee",
+             "difficulty": node.difficulty},
         ]
         if node.subtype in ("elite", "boss"):
             actions.insert(1, {"id": "observe", "label": "👁️ Observe Weakness", "type": "info"})
-        actions.append({"id": "leave", "label": "← Leave", "type": "navigation"})
         return actions
 
     # ── Challenge nodes ───────────────────────────────────────────────────
@@ -93,6 +96,17 @@ def get_node_actions(node: Node) -> list[dict]:
         return [
             {"id": "investigate", "label": "🔍 Investigate", "type": "event"},
             {"id": "leave", "label": "← Leave", "type": "navigation"},
+        ]
+
+    # ── Anomaly nodes ─────────────────────────────────────────────────────
+    if node.type == "anomaly":
+        if node.state == "cleared":
+            return [{"id": "leave", "label": "← Leave (Cleared)", "type": "navigation"}]
+        return [
+            {"id": "face_anomaly",  "label": "⚠️ Face the Anomaly", "type": "combat"},
+            {"id": "study_anomaly", "label": "👁️ Read the Rift",    "type": "info"},
+            {"id": "flee_attempt",  "label": "🏃 Attempt to Retreat", "type": "flee",
+             "difficulty": 5},   # Anomaly always difficulty 5 — Grand Examiner-level flee
         ]
 
     # ── Hub nodes ─────────────────────────────────────────────────────────

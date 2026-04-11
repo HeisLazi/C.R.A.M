@@ -52,8 +52,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-STATIC_DIR = Path(__file__).parent.parent / "static"
-app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+STATIC_DIR   = Path(__file__).parent.parent / "static"
+SUBJECTS_DIR = Path(__file__).parent.parent / "subjects"
+
+app.mount("/static",   StaticFiles(directory=str(STATIC_DIR)),   name="static")
+app.mount("/subjects", StaticFiles(directory=str(SUBJECTS_DIR)), name="subjects")
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -68,12 +71,14 @@ def index():
 # Combat
 # ────────────────────────────────────────────────────────────────────────────
 class StartCombatRequest(BaseModel):
-    concept_id:     Optional[str] = None
-    weapon_id:      str = "none"
-    armor_id:       str = "none"
-    node_god:       Optional[str]  = None
-    node_modifiers: list[str]      = []
-    bonus_insight:  int            = 0
+    concept_id:      Optional[str] = None
+    weapon_id:       str = "none"
+    armor_id:        str = "none"
+    node_god:        Optional[str]  = None
+    node_modifiers:  list[str]      = []
+    bonus_insight:   int            = 0
+    is_anomaly:      bool           = False
+    node_difficulty: int            = 1
 
 
 class AnswerRequest(BaseModel):
@@ -96,6 +101,8 @@ def post_start_combat(body: StartCombatRequest = StartCombatRequest()):
             node_god=body.node_god,
             node_modifiers=body.node_modifiers,
             bonus_insight=body.bonus_insight,
+            is_anomaly=body.is_anomaly,
+            node_difficulty=body.node_difficulty,
         )
     except RuntimeError as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -126,6 +133,24 @@ def post_answer(body: AnswerRequest):
         return result
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+class PeekRequest(BaseModel):
+    question_id: str
+
+
+@app.post("/peek_answer")
+def post_peek_answer(body: PeekRequest):
+    """Return model answer for an open-ended question without affecting combat state."""
+    from backend.question_engine import get_question_by_id
+    q = get_question_by_id(body.question_id)
+    if q is None:
+        raise HTTPException(status_code=404, detail="Question not found")
+    return {
+        "correct_answer": q.get("correct_answer", ""),
+        "explanation":    q.get("explanation", ""),
+        "question_type":  q.get("type", "multiple_choice"),
+    }
 
 
 @app.post("/insight")
@@ -292,6 +317,7 @@ class GameSession:
         self.modifiers = assign_random_modifiers()
         self.weapon_id = "none"
         self.armor_id  = "none"
+        self.debuffs: list = []          # permanent debuffs from anomaly losses
 
 
 _sessions: dict[str, GameSession] = {}
@@ -329,6 +355,8 @@ def get_game_world(session_id: str) -> dict:
         "insight": session.insight,
         "weapon_id": getattr(session, "weapon_id", "none"),
         "armor_id":  getattr(session, "armor_id", "none"),
+        "debuffs":   getattr(session, "debuffs", []),
+        "upgrades":  getattr(session, "upgrades", []),
     }
 
 
@@ -400,7 +428,35 @@ def do_node_action(body: NodeActionRequest) -> dict:
     session = _sessions[body.session_id]
     from backend.node_effects import apply_node_action
     result = apply_node_action(session, body.action_id)
+
+    # If combat is starting from an anomaly node, wire the is_anomaly flag through
+    if result.get("type") == "combat_started" and result.get("is_anomaly"):
+        # Store anomaly flag on session so endCombat can trigger debuff
+        session._pending_anomaly = True
+    else:
+        session._pending_anomaly = False
+
     return result
+
+
+class AnomalyDebuffRequest(BaseModel):
+    session_id: str
+
+
+@app.post("/api/game/anomaly/debuff")
+def apply_anomaly_debuff_endpoint(body: AnomalyDebuffRequest) -> dict:
+    """Apply a permanent debuff to the player after losing an anomaly combat."""
+    if body.session_id not in _sessions:
+        raise HTTPException(status_code=404, detail="Session not found")
+    session = _sessions[body.session_id]
+    from backend.node_effects import apply_anomaly_debuff
+    debuff = apply_anomaly_debuff(session)
+    return {
+        "debuff": debuff,
+        "all_debuffs": getattr(session, "debuffs", []),
+        "hp": session.hp,
+        "max_hp": session.max_hp,
+    }
 
 
 def _node_to_dict(node) -> dict:
@@ -528,3 +584,170 @@ def load_game(session_id: str) -> dict:
 @app.get("/api/game/saves")
 def get_saves() -> dict:
     return {"saves": list_saves()}
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# Subject management
+# ────────────────────────────────────────────────────────────────────────────
+@app.get("/api/subjects")
+def get_subjects() -> dict:
+    """List all available subject folders + which one is currently active."""
+    from backend.question_engine import list_subjects, get_active_subject
+    return {
+        "active":   get_active_subject(),
+        "subjects": list_subjects(),
+    }
+
+
+class SetSubjectRequest(BaseModel):
+    subject_id: str
+
+
+@app.post("/api/set_subject")
+def set_subject(body: SetSubjectRequest) -> dict:
+    """Switch the active subject. Clears question/concept caches immediately."""
+    from backend.question_engine import set_subject as qe_set_subject
+    try:
+        result = qe_set_subject(body.subject_id)
+        return result
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# Ancient Library — concept study notes + PDFs across all subjects
+# ────────────────────────────────────────────────────────────────────────────
+@app.get("/api/library")
+def get_library() -> dict:
+    """
+    Return:
+     - concepts from the active subject's concepts.json (for Field Notes tab)
+     - all_pdf_groups: PDFs from every subject folder, grouped by folder (for Ancient Library tab)
+     - active_subject: which subject is currently loaded
+    """
+    from backend.question_engine import (
+        get_active_subject, _load_concepts, list_all_pdfs
+    )
+    concepts = _load_concepts()
+    pdf_groups = list_all_pdfs()
+    return {
+        "active_subject": get_active_subject(),
+        "concepts": concepts,
+        "pdf_groups": pdf_groups,
+    }
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# Subject game config — custom enemies / weapons / armors / upgrades
+# ────────────────────────────────────────────────────────────────────────────
+@app.get("/api/subject_config")
+def get_subject_config() -> dict:
+    """
+    Return the game_config block from the active subject's questions.json _meta.
+    The frontend uses this to merge subject-specific custom weapons, armors,
+    upgrades, and enemies into the live catalogs without restarting the server.
+
+    Returns an object with any of these optional keys:
+      custom_enemies  — list of enemy objects added to the combat pool
+      extra_weapons   — dict keyed by weapon_id, merged into WEAPONS_CATALOG
+      extra_armors    — dict keyed by armor_id,  merged into ARMORS_CATALOG
+      extra_upgrades  — dict keyed by upgrade_id, merged into UPGRADES_CATALOG
+    Returns {} if the active subject has no game_config section.
+    """
+    from backend.question_engine import get_game_config, get_active_subject
+    return {
+        "subject": get_active_subject(),
+        "game_config": get_game_config(),
+    }
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# Past Papers Mode
+# ────────────────────────────────────────────────────────────────────────────
+class PPQuestionRequest(BaseModel):
+    concept_id:    Optional[str] = None
+    question_type: Optional[str] = None
+    tier:          Optional[str] = None
+    seen_ids:      list[str]     = []
+
+
+class PPEvalRequest(BaseModel):
+    question_id: str
+    answer: str
+
+
+@app.post("/api/past_papers/question")
+def past_papers_question(body: PPQuestionRequest = PPQuestionRequest()) -> dict:
+    """Return a random question for Past Papers mode."""
+    from backend.question_engine import get_question, get_question_by_id
+    seen = set(body.seen_ids)
+    q = get_question(
+        concept_id=body.concept_id or None,
+        seen_ids=seen,
+        question_types=[body.question_type] if body.question_type else None,
+        tier=body.tier or None,
+    )
+    if not q:
+        raise HTTPException(status_code=404, detail="No questions available")
+    return {
+        "id":       q["id"],
+        "question": q["question"],
+        "options":  q.get("options", []),
+        "type":     q.get("type", "multiple_choice"),
+        "tier":     q.get("tier", "standard"),
+        "concept":  q.get("concept_id", ""),
+    }
+
+
+@app.post("/api/past_papers/evaluate")
+def past_papers_evaluate(body: PPEvalRequest) -> dict:
+    """Evaluate an answer in Past Papers mode (no combat state affected)."""
+    from backend.question_engine import evaluate_answer
+    try:
+        return evaluate_answer(body.question_id, body.answer)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# Upgrades system
+# ────────────────────────────────────────────────────────────────────────────
+class UpgradeRequest(BaseModel):
+    session_id:  str
+    upgrade_id:  str
+    cost_type:   str   # "xp" | "insight"
+    cost_amount: int
+
+
+@app.post("/api/game/upgrade")
+def buy_upgrade(body: UpgradeRequest) -> dict:
+    """Purchase an upgrade at a Tavern."""
+    if body.session_id not in _sessions:
+        raise HTTPException(status_code=404, detail="Session not found")
+    session = _sessions[body.session_id]
+
+    if not hasattr(session, "upgrades"):
+        session.upgrades = []
+
+    # Check if already owned
+    if body.upgrade_id in session.upgrades:
+        raise HTTPException(status_code=400, detail="Already owned")
+
+    # Deduct cost
+    if body.cost_type == "xp":
+        if getattr(session, "xp", 0) < body.cost_amount:
+            raise HTTPException(status_code=400, detail="Not enough XP")
+        session.xp -= body.cost_amount
+    elif body.cost_type == "insight":
+        if getattr(session, "insight", 0) < body.cost_amount:
+            raise HTTPException(status_code=400, detail="Not enough Insight")
+        session.insight -= body.cost_amount
+    else:
+        raise HTTPException(status_code=400, detail="Unknown cost type")
+
+    session.upgrades.append(body.upgrade_id)
+    return {
+        "upgrades": session.upgrades,
+        "xp":       getattr(session, "xp", 0),
+        "insight":  getattr(session, "insight", 0),
+    }

@@ -94,12 +94,141 @@ def _dice_roll(wits: float = 1.0) -> float:
 
 
 ENEMIES = [
-    {"name": "Recursive Wraith",    "concept_id": "recursion",      "difficulty": 1, "hp": 60,  "base_damage": 15, "bonus_damage": 10},
-    {"name": "Binary Shade",        "concept_id": "binary_search",  "difficulty": 2, "hp": 80,  "base_damage": 18, "bonus_damage": 12},
-    {"name": "BST Revenant",        "concept_id": "bst",            "difficulty": 2, "hp": 80,  "base_damage": 18, "bonus_damage": 12},
-    {"name": "Complexity Specter",  "concept_id": "big_o",          "difficulty": 1, "hp": 60,  "base_damage": 15, "bonus_damage": 10},
-    {"name": "AVL Titan",           "concept_id": "avl_tree",       "difficulty": 3, "hp": 100, "base_damage": 22, "bonus_damage": 15},
+    # ── Standard enemies (depth 1–3, tier: standard) ──────────────────────────
+    {
+        "name": "Recursive Wraith",
+        "concept_id": "recursion",
+        "difficulty": 1, "hp": 60, "base_damage": 15, "bonus_damage": 10,
+        "question_tier": "standard",
+        "preferred_types": ["multiple_choice", "true_false"],
+        "preferred_concepts": ["recursion"],
+        "xp_reward": 20,
+    },
+    {
+        "name": "Complexity Specter",
+        "concept_id": "big_o",
+        "difficulty": 1, "hp": 60, "base_damage": 15, "bonus_damage": 10,
+        "question_tier": "standard",
+        "preferred_types": ["multiple_choice", "true_false"],
+        "preferred_concepts": ["big_o"],
+        "xp_reward": 20,
+    },
+    {
+        "name": "Binary Shade",
+        "concept_id": "binary_search",
+        "difficulty": 2, "hp": 80, "base_damage": 18, "bonus_damage": 12,
+        "question_tier": "standard",
+        "preferred_types": ["multiple_choice", "true_false"],
+        "preferred_concepts": ["binary_search", "sorting"],
+        "xp_reward": 30,
+    },
+    {
+        "name": "BST Revenant",
+        "concept_id": "bst",
+        "difficulty": 2, "hp": 80, "base_damage": 18, "bonus_damage": 12,
+        "question_tier": "standard",
+        "preferred_types": ["multiple_choice", "true_false"],
+        "preferred_concepts": ["bst", "avl_tree"],
+        "xp_reward": 30,
+    },
+
+    # ── Mid-tier enemies (depth 3–6, tier: standard/elite) ───────────────────
+    {
+        "name": "Sort Daemon",
+        "concept_id": "sorting",
+        "difficulty": 2, "hp": 85, "base_damage": 19, "bonus_damage": 13,
+        "question_tier": "standard",
+        "preferred_types": ["multiple_choice", "define"],
+        "preferred_concepts": ["sorting", "big_o"],
+        "xp_reward": 35,
+    },
+    {
+        "name": "Graph Lurker",
+        "concept_id": "graphs",
+        "difficulty": 3, "hp": 95, "base_damage": 21, "bonus_damage": 14,
+        "question_tier": "standard",
+        "preferred_types": ["multiple_choice", "true_false", "define"],
+        "preferred_concepts": ["graphs"],
+        "xp_reward": 40,
+    },
+    {
+        "name": "Hash Wraith",
+        "concept_id": "hashing",
+        "difficulty": 3, "hp": 95, "base_damage": 20, "bonus_damage": 14,
+        "question_tier": "standard",
+        "preferred_types": ["multiple_choice", "define"],
+        "preferred_concepts": ["hashing"],
+        "xp_reward": 40,
+    },
+    {
+        "name": "AVL Titan",
+        "concept_id": "avl_tree",
+        "difficulty": 3, "hp": 100, "base_damage": 22, "bonus_damage": 15,
+        "question_tier": "standard",
+        "preferred_types": ["multiple_choice", "short_exam"],
+        "preferred_concepts": ["avl_tree", "bst"],
+        "xp_reward": 45,
+    },
+
+    # ── Elite enemies (depth 5–8, tier: elite) ───────────────────────────────
+    {
+        "name": "DP Colossus",
+        "concept_id": "dp",
+        "difficulty": 4, "hp": 120, "base_damage": 26, "bonus_damage": 18,
+        "question_tier": "elite",
+        "preferred_types": ["multiple_choice", "short_exam", "define"],
+        "preferred_concepts": ["dp", "recursion"],
+        "xp_reward": 60,
+    },
+    {
+        "name": "Void Examiner",
+        "concept_id": None,           # draws from all concepts
+        "difficulty": 4, "hp": 115, "base_damage": 25, "bonus_damage": 17,
+        "question_tier": "elite",
+        "preferred_types": ["multiple_choice", "short_exam"],
+        "preferred_concepts": ["big_o", "sorting", "graphs", "hashing"],
+        "xp_reward": 65,
+    },
+
+    # ── Boss enemy (depth 8–10, tier: boss) ───────────────────────────────────
+    {
+        "name": "Grand Examiner",
+        "concept_id": None,           # draws from all concepts
+        "difficulty": 5, "hp": 180, "base_damage": 35, "bonus_damage": 25,
+        "question_tier": "boss",
+        "preferred_types": ["multiple_choice", "short_exam", "long_exam"],
+        "preferred_concepts": None,   # anything
+        "xp_reward": 150,
+    },
+
+    # ── Anomaly enemy (spawns only on anomaly nodes) ───────────────────────────
+    {
+        "name": "The Pale Drift",
+        "concept_id": None,
+        "difficulty": 5, "hp": 160, "base_damage": 40, "bonus_damage": 30,
+        "question_tier": "anomaly",
+        "preferred_types": ["multiple_choice", "true_false", "short_exam"],
+        "preferred_concepts": None,
+        "xp_reward": 200,
+        "is_anomaly_enemy": True,
+    },
 ]
+
+# Map enemy names to their subtype for sprite selection
+ENEMY_SUBTYPE_MAP = {
+    "Recursive Wraith":   "drone",
+    "Complexity Specter": "drone",
+    "Binary Shade":       "guard",
+    "BST Revenant":       "guard",
+    "Sort Daemon":        "guard",
+    "Graph Lurker":       "elite",
+    "Hash Wraith":        "elite",
+    "AVL Titan":          "elite",
+    "DP Colossus":        "elite",
+    "Void Examiner":      "elite",
+    "Grand Examiner":     "boss",
+    "The Pale Drift":     "boss",
+}
 
 
 @dataclass
@@ -127,6 +256,10 @@ class CombatSession:
     node_god:       Optional[str] = None
     node_modifiers: list = None          # list[str]
     run_modifiers:  list = None          # run-based modifiers
+    # ── Question filtering ────────────────────────────────────────────────────
+    question_tier:  str  = "standard"   # tier used for question selection
+    question_types: list = dc_field(default_factory=list)  # preferred question types
+    is_anomaly:     bool = False         # anomaly combat triggers debuff on loss
 
 
 _sessions: dict[str, CombatSession] = {}
@@ -143,18 +276,58 @@ def start_combat(
     level:          int            = 1,
     god:            Optional[str]  = None,
     run_modifiers:  Optional[list] = None,
+    is_anomaly:     bool           = False,
+    node_difficulty: int           = 1,
 ) -> dict:
     session_id = str(uuid.uuid4())
 
-    if concept_id:
-        candidates = [e for e in ENEMIES if e["concept_id"] == concept_id]
-        enemy_template = random.choice(candidates) if candidates else random.choice(ENEMIES)
+    # Merge any custom enemies defined in the active subject's game_config
+    try:
+        from backend.question_engine import get_game_config
+        _custom = get_game_config().get("custom_enemies", [])
+    except Exception:
+        _custom = []
+    _all_enemies = ENEMIES + [e for e in _custom if isinstance(e, dict)]
+
+    if is_anomaly:
+        # Anomaly always summons The Pale Drift (or custom anomaly enemy if provided)
+        candidates = [e for e in _all_enemies if e.get("is_anomaly_enemy")]
+        enemy_template = candidates[0] if candidates else random.choice(_all_enemies)
+    elif concept_id:
+        candidates = [e for e in _all_enemies if e.get("concept_id") == concept_id
+                      and not e.get("is_anomaly_enemy")]
+        enemy_template = random.choice(candidates) if candidates else random.choice(
+            [e for e in _all_enemies if not e.get("is_anomaly_enemy")]
+        )
     else:
-        enemy_template = random.choice(ENEMIES)
+        # Pick enemy by node difficulty range
+        diff_candidates = [e for e in _all_enemies
+                           if not e.get("is_anomaly_enemy")
+                           and abs(e["difficulty"] - node_difficulty) <= 1]
+        enemy_template = random.choice(diff_candidates) if diff_candidates else random.choice(
+            [e for e in _all_enemies if not e.get("is_anomaly_enemy")]
+        )
 
     enemy = dict(enemy_template)
+
+    # Determine question filtering from enemy preferences
+    q_tier  = enemy.get("question_tier", "standard")
+    q_types = enemy.get("preferred_types") or []
+    # Use enemy's preferred_concepts if set, else fall back to concept_id
+    q_concept = concept_id
+    if enemy.get("preferred_concepts"):
+        q_concept = random.choice(enemy["preferred_concepts"])
+
     seen: set = set()
-    question = get_question(concept_id=enemy["concept_id"], seen_ids=seen)
+    question = get_question(
+        concept_id=q_concept,
+        seen_ids=seen,
+        tier=q_tier,
+        question_types=q_types if q_types else None,
+    )
+    if question is None:
+        # Final fallback: any question at all
+        question = get_question(seen_ids=seen)
     if question is None:
         raise RuntimeError("No questions available for this concept.")
     seen.add(question["id"])
@@ -180,6 +353,9 @@ def start_combat(
         node_god=node_god,
         node_modifiers=node_modifiers or [],
         run_modifiers=run_modifiers or [],
+        question_tier=q_tier,
+        question_types=q_types,
+        is_anomaly=is_anomaly,
     )
     _sessions[session_id] = session
 
@@ -287,10 +463,23 @@ def resolve_action(session_id: str, question_id: str, answer: str) -> dict:
         if session.seen_question_ids is None:
             session.seen_question_ids = set()
         session.seen_question_ids.add(question_id)
+
+        # Pick next question respecting enemy's preferred types and tier
+        enemy = session.enemy
+        q_concept = None
+        if enemy.get("preferred_concepts"):
+            q_concept = random.choice(enemy["preferred_concepts"])
+        elif enemy.get("concept_id"):
+            q_concept = enemy["concept_id"]
+
         next_q = get_question(
-            concept_id=session.enemy["concept_id"],
+            concept_id=q_concept,
             seen_ids=session.seen_question_ids,
+            tier=session.question_tier,
+            question_types=session.question_types if session.question_types else None,
         )
+        if next_q is None:
+            next_q = get_question(seen_ids=session.seen_question_ids)
         if next_q:
             session.current_question = next_q
             session.seen_question_ids.add(next_q["id"])
@@ -335,9 +524,10 @@ def _session_state(session: CombatSession) -> dict:
         "player_scaling": _get_level_scaling(session.level),
         "enemy_scaling": _get_enemy_scaling(session.level),
         "enemy_name": session.enemy["name"],
-        "enemy_concept": session.enemy["concept_id"],
+        "enemy_concept": session.enemy.get("concept_id"),
         "enemy_hp": session.enemy_hp,
         "enemy_max_hp": session.enemy["hp"],
+        "enemy_subtype": ENEMY_SUBTYPE_MAP.get(session.enemy["name"], "guard"),
         "question": _question_payload(session.current_question),
         "round": session.round,
         # ── Equipment ─────────────────────────────────────────────────────────
@@ -355,6 +545,10 @@ def _session_state(session: CombatSession) -> dict:
         "node_modifiers": session.node_modifiers,
         # ── Run modifiers ─────────────────────────────────────────────────────
         "run_modifiers": session.run_modifiers,
+        # ── Anomaly / question meta ───────────────────────────────────────────
+        "is_anomaly":     session.is_anomaly,
+        "question_tier":  session.question_tier,
+        "xp_reward":      session.enemy.get("xp_reward", 30),
     }
 
 
@@ -375,7 +569,10 @@ def use_insight(session_id: str) -> dict:
 
 def _question_payload(q: dict) -> dict:
     return {
-        "id": q["id"],
+        "id":       q["id"],
         "question": q["question"],
-        "options": q["options"],
+        "options":  q.get("options", []),
+        "type":     q.get("type", "multiple_choice"),
+        "tier":     q.get("tier", "standard"),
+        "concept":  q.get("concept_id", ""),
     }

@@ -9,16 +9,21 @@ from typing import Optional
 import random
 
 
-NODE_TYPES = ("combat", "challenge", "utility", "event", "hub")
+NODE_TYPES = ("combat", "challenge", "utility", "event", "hub", "anomaly")
 NODE_SUBTYPES = {
     "combat": ("drone", "guard", "elite", "boss"),
     "challenge": ("puzzle", "quiz", "time_trial"),
     "utility": ("shop", "healer", "save_point"),
     "event": ("story", "ambush", "treasure"),
     "hub": ("base", "crossroads", "sanctuary"),
+    "anomaly": ("rift", "void_tear", "pale_gate"),  # rare anomaly variants
 }
 BIOMES = ("forest", "desert", "ice", "void", "city", "ruins")
 NODE_STATES = ("unvisited", "visited", "cleared")
+
+# Anomaly nodes: rare, only at depth ≥ 3, ~8% chance per eligible depth layer
+ANOMALY_SPAWN_CHANCE = 0.08
+ANOMALY_MIN_DEPTH = 3
 
 
 @dataclass
@@ -78,34 +83,53 @@ def generate_world() -> dict[str, Node]:
             nodes[node_id] = node
             depth_nodes[depth].append(node_id)
 
+        # ── Anomaly node: rare spawn at depth ≥ ANOMALY_MIN_DEPTH ────────────
+        if depth >= ANOMALY_MIN_DEPTH and random.random() < ANOMALY_SPAWN_CHANCE:
+            anomaly_id = f"anomaly_{depth}"
+            anomaly = create_node(anomaly_id, "anomaly", depth, biome="void")
+            anomaly.difficulty = min(10, depth + 2)  # harder than regular nodes
+            nodes[anomaly_id] = anomaly
+            depth_nodes[depth].append(anomaly_id)
+
+    # ── Step 1: Forward connections depth → depth+1 (occasionally +2 skip) ──
     for depth in range(1, 11):
         for node_id in depth_nodes[depth]:
             node = nodes[node_id]
 
+            # Always connect to 1–2 nodes at depth+1
             if depth < 10:
-                forward_targets = random.sample(
-                    depth_nodes[depth + 1],
-                    min(len(depth_nodes[depth + 1]), random.randint(1, 2)),
-                )
-                node.connections.extend(forward_targets)
+                fwd_pool = depth_nodes[depth + 1]
+                fwd_count = min(len(fwd_pool), random.randint(1, 2))
+                for target in random.sample(fwd_pool, fwd_count):
+                    if target not in node.connections:
+                        node.connections.append(target)
 
-            if depth > 1:
-                same_depth_targets = [
-                    n for n in depth_nodes[depth]
-                    if n != node_id and n not in node.connections
-                ]
-                if same_depth_targets:
-                    lateral = random.choice(same_depth_targets)
-                    node.connections.append(lateral)
+                # 20% chance: single skip connection to depth+2 (no further)
+                if depth < 9 and random.random() < 0.20:
+                    skip_pool = depth_nodes[depth + 2]
+                    skip_target = random.choice(skip_pool)
+                    if skip_target not in node.connections:
+                        node.connections.append(skip_target)
 
-            if len(node.connections) < 2:
-                fallback = random.choice(depth_nodes[0])
-                if fallback not in node.connections:
-                    node.connections.append(fallback)
+            # 30% chance: lateral connection within same depth layer
+            same = [n for n in depth_nodes[depth] if n != node_id and n not in node.connections]
+            if same and random.random() < 0.30:
+                node.connections.append(random.choice(same))
 
-    for node in nodes.values():
-        for conn_id in node.connections:
-            if conn_id in nodes and node.id not in nodes[conn_id].connections:
-                nodes[conn_id].connections.append(node.id)
+    # ── Step 2: Citadel (depth 0) connects only to ALL depth-1 nodes ─────────
+    for node_id in depth_nodes[1]:
+        if node_id not in nodes["citadel"].connections:
+            nodes["citadel"].connections.append(node_id)
+
+    # ── Step 3: Bidirectional edges — only for depth diff ≤ 2 ────────────────
+    # (prevents deep nodes from tunnelling back to citadel via the fallback)
+    for node in list(nodes.values()):
+        for conn_id in list(node.connections):
+            if conn_id not in nodes:
+                continue
+            other = nodes[conn_id]
+            depth_diff = abs(other.depth - node.depth)
+            if depth_diff <= 2 and node.id not in other.connections:
+                other.connections.append(node.id)
 
     return nodes

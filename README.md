@@ -49,6 +49,22 @@ This is a full-stack learning RPG I built to make practicing programming concept
 
 **Subject System** — Switch between different JSON question sets (DSA2, etc.) for varied content.
 
+## Desktop Application
+
+The game can also run as a standalone Windows desktop application:
+
+```
+dist/CRAM_The_Unbound/CRAM_The_Unbound.exe
+```
+
+Or build from source using the launcher:
+
+```
+python launcher.py
+```
+
+This runs the game in a native window without requiring a browser.
+
 ## Tech Stack
 
 | Technology  | Purpose                      |
@@ -57,6 +73,8 @@ This is a full-stack learning RPG I built to make practicing programming concept
 | FastAPI     | REST API framework           |
 | HTML/CSS/JS | Browser-based game interface |
 | PDF.js      | PDF rendering in browser     |
+| PyInstaller | Desktop app bundling         |
+| pywebview   | Native window display        |
 
 ## Getting Started
 
@@ -68,9 +86,23 @@ pip install fastapi uvicorn pydantic
 python -m uvicorn main:app --reload --port 8000
 ```
 
-### Playing the Game
+### Playing the Game (Web)
 
 Simply open `play.html` in your browser. The HTML file connects directly to the backend API at `http://localhost:8000`.
+
+### Playing the Game (Desktop)
+
+Run the pre-built executable:
+
+```
+dist/CRAM_The_Unbound/CRAM_The_Unbound.exe
+```
+
+Or build your own:
+
+```
+python launcher.py
+```
 
 Click "Begin Your Run" to start your adventure, or explore:
 

@@ -11,10 +11,15 @@ Responsibilities:
 
 import json
 import random
+import sys
 from pathlib import Path
 from typing import Optional
 
-SUBJECTS_DIR = Path(__file__).parent.parent / "subjects"
+# Same frozen-mode path logic as main.py — subjects/ must be next to the .exe
+if getattr(sys, 'frozen', False):
+    SUBJECTS_DIR = Path(sys.executable).parent / "subjects"
+else:
+    SUBJECTS_DIR = Path(__file__).parent.parent / "subjects"
 
 # ── Active subject state ─────────────────────────────────────────────────────
 _active_subject: str       = "dsa2"

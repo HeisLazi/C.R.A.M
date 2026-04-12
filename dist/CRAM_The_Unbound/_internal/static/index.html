@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Origins: The Unbound</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0f14;
+      --surface:  #161a24;
+      --border:   #2a2f3f;
+      --accent:   #7c6fff;
+      --accent2:  #ff6b6b;
+      --text:     #c8cdd8;
+      --muted:    #5a6070;
+      --hp-green: #3ecf6e;
+      --hp-red:   #e8415a;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    /* ── HP Bars ── */
+    .fighters {
+      display: flex;
+      gap: 24px;
+      width: 100%;
+      max-width: 680px;
+      margin-bottom: 28px;
+    }
+
+    .fighter {
+      flex: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .fighter-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .fighter-name {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hp-bar-track {
+      background: #1e2230;
+      border-radius: 4px;
+      height: 10px;
+      overflow: hidden;
+    }
+
+    .hp-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .hp-bar-fill.player { background: var(--hp-green); }
+    .hp-bar-fill.enemy  { background: var(--hp-red); }
+
+    .hp-text {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    /* ── Combat Box ── */
+    #combat-box {
+      width: 100%;
+      max-width: 680px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px 24px;
+    }
+
+    #question-text {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .option-btn {
+      background: #1e2230;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.92rem;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: #1f2236;
+    }
+
+    .option-btn:disabled { cursor: not-allowed; opacity: 0.6; }
+
+    .option-btn.correct {
+      border-color: var(--hp-green);
+      background: #142a1e;
+      color: var(--hp-green);
+    }
+
+    .option-btn.wrong {
+      border-color: var(--hp-red);
+      background: #2a1418;
+      color: var(--hp-red);
+    }
+
+    /* ── Result Panel ── */
+    #result-panel {
+      display: none;
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+    }
+
+    #result-label {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    #result-label.correct { color: var(--hp-green); }
+    #result-label.wrong   { color: var(--hp-red); }
+
+    #damage-text {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    #explanation {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      background: #1a1e2e;
+      border-left: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 12px 14px;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    #next-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 22px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    #next-btn:hover { opacity: 0.85; }
+
+    /* ── Start / End screens ── */
+    #start-screen, #end-screen {
+      width: 100%;
+      max-width: 500px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    #start-screen h2, #end-screen h2 {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    #start-screen p, #end-screen p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .primary-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 32px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: opacity 0.2s;
+    }
+
+    .primary-btn:hover { opacity: 0.85; }
+
+    #end-title { margin-bottom: 8px; }
+    #end-title.win  { color: var(--hp-green); }
+    #end-title.loss { color: var(--hp-red); }
+
+    #round-info {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    /* ── Insight ── */
+    #insight-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    #insight-btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: background 0.2s, opacity 0.2s;
+    }
+
+    #insight-btn:hover:not(:disabled) { background: #1e1a3a; }
+    #insight-btn:disabled { opacity: 0.35; cursor: not-allowed; border-color: var(--border); color: var(--muted); }
+
+    #insight-uses-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    #hint-panel {
+      display: none;
+      background: #161d2e;
+      border-left: 3px solid #7c6fff88;
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-size: 0.84rem;
+      color: var(--text);
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    #hint-label {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ── Codex Modal ── */
+    #codex-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 100;
+      overflow-y: auto;
+      padding: 40px 16px;
+    }
+
+    #codex-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 32px 28px;
+    }
+
+    #codex-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    #codex-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    #codex-close {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    #codex-close:hover { border-color: var(--accent); color: var(--text); }
+
+    #codex-summary {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .codex-entry {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 12px;
+      background: #1a1e2e;
+    }
+
+    .codex-entry.mistake {
+      border-color: #e8415a55;
+      background: #1e1218;
+    }
+
+    .codex-entry.correct-entry {
+      border-color: #3ecf6e44;
+    }
+
+    .codex-round {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .codex-question {
+      font-size: 0.92rem;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .codex-answers {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+      font-size: 0.8rem;
+    }
+
+    .codex-selected {
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .codex-selected.was-wrong {
+      background: #3a1520;
+      color: var(--hp-red);
+    }
+
+    .codex-selected.was-right {
+      background: #122a1c;
+      color: var(--hp-green);
+    }
+
+    .codex-correct-label {
+      color: var(--hp-green);
+      padding: 3px 10px;
+      border-radius: 4px;
+      background: #122a1c;
+      font-weight: 600;
+    }
+
+    .codex-explanation {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.55;
+      border-left: 2px solid var(--border);
+      padding-left: 10px;
+    }
+
+    .codex-empty {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 32px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Origins: The Unbound</h1>
+  <p class="subtitle">Learning RPG — DSA Edition</p>
+
+  <!-- START SCREEN -->
+  <div id="start-screen">
+    <h2>Enter the Fracture</h2>
+    <p>Answer correctly to deal damage.<br>Wrong answers let the enemy strike back.</p>
+    <button class="primary-btn" onclick="startCombat()">Start Combat</button>
+  </div>
+
+  <!-- COMBAT SCREEN -->
+  <div id="combat-screen" class="hidden">
+    <div class="fighters">
+      <div class="fighter">
+        <div class="fighter-label">Player</div>
+        <div class="fighter-name">Cpt Shanyok</div>
+        <div class="hp-bar-track">
+          <div class="hp-bar-fill player" id="player-bar" style="width:100%"></div>
+        </div>
+        <div class="hp-text" id="player-hp-text">100 / 100</div>
+      </div>
+      <div class="fighter">
+        <div class="fighter-label">Enemy</div>
+        <div class="fighter-name" id="enemy-name">—</div>
+        <div class="hp-bar-track">
+          <div class="hp-bar-fill enemy" id="enemy-bar" style="width:100%"></div>
+        </div>
+        <div class="hp-text" id="enemy-hp-text">— / —</div>
+      </div>
+    </div>
+
+    <div id="combat-box">
+      <div id="round-info">Round 1</div>
+      <div id="question-text">Loading...</div>
+
+      <div id="hint-panel">
+        <div id="hint-label">Insight</div>
+        <div id="hint-text"></div>
+      </div>
+
+      <div id="insight-row">
+        <button id="insight-btn" onclick="useInsight()">Insight</button>
+        <span id="insight-uses-label">2 uses left</span>
+      </div>
+
+      <div class="options" id="options-container"></div>
+
+      <div id="result-panel">
+        <div id="result-label">—</div>
+        <div id="damage-text"></div>
+        <div id="explanation"></div>
+        <button id="next-btn" onclick="nextRound()">Next Round →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- END SCREEN -->
+  <div id="end-screen" class="hidden">
+    <h2 id="end-title">—</h2>
+    <p id="end-message"></p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button class="primary-btn" onclick="resetGame()">Play Again</button>
+      <button class="primary-btn" id="codex-open-btn" onclick="openCodex()" style="background:transparent;border:1px solid var(--accent);color:var(--accent);">Review Codex</button>
+    </div>
+  </div>
+
+  <!-- CODEX MODAL -->
+  <div id="codex-overlay" onclick="closeCodexOnBackdrop(event)">
+    <div id="codex-modal">
+      <div id="codex-header">
+        <span id="codex-title">Codex — Combat Record</span>
+        <button id="codex-close" onclick="closeCodex()">Close ✕</button>
+      </div>
+      <div id="codex-summary"></div>
+      <div id="codex-entries"></div>
+    </div>
+  </div>
+
+  <script>
+    let sessionId = null;
+    let pendingQuestionId = null;
+    let pendingNextQuestion = null;
+    let insightUses = 0;
+
+    const $ = id => document.getElementById(id);
+
+    function startCombat() {
+      $('start-screen').classList.add('hidden');
+      $('combat-screen').classList.remove('hidden');
+      $('end-screen').classList.add('hidden');
+
+      fetch('/start_combat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({})
+      })
+      .then(r => r.json())
+      .then(data => {
+        sessionId = data.session_id;
+        insightUses = data.insight_uses ?? 2;
+        updateHPBars(data.player_hp, data.player_max_hp, data.enemy_hp, data.enemy_max_hp);
+        $('enemy-name').textContent = data.enemy_name;
+        $('enemy-hp-text').textContent = `${data.enemy_hp} / ${data.enemy_max_hp}`;
+        updateInsightUI();
+        renderQuestion(data.question, data.round);
+      })
+      .catch(err => console.error('Start combat failed:', err));
+    }
+
+    function renderQuestion(q, round) {
+      pendingQuestionId = q.id;
+      $('round-info').textContent = `Round ${round}`;
+      $('question-text').textContent = q.question;
+
+      $('hint-panel').style.display = 'none';
+      $('hint-text').textContent = '';
+      updateInsightUI();
+
+      const container = $('options-container');
+      container.innerHTML = '';
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => submitAnswer(opt);
+        container.appendChild(btn);
+      });
+
+      $('result-panel').style.display = 'none';
+    }
+
+    function useInsight() {
+      if (insightUses <= 0 || !sessionId) return;
+      $('insight-btn').disabled = true;
+
+      fetch('/insight', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: sessionId })
+      })
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) return;
+        insightUses = data.insight_uses;
+        $('hint-text').textContent = data.hint;
+        $('hint-panel').style.display = 'block';
+        updateInsightUI();
+      })
+      .catch(err => console.error('Insight failed:', err));
+    }
+
+    function updateInsightUI() {
+      const btn = $('insight-btn');
+      const label = $('insight-uses-label');
+      label.textContent = insightUses === 1 ? '1 use left' : `${insightUses} uses left`;
+      btn.disabled = insightUses <= 0;
+    }
+
+    function submitAnswer(answer) {
+      disableOptions();
+      $('insight-btn').disabled = true;
+
+      fetch('/answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: sessionId,
+          question_id: pendingQuestionId,
+          answer: answer
+        })
+      })
+      .then(r => r.json())
+      .then(data => {
+        highlightAnswer(answer, data.correct_answer);
+        updateHPBars(data.player_hp, data.player_max_hp, data.enemy_hp, data.enemy_max_hp);
+        showResult(data);
+        pendingNextQuestion = data.next_question;
+
+        if (data.combat_over) {
+          setTimeout(() => endCombat(data.winner), 1600);
+        }
+      })
+      .catch(err => console.error('Answer failed:', err));
+    }
+
+    function highlightAnswer(chosen, correct) {
+      const buttons = $('options-container').querySelectorAll('.option-btn');
+      buttons.forEach(btn => {
+        if (btn.textContent === correct) {
+          btn.classList.add('correct');
+        } else if (btn.textContent === chosen && chosen !== correct) {
+          btn.classList.add('wrong');
+        }
+      });
+    }
+
+    function showResult(data) {
+      const panel = $('result-panel');
+      const label = $('result-label');
+      const dmgText = $('damage-text');
+      const expEl = $('explanation');
+      const nextBtn = $('next-btn');
+
+      label.className = data.correct ? 'correct' : 'wrong';
+      label.textContent = data.correct ? 'Correct!' : 'Wrong!';
+
+      if (data.correct) {
+        const rollStr = data.dice_roll != null ? ` (roll ×${data.dice_roll})` : '';
+        dmgText.textContent = `You dealt ${data.damage_dealt} damage to the enemy${rollStr}.`;
+      } else {
+        dmgText.textContent = `The enemy counterattacked for ${data.enemy_damage} damage!`;
+      }
+
+      expEl.textContent = data.explanation;
+
+      nextBtn.style.display = data.combat_over ? 'none' : 'inline-block';
+      panel.style.display = 'block';
+    }
+
+    function nextRound() {
+      if (!pendingNextQuestion) return;
+      const currentRound = parseInt($('round-info').textContent.replace('Round ', '')) + 1;
+      renderQuestion(pendingNextQuestion, currentRound);
+      pendingNextQuestion = null;
+    }
+
+    function endCombat(winner) {
+      $('combat-screen').classList.add('hidden');
+      $('end-screen').classList.remove('hidden');
+
+      const title = $('end-title');
+      const msg = $('end-message');
+
+      if (winner === 'player') {
+        title.className = 'win';
+        title.textContent = 'Victory!';
+        msg.textContent = 'The enemy is defeated. Your understanding grows stronger.';
+      } else {
+        title.className = 'loss';
+        title.textContent = 'Defeated.';
+        msg.textContent = 'The Pale Drift claims you — for now. Study the lesson and return.';
+      }
+    }
+
+    function resetGame() {
+      sessionId = null;
+      pendingQuestionId = null;
+      pendingNextQuestion = null;
+      insightUses = 0;
+      $('hint-panel').style.display = 'none';
+      $('hint-text').textContent = '';
+      $('end-screen').classList.add('hidden');
+      $('combat-screen').classList.add('hidden');
+      $('start-screen').classList.remove('hidden');
+    }
+
+    function updateHPBars(playerHp, playerMax, enemyHp, enemyMax) {
+      const pPct = Math.max(0, (playerHp / playerMax) * 100);
+      const ePct = Math.max(0, (enemyHp / enemyMax) * 100);
+      $('player-bar').style.width = pPct + '%';
+      $('enemy-bar').style.width = ePct + '%';
+      $('player-hp-text').textContent = `${playerHp} / ${playerMax}`;
+      $('enemy-hp-text').textContent = `${enemyHp} / ${enemyMax}`;
+    }
+
+    function disableOptions() {
+      $('options-container').querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+    }
+
+    function openCodex() {
+      if (!sessionId) return;
+      fetch(`/codex/${sessionId}`)
+        .then(r => r.json())
+        .then(data => {
+          renderCodex(data.entries || []);
+          $('codex-overlay').style.display = 'block';
+        })
+        .catch(err => console.error('Codex fetch failed:', err));
+    }
+
+    function closeCodex() {
+      $('codex-overlay').style.display = 'none';
+    }
+
+    function closeCodexOnBackdrop(event) {
+      if (event.target === $('codex-overlay')) closeCodex();
+    }
+
+    function renderCodex(entries) {
+      const total    = entries.length;
+      const mistakes = entries.filter(e => !e.correct).length;
+      const correct  = total - mistakes;
+
+      $('codex-summary').textContent =
+        total === 0
+          ? 'No answers recorded yet.'
+          : `${total} question${total !== 1 ? 's' : ''} answered — ${correct} correct, ${mistakes} mistake${mistakes !== 1 ? 's' : ''}.`;
+
+      const container = $('codex-entries');
+      container.innerHTML = '';
+
+      if (total === 0) {
+        container.innerHTML = '<div class="codex-empty">No entries yet.</div>';
+        return;
+      }
+
+      entries.forEach(entry => {
+        const card = document.createElement('div');
+        card.className = 'codex-entry ' + (entry.correct ? 'correct-entry' : 'mistake');
+
+        const selectedClass = entry.correct ? 'was-right' : 'was-wrong';
+        const correctBadge  = entry.correct
+          ? ''
+          : `<span class="codex-correct-label">✓ ${entry.correct_answer}</span>`;
+
+        card.innerHTML = `
+          <div class="codex-round">Round ${entry.round}</div>
+          <div class="codex-question">${entry.question}</div>
+          <div class="codex-answers">
+            <span class="codex-selected ${selectedClass}">
+              ${entry.correct ? '✓' : '✗'} ${entry.selected}
+            </span>
+            ${correctBadge}
+          </div>
+          <div class="codex-explanation">${entry.explanation}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+  </script>
+
+</body>
+</html>

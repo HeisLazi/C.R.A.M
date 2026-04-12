@@ -22,6 +22,8 @@ Endpoints:
   GET  /world/{world_id}/lazi              → Lazi dialogue using codex data
 """
 
+import os
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -52,8 +54,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-STATIC_DIR   = Path(__file__).parent.parent / "static"
-SUBJECTS_DIR = Path(__file__).parent.parent / "subjects"
+# ── Path resolution — works both from source and when frozen by PyInstaller ──
+#
+# PyInstaller 6+ (--onedir) layout:
+#   dist/CRAM_The_Unbound/
+#     CRAM_The_Unbound.exe      ← sys.executable
+#     subjects/                 ← user-editable, lives NEXT TO the .exe
+#     _internal/                ← sys._MEIPASS  (bundled read-only data)
+#       static/
+#       play.html
+#       CRAM_SUBJECT_TEMPLATE.json
+#
+# When running from source, everything is relative to the project root.
+if getattr(sys, 'frozen', False):
+    _BUNDLE_DIR = Path(sys._MEIPASS)          # _internal/ — bundled assets
+    _APP_ROOT   = Path(sys.executable).parent  # next to .exe — user files
+else:
+    _BUNDLE_DIR = Path(__file__).parent.parent
+    _APP_ROOT   = Path(__file__).parent.parent
+
+STATIC_DIR   = _BUNDLE_DIR / "static"
+SUBJECTS_DIR = _APP_ROOT   / "subjects"
+PLAY_HTML    = _BUNDLE_DIR / "play.html"
 
 app.mount("/static",   StaticFiles(directory=str(STATIC_DIR)),   name="static")
 app.mount("/subjects", StaticFiles(directory=str(SUBJECTS_DIR)), name="subjects")
@@ -65,6 +87,58 @@ app.mount("/subjects", StaticFiles(directory=str(SUBJECTS_DIR)), name="subjects"
 @app.get("/")
 def index():
     return FileResponse(str(STATIC_DIR / "index.html"))
+
+
+@app.get("/play")
+def play():
+    """
+    Serve play.html — used by the pywebview launcher so the window points at
+    http://127.0.0.1:8000/play instead of opening the file directly.
+    """
+    return FileResponse(str(PLAY_HTML))
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# .exe / desktop utilities
+# ────────────────────────────────────────────────────────────────────────────
+@app.post("/api/open_subjects_folder")
+def open_subjects_folder():
+    """
+    Open the subjects/ directory in the OS file manager.
+    Called by the in-game 'Add Subject' button so players can drop new
+    subject folders in without touching the command line.
+    """
+    import platform, subprocess
+    path = str(SUBJECTS_DIR)
+    SUBJECTS_DIR.mkdir(parents=True, exist_ok=True)  # create it if it doesn't exist yet
+    system = platform.system()
+    try:
+        if system == "Windows":
+            os.startfile(path)
+        elif system == "Darwin":
+            subprocess.Popen(["open", path])
+        else:
+            subprocess.Popen(["xdg-open", path])
+        return {"ok": True, "path": path}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/reload_subjects")
+def reload_subjects():
+    """
+    Force the question engine to rescan the subjects/ folder and reload the
+    active subject's questions. Used by the in-game Refresh button so players
+    don't need to restart after dropping in a new subject.
+    """
+    from backend.question_engine import reload_questions, list_subjects, get_active_subject
+    count = reload_questions()
+    return {
+        "ok": True,
+        "active": get_active_subject(),
+        "question_count": count,
+        "subjects": list_subjects(),
+    }
 
 
 # ────────────────────────────────────────────────────────────────────────────

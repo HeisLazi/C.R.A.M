@@ -1,15 +1,119 @@
 <!doctype html>
 <html>
 <head>
-  <title>Origins: The Unbound</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>C.R.A.M — The Unbound</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #0a0a0f; color: #d4d4d4; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
-    #app { max-width: 960px; margin: 0 auto; padding: 20px; }
+    html { height: 100%; }
+    body { height: 100%; overflow: hidden; background: #05050d; color: #d4d4d4; font-family: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif; }
+    #app { height: 100%; overflow-y: auto; max-width: 1200px; margin: 0 auto; padding: 24px 40px; scrollbar-width: thin; scrollbar-color: #1a1a30 transparent; position:relative; z-index:1; }
+
+    /* ── Animated background ──────────────────────────────────────── */
+    #cram-bg {
+      position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, #0d0430 0%, #05050d 55%);
+    }
+    /* Star layers — three CSS-only star fields at different speeds/sizes */
+    #cram-bg .stars-s, #cram-bg .stars-m, #cram-bg .stars-l {
+      position:absolute; inset:0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(200,162,255,.55) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 40%, rgba(180,150,255,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 8%, rgba(220,200,255,.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 60%, rgba(160,130,220,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 25%, rgba(200,170,255,.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 85% 75%, rgba(180,160,255,.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 85%, rgba(200,180,255,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 12%, rgba(220,210,255,.45) 0%, transparent 100%),
+        radial-gradient(1px 1px at 33% 70%, rgba(180,150,240,.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 78% 50%, rgba(200,160,255,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 48% 90%, rgba(170,140,220,.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 62% 35%, rgba(210,185,255,.45) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5% 52%, rgba(190,165,250,.35) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 38%, rgba(200,175,255,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 22% 22%, rgba(215,195,255,.5) 0%, transparent 100%);
+      background-size: 100% 100%;
+    }
+    #cram-bg .stars-s { animation: drift-s 90s linear infinite; opacity:.7; }
+    #cram-bg .stars-m {
+      background-image:
+        radial-gradient(1.5px 1.5px at 18% 30%, rgba(200,162,255,.45) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 43% 65%, rgba(180,150,255,.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 67% 18%, rgba(210,185,255,.5) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 82% 82%, rgba(190,160,240,.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 30% 50%, rgba(200,170,255,.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 75% 42%, rgba(215,190,255,.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 55% 78%, rgba(180,155,235,.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 8%  60%, rgba(205,178,255,.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 94% 55%, rgba(195,168,250,.35) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 50% 20%, rgba(220,200,255,.5) 0%, transparent 100%);
+      animation: drift-m 140s linear infinite; opacity:.65;
+    }
+    #cram-bg .stars-l {
+      background-image:
+        radial-gradient(2px 2px at 20% 10%, rgba(200,162,255,.3) 0%, transparent 100%),
+        radial-gradient(2px 2px at 60% 55%, rgba(180,150,255,.25) 0%, transparent 100%),
+        radial-gradient(2px 2px at 80% 20%, rgba(210,185,255,.35) 0%, transparent 100%),
+        radial-gradient(2px 2px at 35% 80%, rgba(190,160,240,.25) 0%, transparent 100%),
+        radial-gradient(2px 2px at 95% 70%, rgba(200,170,255,.3) 0%, transparent 100%),
+        radial-gradient(2px 2px at 45% 40%, rgba(215,190,255,.3) 0%, transparent 100%);
+      animation: drift-l 200s linear infinite; opacity:.6;
+    }
+    @keyframes drift-s { 0%{transform:translateY(0)} 100%{transform:translateY(-8px)} }
+    @keyframes drift-m { 0%{transform:translateY(0) translateX(0)} 50%{transform:translateY(-5px) translateX(3px)} 100%{transform:translateY(0) translateX(0)} }
+    @keyframes drift-l { 0%{transform:translateY(0) translateX(0)} 33%{transform:translateY(-4px) translateX(-3px)} 66%{transform:translateY(2px) translateX(4px)} 100%{transform:translateY(0) translateX(0)} }
+
+    /* Ambient glow orbs */
+    #cram-bg .orb { position:absolute; border-radius:50%; filter:blur(60px); }
+    #cram-bg .orb-1 {
+      width:320px; height:200px; top:-80px; left:calc(50% - 160px);
+      background:radial-gradient(ellipse,rgba(80,20,160,.18) 0%,transparent 70%);
+      animation:orb-pulse 8s ease-in-out infinite;
+    }
+    #cram-bg .orb-2 {
+      width:220px; height:180px; bottom:10%; left:5%;
+      background:radial-gradient(ellipse,rgba(20,50,120,.12) 0%,transparent 70%);
+      animation:orb-pulse 11s ease-in-out 2s infinite;
+    }
+    #cram-bg .orb-3 {
+      width:180px; height:140px; bottom:15%; right:6%;
+      background:radial-gradient(ellipse,rgba(60,10,110,.14) 0%,transparent 70%);
+      animation:orb-pulse 14s ease-in-out 5s infinite;
+    }
+    @keyframes orb-pulse { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.12)} }
+
+    /* CRT scanlines — barely visible, retro feel */
+    #cram-bg .scanlines {
+      position:absolute; inset:0;
+      background:repeating-linear-gradient(
+        to bottom,
+        transparent 0px, transparent 3px,
+        rgba(0,0,0,.08) 3px, rgba(0,0,0,.08) 4px
+      );
+      pointer-events:none;
+    }
+    /* Subtle pixel grid */
+    #cram-bg .pixgrid {
+      position:absolute; inset:0; opacity:.025;
+      background-image:
+        linear-gradient(rgba(140,100,255,.6) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(140,100,255,.6) 1px, transparent 1px);
+      background-size:32px 32px;
+      animation:grid-drift 30s linear infinite;
+    }
+    @keyframes grid-drift { 0%{background-position:0 0} 100%{background-position:32px 32px} }
+    #app::-webkit-scrollbar { width: 6px; }
+    #app::-webkit-scrollbar-track { background: transparent; }
+    #app::-webkit-scrollbar-thumb { background: #1a1a30; border-radius: 3px; }
 
     /* ── Header ─────────────────────────────────────────────────────── */
     .header { text-align:center; padding:18px 0 8px; border-bottom:1px solid #1a1a2e; margin-bottom:16px; }
-    .header h1 { color:#c8a2ff; font-size:26px; letter-spacing:2px; }
+    .header h1 { color:#c8a2ff; font-size:20px; letter-spacing:3px; font-family:'Press Start 2P', monospace; line-height:1.4; }
     .header .sub { color:#555; font-size:11px; margin-top:3px; }
 
     /* ── Player bar ─────────────────────────────────────────────────── */
@@ -109,6 +213,27 @@
     .expl { margin-top:10px; padding:10px; border-radius:6px; font-size:13px; line-height:1.5; }
     .expl.good { background:#0a1f0a; border:1px solid #1a4a1a; color:#8d8; }
     .expl.bad  { background:#1f0a0a; border:1px solid #4a1a1a; color:#d88; }
+
+    /* Click-to-proceed button (shown after every answer) */
+    .combat-proceed {
+      margin-top:12px; width:100%; padding:11px 0;
+      background:#0c0c20; border:1px solid #2a2a50; border-radius:8px;
+      color:#9988cc; font-size:13px; font-weight:600; letter-spacing:0.5px;
+      cursor:pointer; transition:all 0.15s;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+    }
+    .combat-proceed:hover { background:#141430; border-color:#5544aa; color:#c8b8ff; }
+    .combat-proceed.wrong-proceed {
+      border-color:#4a1a1a; color:#cc8888;
+      background:#140a0a;
+    }
+    .combat-proceed.wrong-proceed:hover { background:#1e0e0e; border-color:#8a3333; color:#ffaaaa; }
+    /* Correct answer label shown on wrong answers */
+    .correct-reveal {
+      margin-top:8px; padding:10px 14px; background:#071807; border:1px solid #1a5a1a;
+      border-radius:7px; font-size:13px; color:#88cc88; line-height:1.5;
+    }
+    .correct-reveal strong { color:#aaffaa; }
 
     /* ── Battle Arena ──────────────────────────────────────────────── */
     .battle-wrap { margin-bottom:14px; }
@@ -258,7 +383,8 @@
     }
     .start-logo { position:relative; margin-bottom:8px; }
     .start-logo h1 {
-      font-size:42px; letter-spacing:4px; font-weight:900;
+      font-size:28px; letter-spacing:4px; font-weight:900;
+      font-family:'Press Start 2P', monospace; line-height:1.5;
       background:linear-gradient(135deg, #c8a2ff 0%, #8866cc 50%, #5533aa 100%);
       -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
     }
@@ -282,6 +408,97 @@
     .sb-subject:hover { background:#180e08; border-color:#6a4a1a; }
     .sb-library { background:#070d18; border-color:#1a3a5a; color:#7ab8dd; }
     .sb-library:hover { background:#0a1525; border-color:#2a6a9a; }
+    .sb-tutorial { background:#060d06; border-color:#2a6a2a; color:#88dd88; }
+    .sb-tutorial:hover { background:#0a160a; border-color:#44aa44; }
+
+    /* ── Sir GetRICH dialogue overlay ───────────────────────────────── */
+    /* Normal mode: bottom-center, near the main content */
+    .tutor-overlay {
+      position:fixed; bottom:0; left:0; right:0; z-index:999;
+      display:flex; align-items:flex-end; justify-content:center;
+      padding:0 16px 18px; pointer-events:none;
+    }
+    .tutor-overlay.visible { pointer-events:all; }
+    .tutor-box {
+      display:flex; align-items:flex-end; gap:16px;
+      max-width:640px; width:100%;
+      transform:translateY(120%); opacity:0;
+      transition:transform 0.35s cubic-bezier(0.34,1.2,0.64,1), opacity 0.3s ease;
+    }
+    .tutor-overlay.visible .tutor-box { transform:translateY(0); opacity:1; }
+    .tutor-sprite-wrap {
+      flex-shrink:0; width:80px; height:110px; display:flex; align-items:flex-end;
+    }
+    .tutor-sprite-wrap svg { width:100%; height:100%; filter:drop-shadow(0 0 10px rgba(240,192,0,0.4)); }
+    .tutor-bubble {
+      background:#0a1208; border:2px solid #2a7a2a; border-radius:14px;
+      padding:14px 16px; flex:1; position:relative;
+      box-shadow:0 4px 32px rgba(0,200,0,0.14), 0 0 0 1px rgba(100,200,100,0.05);
+    }
+    .tutor-bubble::before {
+      content:''; position:absolute; bottom:22px; left:-10px;
+      width:0; height:0;
+      border-top:8px solid transparent; border-bottom:8px solid transparent;
+      border-right:10px solid #2a7a2a;
+    }
+    .tutor-bubble::after {
+      content:''; position:absolute; bottom:23px; left:-7px;
+      width:0; height:0;
+      border-top:7px solid transparent; border-bottom:7px solid transparent;
+      border-right:9px solid #0a1208;
+    }
+    .tutor-name {
+      color:#f0c000; font-size:12px; font-weight:800; letter-spacing:1px;
+      margin-bottom:7px; display:flex; align-items:center; gap:6px;
+    }
+    .tutor-name::after { content:'💰'; font-size:13px; }
+    .tutor-text { color:#c8e8c8; font-size:13px; line-height:1.65; }
+    .tutor-btn {
+      margin-top:10px; padding:6px 16px; background:#1a4a1a; border:1px solid #3a8a3a;
+      color:#88ee88; border-radius:6px; cursor:pointer; font-size:12px; font-weight:700;
+      transition:all 0.15s; letter-spacing:0.5px;
+    }
+    .tutor-btn:hover { background:#244a24; border-color:#55cc55; color:#aaffaa; }
+
+    /* Intro mode: fullscreen centered, large sprite */
+    .tutor-overlay.intro-mode {
+      align-items:center; justify-content:center;
+      background:rgba(5,5,13,0.96); backdrop-filter:blur(4px);
+      padding:0;
+    }
+    .tutor-overlay.intro-mode .tutor-box {
+      flex-direction:column; align-items:center; max-width:480px;
+      gap:20px;
+    }
+    .tutor-overlay.intro-mode .tutor-sprite-wrap {
+      width:140px; height:190px;
+    }
+    .tutor-overlay.intro-mode .tutor-bubble {
+      width:100%; text-align:center;
+    }
+    .tutor-overlay.intro-mode .tutor-bubble::before,
+    .tutor-overlay.intro-mode .tutor-bubble::after { display:none; }
+    .tutor-overlay.intro-mode .tutor-name {
+      justify-content:center; font-size:15px;
+    }
+    .tutor-overlay.intro-mode .tutor-text { font-size:15px; }
+    .tutor-overlay.intro-mode .tutor-btn {
+      padding:10px 28px; font-size:14px; width:100%; margin-top:14px;
+    }
+
+    /* Tutorial world map (linear) */
+    .tutorial-map { display:flex; flex-direction:column; align-items:center; gap:8px; padding:10px 0; }
+    .tut-node {
+      display:flex; align-items:center; gap:12px; padding:12px 18px; width:280px;
+      border-radius:10px; border:1px solid #2a3a2a; background:#060d06;
+    }
+    .tut-node.active { border-color:#44aa44; background:#0a180a; }
+    .tut-node.cleared { border-color:#2a4a2a; opacity:0.6; }
+    .tut-node-icon { font-size:22px; }
+    .tut-node-info { flex:1; }
+    .tut-node-name { font-size:13px; font-weight:700; color:#88cc88; }
+    .tut-node-desc { font-size:11px; color:#2a4a2a; margin-top:2px; }
+    .tut-connector { width:2px; height:20px; background:#1a3a1a; }
     /* Subject Switcher screen */
     .subject-switcher { max-width:460px; margin:0 auto; padding:0 4px; }
     .subject-switcher h2 { color:#cc9944; font-size:18px; letter-spacing:1px; margin-bottom:4px; }
@@ -305,6 +522,89 @@
     .start-btn-main .sb-desc  { font-size:11px; opacity:0.6; font-weight:400; margin-top:2px; }
     .start-btn-main .sb-arr   { color:#ffffff22; font-size:18px; }
     .start-version { color:#2a2a3a; font-size:10px; margin-top:24px; letter-spacing:2px; }
+
+    /* ── Intro splash screen ──────────────────────────────────────── */
+    .intro-splash {
+      display:flex; flex-direction:column; align-items:center;
+      min-height:100%; padding:20px 20px 30px; gap:0;
+    }
+    .intro-title { text-align:center; margin-bottom:16px; padding-top:16px; }
+    .intro-cram {
+      font-family:'Press Start 2P', monospace;
+      font-size:32px; letter-spacing:6px;
+      background:linear-gradient(135deg, #c8a2ff 0%, #8866cc 50%, #5533aa 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+      filter:drop-shadow(0 0 18px rgba(140,80,255,.5));
+      margin-bottom:8px;
+    }
+    .intro-subtitle {
+      font-family:'Press Start 2P', monospace;
+      font-size:10px; color:#4a3a6a; letter-spacing:4px;
+    }
+    /* Characters side by side */
+    .intro-chars {
+      display:flex; align-items:flex-end; justify-content:center;
+      gap:32px; flex:1; padding:0 10px;
+      min-height:220px;
+    }
+    .intro-char {
+      display:flex; flex-direction:column; align-items:center; gap:6px;
+      transition:all 0.3s ease;
+      opacity:0.55; transform:scale(0.92);
+    }
+    .intro-char.char-active {
+      opacity:1; transform:scale(1);
+    }
+    .intro-char svg { width:110px; height:150px; filter:drop-shadow(0 4px 18px rgba(0,0,0,.6)); }
+    .intro-shanty svg { filter:drop-shadow(0 4px 18px rgba(0,80,180,.3)); }
+    .intro-getrich svg { filter:drop-shadow(0 4px 18px rgba(240,192,0,.25)); }
+    .intro-char-name {
+      font-size:10px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+      color:#4a4a6a;
+    }
+    .intro-shanty .intro-char-name { color:#2a4a8a; }
+    .intro-getrich .intro-char-name { color:#7a6010; }
+    /* Dialogue box */
+    .intro-dialogue {
+      width:100%; max-width:520px; background:#080814;
+      border:1px solid #1e1e38; border-radius:12px;
+      padding:18px 20px; margin-top:12px;
+    }
+    .intro-speaker {
+      font-size:11px; font-weight:800; letter-spacing:1.5px;
+      text-transform:uppercase; margin-bottom:8px;
+    }
+    .spk-rich { color:#d4a800; }
+    .spk-cpt  { color:#4a90cc; }
+    .intro-line {
+      color:#c8c8d8; font-size:14px; line-height:1.7;
+      min-height:48px; transition:opacity 0.2s;
+    }
+    .intro-next-btn {
+      margin-top:14px; width:100%; padding:11px 0;
+      background:#0f0f24; border:1px solid #3a3a7a; color:#9988cc;
+      border-radius:8px; font-size:13px; font-weight:700; letter-spacing:1px;
+      cursor:pointer; transition:all 0.15s; font-family:inherit;
+    }
+    .intro-next-btn:hover { background:#18183a; border-color:#6655cc; color:#c8b8ff; }
+    .intro-skip {
+      margin-top:12px; font-size:10px; color:#2a2a3a; cursor:pointer;
+      letter-spacing:1px; text-decoration:underline; text-underline-offset:3px;
+    }
+    .intro-skip:hover { color:#4a4a6a; }
+    /* GetRICH fun-fact bubble */
+    .getrich-fact-bubble {
+      position:relative; background:#0a0a1e; border:1px solid #d4a800;
+      border-radius:10px; padding:8px 14px; max-width:260px;
+      font-size:11.5px; color:#e8d070; line-height:1.55;
+      margin:0 auto -6px; text-align:center;
+      box-shadow:0 0 12px rgba(212,168,0,.15);
+    }
+    .getrich-fact-bubble::after {
+      content:''; position:absolute; bottom:-8px; left:50%; transform:translateX(-50%);
+      border:8px solid transparent; border-top-color:#d4a800; border-bottom:none;
+    }
+    .getrich-fact-icon { font-size:13px; margin-right:4px; }
 
     /* ── Back button ─────────────────────────────────────────────────── */
     .back-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px;
@@ -412,14 +712,83 @@
     /* ── Upgrades / Crafting ─────────────────────────────────────────── */
     .upgrade-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
     .upgrade-card { background:#08080f; border:1px solid #141424; border-radius:8px; padding:14px; cursor:pointer; transition:all 0.15s; }
-    .upgrade-card:hover:not(.owned):not(.cant-afford) { border-color:#5a3a8a; background:#0e0e1e; }
+    .upgrade-card:hover:not(.owned):not(.cant-afford):not(.locked-card) { border-color:#5a3a8a; background:#0e0e1e; }
     .upgrade-card.owned   { border-color:#1a4a1a; background:#060f06; cursor:default; }
     .upgrade-card.cant-afford { opacity:0.5; cursor:not-allowed; }
+    .locked-card { opacity:0.4; cursor:not-allowed !important; border-style:dashed !important; pointer-events:none; }
     .uc-icon  { font-size:22px; margin-bottom:6px; }
     .uc-name  { color:#ccc; font-size:13px; font-weight:700; margin-bottom:4px; }
     .uc-desc  { color:#666; font-size:11px; line-height:1.5; margin-bottom:8px; }
     .uc-cost  { font-size:11px; color:#887744; }
     .uc-owned { font-size:11px; color:#44884a; font-weight:bold; }
+    @keyframes fadeInUp { from{opacity:0;transform:translateX(-50%) translateY(10px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
+    @keyframes fadeOut  { to{opacity:0} }
+
+    /* ── Path Select Screen ─────────────────────────────────────────── */
+    .path-select { padding:8px 0; }
+    .path-select h2 { color:#c8a2ff; font-size:16px; margin-bottom:4px; }
+    .path-select .ps-sub { color:#3a3a5a; font-size:12px; margin-bottom:14px; }
+    .path-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:24px; }
+    .path-card {
+      border:2px solid #1a1a30; border-radius:12px; padding:18px; cursor:pointer;
+      transition:all 0.15s; background:#080814; position:relative; overflow:hidden;
+    }
+    .path-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:3px;
+      background: var(--pc, #444); opacity:0.6;
+    }
+    .path-card:hover { background:#0e0e1c; transform:translateY(-2px); border-color: var(--pc, #444); }
+    .path-card.selected { background:#0a0a1c; border-color: var(--pc, #444); box-shadow:0 0 18px color-mix(in srgb, var(--pc,#444) 20%, transparent); }
+    .path-card.selected::before { opacity:1; }
+    .pc-icon  { font-size:28px; margin-bottom:8px; }
+    .pc-name  { font-size:16px; font-weight:700; color:#eee; margin-bottom:2px; }
+    .pc-tag   { font-size:11px; color:#555; margin-bottom:10px; font-style:italic; }
+    .pc-desc  { font-size:12px; color:#555; line-height:1.6; margin-bottom:12px; }
+    .pc-tiers { display:flex; flex-direction:column; gap:5px; }
+    .pc-tier  { font-size:11px; padding:5px 8px; border-radius:5px; background:#06060e; border:1px solid #12122a; }
+    .pc-tier-lv { color:#333; font-size:10px; margin-bottom:2px; }
+    .pc-tier-nm { color:#888; font-weight:600; }
+    .pc-tier-ab { color:#444; margin-top:2px; font-style:italic; }
+    .path-card.selected .pc-tier { border-color:#2a2a4a; }
+    .ps-confirm { text-align:center; padding:16px 0; }
+    .ps-confirm .enter-btn { display:inline-block; padding:14px 40px; background:#0d0d20; border:1px solid #3a3a6a; border-radius:8px; color:#c8a2ff; font-size:15px; font-weight:600; cursor:pointer; letter-spacing:1px; transition:all 0.15s; }
+    .ps-confirm .enter-btn:hover:not(:disabled) { background:#18184a; border-color:#c8a2ff; }
+    .ps-confirm .enter-btn:disabled { opacity:0.3; cursor:not-allowed; }
+    .ps-selected-summary { display:flex; gap:16px; justify-content:center; margin-bottom:14px; flex-wrap:wrap; }
+    .pss-pill { padding:6px 14px; border-radius:20px; border:1px solid #2a2a4a; font-size:12px; color:#888; background:#08080e; }
+    .pss-pill.set { color:#c8a2ff; border-color:#4a3a7a; background:#12103a; }
+
+    /* ── Weapon Upgrade Prompt ──────────────────────────────────────── */
+    .upgrade-prompt { background:#07060e; border:1px solid #2a1a4a; border-radius:12px; padding:24px; margin-bottom:14px; }
+    .up-title  { color:#c8a2ff; font-size:20px; font-weight:700; margin-bottom:4px; text-align:center; }
+    .up-sub    { color:#4a3a6a; font-size:13px; text-align:center; margin-bottom:16px; }
+    .up-stack-note { background:#1a1530; border:1px solid #4a3080; border-radius:8px; padding:10px 14px;
+                     font-size:12px; color:#b09adf; margin-bottom:16px; text-align:center; }
+    .up-choice { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .up-option { border:2px solid #1a1a30; border-radius:10px; padding:18px; cursor:pointer; transition:all 0.15s; background:#09090f; }
+    .up-option:hover { border-color:#c8a2ff; background:#12122a; transform:translateY(-2px); }
+    .uo-name   { font-size:15px; font-weight:700; color:#eee; margin-bottom:6px; }
+    .uo-stat   { font-size:12px; color:#6a8a6a; margin-bottom:8px; }
+    .uo-ability{ font-size:12px; color:#7a6a4a; line-height:1.6; }
+    .uo-warn   { font-size:11px; color:#3a3a4a; margin-top:10px; text-align:center; }
+
+    /* ── Path progression display (Equipment screen) ────────────────── */
+    .path-display { background:#070610; border:1px solid #1a1430; border-radius:10px; padding:18px; margin-bottom:14px; }
+    .pd-title  { color:#c8a2ff; font-size:15px; font-weight:700; margin-bottom:14px; }
+    .pd-tiers  { display:flex; flex-direction:column; gap:8px; }
+    .pd-tier   { display:flex; gap:12px; align-items:flex-start; padding:10px 12px; border-radius:8px; background:#06060c; border:1px solid #12122a; opacity:0.4; }
+    .pd-tier.current  { opacity:1; border-color:#4a3a8a; background:#0e0c1e; }
+    .pd-tier.past     { opacity:0.55; }
+    .pd-tier.upcoming { opacity:0.3; }
+    .pdt-badge { font-size:10px; padding:2px 8px; border-radius:10px; background:#1a1428; color:#555; white-space:nowrap; margin-top:2px; flex-shrink:0; }
+    .pd-tier.current .pdt-badge { background:#2a1a4a; color:#c8a2ff; }
+    .pd-tier.past .pdt-badge { background:#1a3a1a; color:#4a8a4a; }
+    .pdt-name  { font-size:14px; font-weight:600; color:#bbb; }
+    .pd-tier.current .pdt-name { color:#eee; }
+    .pdt-stat  { font-size:11px; color:#666; margin-top:2px; }
+    .pdt-ability { font-size:11px; color:#554a38; margin-top:4px; font-style:italic; }
+    .pd-tier.current .pdt-ability { color:#7a6a4a; }
+    .pd-connector { width:2px; height:12px; background:#1a1428; margin:0 auto; }
 
     /* ── Old start (keep for compat) ───────────────────────────────── */
     .start { text-align:center; padding:80px 20px; }
@@ -453,7 +822,7 @@
     .equip-section { margin-bottom:16px; }
     .equip-section h3 { color:#888; font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
     .equip-card { display:inline-block; padding:10px 14px; margin:4px; border-radius:7px; border:1px solid #1e1e30; background:#12121e; cursor:pointer; font-size:13px; color:#bbb; transition:all 0.12s; vertical-align:top; min-width:130px; }
-    .equip-card:hover { background:#181828; border-color:#4a4a8a; color:#eee; }
+    .equip-card:hover:not(.locked-card) { background:#181828; border-color:#4a4a8a; color:#eee; }
     .equip-card.selected { border-color:#c8a2ff; color:#c8a2ff; background:#160f2a; }
     .equip-card .eq-name { font-weight:bold; margin-bottom:3px; }
     .equip-card .eq-stat { font-size:11px; color:#666; }
@@ -563,6 +932,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
+<!-- Ambient animated background -->
+<div id="cram-bg" aria-hidden="true">
+  <div class="stars-s"></div>
+  <div class="stars-m"></div>
+  <div class="stars-l"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="scanlines"></div>
+  <div class="pixgrid"></div>
+</div>
+
 <div id="app"></div>
 
 <script>
@@ -585,7 +966,23 @@ let isAnomalyCombat = false;   // true when fighting The Pale Drift (anomaly nod
 let combatXpReward  = 30;      // XP granted on victory (from enemy.xp_reward)
 let playerDebuffs   = [];      // permanent debuffs from anomaly losses
 let pendingOpenAnswer = null;  // for self-eval: stores {qid} while showing model answer
-let playerUpgrades  = [];      // list of purchased upgrade IDs
+let playerUpgrades  = [];      // list of purchased upgrade IDs this run
+
+// ── Tutorial state ─────────────────────────────────────────────────────────
+let isTutorialMode     = false;  // true during tutorial run
+let tutorialWorld      = null;   // tutorial world node dict
+let tutorialStep       = 0;      // which dialogue step we're on
+let tutorDialogueQueue = [];     // pending dialogue strings to show
+let _currentNodeId     = null;   // node that triggered current combat (used by afterCombat)
+
+// ── Playstyle / Path state ─────────────────────────────────────────────────
+let playerPath          = null;  // "aggressor" | "scholar" | "warden"
+let playerArmorPath     = null;  // "iron_guard" | "sorcerer" | "drifter"
+let playerWeaponTier    = 0;     // 0=T1, 1=T2, 2=T3
+let playerArmorTier     = 0;     // 0=T1, 1=T2, 2=T3
+let playerWeaponChoices   = [];    // [idx_at_t2, idx_at_t3] — branch chosen (0 or 1)
+let playerBonusAbilities  = [];    // stacked abilities from prior tiers (e.g. T2 ability kept at T3)
+let pendingWeaponUpgrade  = null;  // tier number (1 or 2) when upgrade prompt is due
 
 // ── Navigation back-button ─────────────────────────────────────────────────
 let navBack = null;            // function to call when "← Back" is pressed
@@ -685,7 +1082,7 @@ function renderStart() {
       <div class="start-lore">"Knowledge is the only weapon that sharpens itself on the enemy."</div>
 
       <div class="start-menu">
-        <button class="start-btn-main sb-run" onclick="startGame()">
+        <button class="start-btn-main sb-run" onclick="renderPathSelect()">
           <span class="sb-icon">⚔️</span>
           <span class="sb-text">
             <div class="sb-label">Begin Your Run</div>
@@ -712,6 +1109,15 @@ function renderStart() {
           <span class="sb-arr">›</span>
         </button>
 
+        <button class="start-btn-main sb-tutorial" onclick="startTutorialRun()">
+          <span class="sb-icon">🎓</span>
+          <span class="sb-text">
+            <div class="sb-label">Tutorial Run</div>
+            <div class="sb-desc">New here? Sir GetRICH will show you the ropes, bra.</div>
+          </span>
+          <span class="sb-arr">›</span>
+        </button>
+
         <button class="start-btn-main sb-library" onclick="renderAncientLibrary()">
           <span class="sb-icon">📚</span>
           <span class="sb-text">
@@ -732,6 +1138,307 @@ function renderStart() {
       </div>
 
       <div class="start-version">C.R.A.M · ${escHtml(_activeSubjectName)} · v2.0</div>
+    </div>
+  `);
+}
+
+// ── Tutorial System ─────────────────────────────────────────────────────────
+
+// Sir GetRICH speaks Namlish — Namibian colloquial English + slang
+const SIR_GETRICH_DIALOGUES = {
+  welcome: [
+    "Eno, eno! Welcome to C.R.A.M, bra. I'm Sir GetRICH — yeses, <i>the</i> Sir GetRICH. I'm gonna show you how this whole thing works, né?",
+    "Lekker. So this game — you answer questions to fight enemies. The better you answer, the harder you hit. Simple as that, bra. Sharp né?",
+    "Before we go in, you gotta pick your <b>Weapon Path</b> and your <b>Armor Path</b>. Sharp choices make a sharp fighter. Mara don't stress — for the tutorial, everything is general knowledge. No deep DSA stuff yet.",
+  ],
+  path_select: [
+    "Etse, you picking your style now? Three weapon paths: <b>Aggressor</b> (raw damage, bra), <b>Scholar</b> (use past hits to snowball), or <b>Warden</b> (take less damage and punish wrong answers). And three armors on the right.",
+    "Jrrr, bra — pick something that matches how you think. Aggressive? Aggressor. Calculated? Scholar. Careful? Warden. Mara you can always change next run, né.",
+  ],
+  before_first_combat: [
+    "Okay sharp, bra! First fight ahead. Remember: each question you answer — if you get it right, you deal damage. If you get it wrong, the enemy hits you. Nawe, simple.",
+    "You got <b>Insight</b> charges — those are hints, bra. Use them when you stuck. But don't burn them all in one fight, né? You might need them later.",
+    "Streak is everything! Answer two in a row correct and your damage starts multiplying. Three in a row? Yeses, now we cooking! Let's go!",
+  ],
+  after_first_combat: [
+    "Jrrr bra, you did that! Yeses, that's how you fight here. Every correct answer is a hit. Every wrong one, that enemy gives you a licking.",
+    "You see how the streak multiplier works now? More you answer right in a row, the harder you hit. That's the whole game basically, né.",
+    "Mara there's more. Eno — we hitting the tavern next. That's where you rest, heal up, and spend your Insight on upgrades. Lekker.",
+  ],
+  tavern: [
+    "Ahh, wanahela — the Tavern! This is where you catch a breather, bra. You heal HP here. Also, if you got Insight coins, you can buy <b>passive upgrades</b>.",
+    "Passive upgrades are permanent for the run — things like better streaks, extra damage, or extra HP. Spend wisely, né? Insight you get by leveling up.",
+    "Sharp. Rest up, upgrade if you want, then we keep moving. One more fight and a boss ahead, bra. You ready?",
+  ],
+  before_second_combat: [
+    "Eno, this next enemy is a bit tougher. But you know the moves now né? Keep that streak going, use Insight if you need it.",
+    "Also — by now you might be leveling up. When you level up mid-run, you earn more Insight AND your weapon can <b>evolve</b> at higher levels. Big upgrades, bra!",
+  ],
+  after_second_combat: [
+    "Yeses!! Bra you are actually built different, né? Two fights down, one boss left.",
+    "The boss is the <b>Grand Examiner</b> in the real game. Here in the tutorial it's easier, mara it still hits. Don't waste your Insight — save some for the fight.",
+  ],
+  before_boss: [
+    "Okay bra, this is it. The final test. Mara remember — you've already learned everything: streaks, Insight, weapon abilities, armor reduction.",
+    "Jrrr, I believe in you bra. Answer smart. Keep the streak. Finish this and you're ready for the real runs. Sharp, let's go!",
+  ],
+  tutorial_complete: [
+    "Yeses yeses YESES! You did it, bra! That's the whole tutorial right there!",
+    "Now you know how C.R.A.M works. Go do a real run — pick your subject, choose your path, and survive to Level 10. The boss won't be this lekker in the real game, né.",
+    "I'm Sir GetRICH and I approve this message. Sharp, bra. Go learn something. 💰",
+  ],
+  level_up: [
+    "Eno bra — level up! You growing! More Insight, more power. Keep answering right.",
+  ],
+  wrong_answer: [
+    "Etse bra, that one was rough né? Shake it off. Streak broken but you still got HP. Focus.",
+    "Mara it's fine, bra. Wrong answers happen. The enemy hitting you is part of the game — that's why armor matters!",
+  ],
+  insight_used: [
+    "Sharp move bra — Insight is there to use. But remember: once it's gone, it's gone for this fight.",
+  ],
+};
+
+// Current active tutorial dialogue
+let _tutorDialogue     = null;  // { lines: [], idx: 0, onDone: fn }
+let _tutorOverlayEl    = null;
+
+function ensureTutorOverlay() {
+  if (!_tutorOverlayEl) {
+    const el = document.createElement('div');
+    el.className = 'tutor-overlay';
+    el.id = 'tutor-overlay';
+    el.innerHTML = `
+      <div class="tutor-box" id="tutor-box">
+        <div class="tutor-sprite-wrap">${getSirGetRICHSprite()}</div>
+        <div class="tutor-bubble">
+          <div class="tutor-name">Sir GetRICH</div>
+          <div class="tutor-text" id="tutor-text"></div>
+          <button class="tutor-btn" id="tutor-btn" onclick="advanceTutorDialogue()">Sharp →</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(el);
+    _tutorOverlayEl = el;
+  }
+  return _tutorOverlayEl;
+}
+
+function showTutorDialogue(lines, onDone, introMode) {
+  if (!isTutorialMode) return;
+  const el = ensureTutorOverlay();
+  _tutorDialogue = { lines: Array.isArray(lines) ? lines : [lines], idx: 0, onDone: onDone || null };
+  const textEl = document.getElementById('tutor-text');
+  if (textEl) textEl.innerHTML = _tutorDialogue.lines[0];
+  const btnEl = document.getElementById('tutor-btn');
+  if (btnEl) btnEl.textContent = _tutorDialogue.lines.length > 1 ? 'Continue →' : 'Sharp →';
+  if (introMode) {
+    el.classList.add('intro-mode');
+  } else {
+    el.classList.remove('intro-mode');
+  }
+  el.classList.add('visible');
+}
+
+function advanceTutorDialogue() {
+  if (!_tutorDialogue) return;
+  _tutorDialogue.idx++;
+  if (_tutorDialogue.idx >= _tutorDialogue.lines.length) {
+    // Done
+    const cb = _tutorDialogue.onDone;
+    _tutorDialogue = null;
+    hideTutorDialogue();
+    if (cb) cb();
+    return;
+  }
+  const textEl = document.getElementById('tutor-text');
+  const btnEl  = document.getElementById('tutor-btn');
+  if (textEl) textEl.innerHTML = _tutorDialogue.lines[_tutorDialogue.idx];
+  if (btnEl) {
+    const remaining = _tutorDialogue.lines.length - _tutorDialogue.idx - 1;
+    btnEl.textContent = remaining > 0 ? 'Continue →' : 'Sharp →';
+  }
+}
+
+function hideTutorDialogue() {
+  const el = document.getElementById('tutor-overlay');
+  if (el) { el.classList.remove('visible'); el.classList.remove('intro-mode'); }
+}
+
+// ── Tutorial run flow ───────────────────────────────────────────────────────
+async function startTutorialRun() {
+  isTutorialMode = true;
+  tutorialStep   = 0;
+  playerPath = null; playerArmorPath = null;
+  playerWeaponTier = 0; playerArmorTier = 0;
+  playerWeaponChoices = []; playerBonusAbilities = [];
+  pendingWeaponUpgrade = null;
+
+  // Show welcome dialogue fullscreen (intro mode), then go to path select
+  render(`
+    <div class="start">
+      <div class="start-logo"><h1>C.R.A.M</h1><div class="sub-title">Tutorial</div></div>
+      <div class="start-divider"></div>
+      <div class="start-lore" style="color:#2a5a2a;">"Knowledge is the only weapon that sharpens itself on the enemy."</div>
+    </div>
+  `);
+  ensureTutorOverlay();
+  showTutorDialogue(SIR_GETRICH_DIALOGUES.welcome, () => {
+    renderTutorialPathSelect();
+  }, true); // true = intro mode (centered, large)
+}
+
+function renderTutorialPathSelect() {
+  // Reuse the normal path select — isTutorialMode=true makes it call startTutorialGame()
+  navBack = renderStart;
+  renderPathSelect();
+  // Show dialogue after render (slight delay so overlay renders on top)
+  setTimeout(() => showTutorDialogue(SIR_GETRICH_DIALOGUES.path_select, null), 300);
+}
+
+async function startTutorialGame() {
+  hideTutorDialogue();
+  render(`<div class="start"><p style="color:#3a6a3a">Preparing tutorial world...</p></div>`);
+
+  const data = await api("/api/tutorial/start", "POST");
+  if (!data) { isTutorialMode = false; renderStart(); return; }
+
+  gameId        = data.session_id;
+  tutorialWorld = data.world;
+  world         = data.world;
+  curNode       = data.current_node;
+
+  // Equip T1 weapons
+  const w = getActiveWeaponData(); const a = getActiveArmorData();
+  player.weapon_id = w.weapon_id; player.armor_id = a.armor_id;
+  await api("/api/game/equip","POST",{ session_id:gameId, weapon_id:w.weapon_id, armor_id:a.armor_id });
+
+  await syncPlayer();
+  renderTutorialOverworld();
+}
+
+function renderTutorialOverworld() {
+  navBack = null;
+  const nodeOrder = ['citadel','tut_combat_1','tut_tavern','tut_combat_2','tut_boss'];
+  const nodeInfo = {
+    citadel:      { icon:'🏰', name:'The Citadel', desc:'Your starting point.' },
+    tut_combat_1: { icon:'⚔️', name:'First Encounter', desc:'A weaker enemy to practice on.' },
+    tut_tavern:   { icon:'🍺', name:'Tavern', desc:'Rest and buy upgrades.' },
+    tut_combat_2: { icon:'⚔️', name:'Second Encounter', desc:'A tougher test.' },
+    tut_boss:     { icon:'💀', name:'Tutorial Boss', desc:'Prove you\'ve learned the ropes.' },
+  };
+
+  const nodes = nodeOrder.map((nid, i) => {
+    const n = tutorialWorld ? tutorialWorld[nid] : null;
+    const info = nodeInfo[nid] || { icon:'❓', name:nid, desc:'' };
+    const isCurrent = nid === curNode;
+    const isCleared = n?.state === 'cleared';
+    return `
+      ${i > 0 ? '<div class="tut-connector"></div>' : ''}
+      <div class="tut-node ${isCurrent?'active':''} ${isCleared?'cleared':''}">
+        <div class="tut-node-icon">${info.icon}</div>
+        <div class="tut-node-info">
+          <div class="tut-node-name">${info.name}</div>
+          <div class="tut-node-desc">${info.desc}</div>
+        </div>
+        ${isCurrent && !isCleared ? `<button onclick="tutorialEnterNode('${nid}')" style="padding:6px 14px;background:#1a4a1a;border:1px solid #3a8a3a;color:#88ee88;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;">Enter →</button>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  render(`
+    <div class="header"><h1>C.R.A.M — Tutorial</h1></div>
+    ${playerBar()}
+    <div style="text-align:center;color:#3a6a3a;font-size:12px;margin:8px 0 16px;letter-spacing:1px;">Tutorial World · Sir GetRICH Mode</div>
+    <div class="tutorial-map">${nodes}</div>
+    ${renderLog()}
+  `);
+
+  // Show contextual dialogue for current node
+  const stepDialogues = {
+    citadel:      null,  // handled at start
+    tut_combat_1: SIR_GETRICH_DIALOGUES.before_first_combat,
+    tut_tavern:   SIR_GETRICH_DIALOGUES.tavern,
+    tut_combat_2: SIR_GETRICH_DIALOGUES.before_second_combat,
+    tut_boss:     SIR_GETRICH_DIALOGUES.before_boss,
+  };
+  const lines = stepDialogues[curNode];
+  if (lines && tutorialStep < 99) {
+    tutorialStep = 99; // prevent re-showing
+    setTimeout(() => showTutorDialogue(lines, null), 400);
+  }
+}
+
+async function tutorialEnterNode(nodeId) {
+  hideTutorDialogue();
+  const nInfo = tutorialWorld ? tutorialWorld[nodeId] : null;
+  if (!nInfo) { renderTutorialOverworld(); return; }
+
+  // Citadel: mark cleared, advance to first combat
+  if (nInfo.type === 'citadel') {
+    if (tutorialWorld[nodeId]) tutorialWorld[nodeId].state = 'cleared';
+    curNode = 'tut_combat_1';
+    renderTutorialOverworld();
+    return;
+  }
+
+  if (nInfo.type === 'combat' || nInfo.type === 'boss') {
+    // Start tutorial combat
+    const r = await api("/api/tutorial/combat/start","POST",{
+      weapon_id:       player.weapon_id || "none",
+      armor_id:        player.armor_id  || "none",
+      node_difficulty: nInfo.difficulty || 1,
+      bonus_insight:   player.insight   || 0,
+      bonus_abilities: playerBonusAbilities || [],
+    });
+    if (!r) { renderTutorialOverworld(); return; }
+    combatId          = r.session_id;
+    combatRound       = r.round||1;
+    combatStreak      = r.streak||0;
+    combatInsightUses = r.insight_uses ?? 2;
+    combatXpReward    = r.xp_reward || 30;
+    combatHp.player   = r.player_hp;
+    combatHp.playerMax= r.player_max_hp;
+    combatHp.enemy    = r.enemy_hp;
+    combatHp.enemyMax = r.enemy_max_hp;
+    combatEnemy       = { name: r.enemy_name, subtype: r.enemy_subtype || 'guard' };
+    combatLocked      = false;
+    _currentNodeId    = nodeId;
+    renderCombat(r.question, r);
+
+  } else if (nInfo.type === 'tavern') {
+    renderTavernScreen(() => {
+      // Mark tavern cleared
+      if (tutorialWorld && tutorialWorld[nodeId]) tutorialWorld[nodeId].state = 'cleared';
+      // Advance to next node
+      const order = ['citadel','tut_combat_1','tut_tavern','tut_combat_2','tut_boss'];
+      const idx = order.indexOf(nodeId);
+      if (idx >= 0 && idx < order.length - 1) curNode = order[idx+1];
+      renderTutorialOverworld();
+    });
+  }
+}
+
+function renderTutorialComplete() {
+  isTutorialMode = false;
+  hideTutorDialogue();
+  render(`
+    <div class="upgrade-prompt" style="text-align:center;padding:60px 20px;">
+      <div style="font-size:48px;margin-bottom:16px;">🏆</div>
+      <div class="up-title" style="font-size:24px;margin-bottom:12px;">Tutorial Complete!</div>
+      <div style="color:#4a6a4a;font-size:14px;line-height:1.7;margin-bottom:28px;max-width:400px;margin-left:auto;margin-right:auto;">
+        You finished the tutorial, bra. Now you know everything you need.<br>
+        Go hit a real run. Sir GetRICH believes in you. 💰
+      </div>
+      <button class="start-btn-main sb-run" onclick="resetRun()" style="margin:0 auto;max-width:300px;">
+        <span class="sb-icon">⚔️</span>
+        <span class="sb-text">
+          <div class="sb-label">Start a Real Run</div>
+          <div class="sb-desc">Pick your subject, choose your path, survive.</div>
+        </span>
+        <span class="sb-arr">›</span>
+      </button>
+      <button onclick="renderStart()" style="margin-top:12px;padding:10px 24px;background:transparent;border:1px solid #2a2a3a;color:#555;border-radius:6px;cursor:pointer;font-size:13px;width:100%;max-width:300px;display:block;margin-left:auto;margin-right:auto;">Back to Menu</button>
     </div>
   `);
 }
@@ -876,17 +1583,236 @@ async function renderAncientLibrary(backFn) {
     renderLibraryPDFsHTML(_libraryData.pdf_groups);
 }
 
+// ── Path Selection (shown before every run) ───────────────────────────────────
+function renderPathSelect(forTutorial) {
+  navBack = renderStart;
+
+  function pathCards(pathsObj, selectedId, onClickFn) {
+    return Object.values(pathsObj).map(p => {
+      const isSelected = selectedId === p.id;
+      const t1 = p.tiers[0];
+      const t2 = p.tiers[1];
+      const t3 = p.tiers[2];
+      const t1name = t1.weapon_id ? t1.name : (t1.armor_id ? t1.name : '?');
+      const t2names = t2.options ? t2.options.map(o=>o.name).join(' / ') : t2.name;
+      const t3names = t3.options ? t3.options.map(o=>o.name).join(' / ') : t3.name;
+      return `
+        <div class="path-card ${isSelected?'selected':''}" style="--pc:${p.color}"
+             onclick="${onClickFn}('${p.id}')">
+          <div class="pc-icon">${p.icon}</div>
+          <div class="pc-name" style="color:${p.color}">${p.name}</div>
+          <div class="pc-tag">${escHtml(p.tagline)}</div>
+          <div class="pc-desc">${escHtml(p.desc)}</div>
+          <div class="pc-tiers">
+            <div class="pc-tier">
+              <div class="pc-tier-lv">T1 — Start</div>
+              <div class="pc-tier-nm">${t1name}</div>
+            </div>
+            <div class="pc-tier">
+              <div class="pc-tier-lv">T2 — Level 4 (choose)</div>
+              <div class="pc-tier-nm">${t2names}</div>
+            </div>
+            <div class="pc-tier">
+              <div class="pc-tier-lv">T3 — Level 7 (choose)</div>
+              <div class="pc-tier-nm">${t3names}</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function armorCards(selectedId) {
+    return Object.values(ARMOR_PATHS).map(p => {
+      const isSelected = selectedId === p.id;
+      return `
+        <div class="path-card ${isSelected?'selected':''}" style="--pc:${p.color}"
+             onclick="selectArmorPath('${p.id}')">
+          <div class="pc-icon">${p.icon}</div>
+          <div class="pc-name" style="color:${p.color}">${p.name}</div>
+          <div class="pc-tag">${escHtml(p.tagline)}</div>
+          <div class="pc-desc">${escHtml(p.desc)}</div>
+          <div class="pc-tiers">
+            <div class="pc-tier">
+              <div class="pc-tier-lv">T1 — Start</div>
+              <div class="pc-tier-nm">${p.tiers[0].name}</div>
+            </div>
+            <div class="pc-tier">
+              <div class="pc-tier-lv">T2 — Level 3</div>
+              <div class="pc-tier-nm">${p.tiers[1].name}</div>
+            </div>
+            <div class="pc-tier">
+              <div class="pc-tier-lv">T3 — Level 6</div>
+              <div class="pc-tier-nm">${p.tiers[2].name}</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  const bothChosen = playerPath && playerArmorPath;
+  const wpName  = playerPath      ? `⚔️ ${WEAPON_PATHS[playerPath].name}` : null;
+  const arName  = playerArmorPath ? `🛡️ ${ARMOR_PATHS[playerArmorPath].name}` : null;
+
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    <button class="back-btn" onclick="goBack()">← Back to Menu</button>
+    <div class="path-select">
+      <h2>⚔️ Choose Your Weapon Path</h2>
+      <p class="ps-sub">Your weapon upgrades at Level 4 and Level 7. Pick a branch when it evolves.</p>
+      <div class="path-row" id="weapon-path-row">
+        ${pathCards(WEAPON_PATHS, playerPath, 'selectWeaponPath')}
+      </div>
+
+      <h2>🛡️ Choose Your Armor Path</h2>
+      <p class="ps-sub">Your armor upgrades automatically at Level 3 and Level 6. No branching — just growth.</p>
+      <div class="path-row" id="armor-path-row">
+        ${armorCards(playerArmorPath)}
+      </div>
+
+      <div class="ps-confirm">
+        <div class="ps-selected-summary">
+          <div class="pss-pill ${playerPath?'set':''}">${wpName || '⚔️ No weapon path chosen'}</div>
+          <div class="pss-pill ${playerArmorPath?'set':''}">${arName || '🛡️ No armor path chosen'}</div>
+        </div>
+        <button class="enter-btn" ${bothChosen?'':'disabled'} onclick="${isTutorialMode ? 'startTutorialGame()' : 'startGame()'}">
+          ${isTutorialMode ? 'Enter Tutorial →' : 'Enter the Rift →'}
+        </button>
+      </div>
+    </div>
+  `);
+}
+
+function selectWeaponPath(id) {
+  playerPath = id;
+  renderPathSelect();
+}
+function selectArmorPath(id) {
+  playerArmorPath = id;
+  renderPathSelect();
+}
+
+// ── Weapon Tier Upgrade Prompt ────────────────────────────────────────────────
+function renderWeaponUpgrade(tier) {
+  // tier = 1 (level 4 upgrade) or 2 (level 7 upgrade)
+  const path = WEAPON_PATHS[playerPath];
+  const tierData = path.tiers[tier];
+  const prevName = getWeaponTierData(playerPath, tier - 1, playerWeaponChoices[tier - 2]).name;
+
+  render(`
+    <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
+    ${playerBar()}
+    <div class="upgrade-prompt">
+      <div class="up-title">⚔️ Weapon Evolution</div>
+      <div class="up-sub">
+        Your <b style="color:#c8a2ff">${prevName}</b> has grown beyond its limits.<br>
+        Choose its next form — this cannot be undone.
+      </div>
+      ${tier === 2 && playerBonusAbilities.length > 0 ? `
+      <div class="up-stack-note">
+        🔗 <b>Your T2 ability carries forward</b> — whichever you pick will <em>stack</em> with it.
+      </div>` : ''}
+      <div class="up-choice">
+        ${tierData.options.map((opt, i) => `
+          <div class="up-option" onclick="chooseWeaponUpgrade(${tier},${i})">
+            <div class="uo-name">⚔️ ${escHtml(opt.name)}</div>
+            <div class="uo-stat">${escHtml(opt.stat)}</div>
+            <div class="uo-ability">${escHtml(opt.ability)}</div>
+          </div>`).join('')}
+      </div>
+      <div class="uo-warn">Playing as <b>${escHtml(path.name)}</b> — Level ${player.level}</div>
+    </div>
+    ${renderLog()}
+  `);
+}
+
+async function chooseWeaponUpgrade(tier, choiceIdx) {
+  // Before upgrading, snapshot the current (lower-tier) weapon's ability for stacking
+  const prevWeapon = getActiveWeaponData();
+  if (prevWeapon && prevWeapon.weapon_id !== 'none') {
+    // Extract the ability string from the description if needed
+    // getActiveWeaponData returns the WEAPON_PATHS entry; ability is in the .ability field
+    const prevAbilityId = _getWeaponAbilityId(playerPath, playerWeaponTier, playerWeaponChoices);
+    if (prevAbilityId && !playerBonusAbilities.includes(prevAbilityId)) {
+      playerBonusAbilities.push(prevAbilityId);
+    }
+  }
+
+  playerWeaponChoices[tier - 1] = choiceIdx;
+  playerWeaponTier = tier;
+  pendingWeaponUpgrade = null;
+  const w = getActiveWeaponData();
+  player.weapon_id = w.weapon_id;
+  // Equip the new weapon on the backend session
+  await api("/api/game/equip","POST",{ session_id:gameId, weapon_id:w.weapon_id });
+  log(`⚔️ Evolved: ${w.name} — ${w.ability}`);
+  // Show stacked abilities info
+  if (playerBonusAbilities.length > 0) {
+    log(`✨ Ability stack: ${playerBonusAbilities.join(' + ')} still active`);
+  }
+  renderOverworld();
+}
+
+// Returns the backend ability_id string for a given path/tier/choices combo
+function _getWeaponAbilityId(path, tierIdx, choices) {
+  // Maps weapon_id → backend ability string
+  const WEAPON_ABILITY_IDS = {
+    binary_blade:     'binary_strike',
+    cleave_edge:      'chain_strike',
+    blood_blade:      'life_steal',
+    void_cleaver:     'binary_strike',
+    berserker_blade:  'life_steal',
+    recursive_staff:  'recursive_echo',
+    echo_codex:       'echo_double',
+    seeker_rod:       'seeker',
+    grand_codex:      'echo_triple',
+    oracle_staff:     'oracle',
+    balance_edge:     'balance_shift',
+    iron_bulwark:     'counter',
+    null_blade:       'null_first',
+    fortress_edge:    'fortify_wep',
+    reflect_blade:    'mirror',
+  };
+  const p = WEAPON_PATHS[path];
+  if (!p) return null;
+  const tierData = p.tiers[tierIdx];
+  if (!tierData) return null;
+  let weaponId;
+  if (tierIdx === 0) {
+    weaponId = tierData.weapon_id;
+  } else {
+    const choiceIdx = choices[tierIdx - 1] ?? 0;
+    weaponId = tierData.options[choiceIdx]?.weapon_id;
+  }
+  return WEAPON_ABILITY_IDS[weaponId] || null;
+}
+
 async function startGame() {
   render(`<div class="start"><p style="color:#555">Generating world...</p></div>`);
-  // Load subject-specific custom content (weapons/armors/upgrades/enemies) before world gen
   await loadSubjectGameConfig();
   const data = await api("/api/game/start","POST");
   if (!data) { renderStart(); return; }
   gameId  = data.session_id;
   world   = data.world;
   curNode = data.current_node;
+
+  // Reset tier state for fresh run
+  playerWeaponTier     = 0;
+  playerArmorTier      = 0;
+  playerWeaponChoices  = [];
+  playerBonusAbilities = [];
+  pendingWeaponUpgrade = null;
+
   log("Run started — session: " + gameId);
   await syncPlayer();
+
+  // Equip T1 weapon and armor from chosen paths
+  const w = getActiveWeaponData();
+  const a = getActiveArmorData();
+  player.weapon_id = w.weapon_id;
+  player.armor_id  = a.armor_id;
+  await api("/api/game/equip","POST",{ session_id:gameId, weapon_id:w.weapon_id, armor_id:a.armor_id });
+  log(`🗡️ ${WEAPON_PATHS[playerPath].name} path — equipped ${w.name} + ${a.name}`);
+
   renderOverworld();
 }
 
@@ -1634,6 +2560,136 @@ function getEnemySprite(subtype) {
 </svg>`;
 }
 
+// ── Sir GetRICH sprite ──────────────────────────────────────────────────────
+function getSirGetRICHSprite() {
+  return `<svg viewBox="0 0 80 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shadow -->
+  <ellipse cx="40" cy="125" rx="22" ry="5" fill="rgba(0,0,0,.35)"/>
+
+  <!-- Shoes (clean white/beige loafers) -->
+  <ellipse cx="27" cy="119" rx="10" ry="5" fill="#e8d8a0"/>
+  <ellipse cx="53" cy="119" rx="10" ry="5" fill="#e8d8a0"/>
+  <rect x="20" y="112" width="14" height="9" rx="3" fill="#e8d8a0"/>
+  <rect x="46" y="112" width="14" height="9" rx="3" fill="#e8d8a0"/>
+  <path d="M20,113 Q27,109 34,113" stroke="#c8b870" stroke-width="1" opacity=".6"/>
+  <path d="M46,113 Q53,109 60,113" stroke="#c8b870" stroke-width="1" opacity=".6"/>
+
+  <!-- Trousers (cream/beige slim fit) -->
+  <rect x="23" y="84" width="13" height="30" rx="4" fill="#e0d0a0"/>
+  <rect x="44" y="84" width="13" height="30" rx="4" fill="#e0d0a0"/>
+  <path d="M25,86 L26,110" stroke="#c8b870" stroke-width=".8" opacity=".4"/>
+  <path d="M46,86 L47,110" stroke="#c8b870" stroke-width=".8" opacity=".4"/>
+
+  <!-- Belt (gold buckle) -->
+  <rect x="20" y="82" width="40" height="6" rx="2" fill="#7a5500"/>
+  <rect x="33" y="80" width="14" height="10" rx="2" fill="#d4a800"/>
+  <rect x="36" y="82" width="8" height="6" rx="1" fill="#f0c000"/>
+  <text x="40" y="87" text-anchor="middle" font-size="4" fill="#7a5500" font-weight="bold">$</text>
+
+  <!-- Shirt body (baggy long-sleeve red) -->
+  <rect x="16" y="50" width="48" height="36" rx="7" fill="#c01818"/>
+  <!-- Baggy fold/wrinkle lines -->
+  <path d="M23,52 L21,83" stroke="#8a0000" stroke-width="1.3" opacity=".45"/>
+  <path d="M57,52 L59,83" stroke="#8a0000" stroke-width="1.3" opacity=".45"/>
+  <path d="M31,56 L30,83" stroke="#8a0000" stroke-width=".7" opacity=".25"/>
+  <path d="M49,56 L50,83" stroke="#8a0000" stroke-width=".7" opacity=".25"/>
+  <!-- Subtle chest crease (baggy drop) -->
+  <path d="M28,60 Q40,65 52,60" stroke="#8a0000" stroke-width=".6" opacity=".3" fill="none"/>
+  <!-- Collar V-neck -->
+  <path d="M31,50 L40,63 L49,50" stroke="#8a0000" stroke-width="1.5" fill="none"/>
+  <path d="M33,50 L34,47 L40,51 L46,47 L47,50" fill="#c01818" stroke="#8a0000" stroke-width=".8"/>
+
+  <!-- CHAINS (3 gold chains of different lengths) -->
+  <!-- Chain 1 - shortest, high -->
+  <path d="M32,52 Q40,60 48,52" stroke="#f0c000" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <circle cx="40" cy="58" r="2.2" fill="#f0c000"/>
+  <circle cx="40" cy="58" r="1.2" fill="#ffe040"/>
+  <!-- Chain 2 - medium -->
+  <path d="M30,54 Q40,67 50,54" stroke="#d4a800" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+  <circle cx="40" cy="65" r="2" fill="#d4a800"/>
+  <text x="40" y="67.5" text-anchor="middle" font-size="3.5" fill="#7a5500" font-weight="bold">$</text>
+  <!-- Chain 3 - longest, sits lower -->
+  <path d="M28,56 Q40,75 52,56" stroke="#c49200" stroke-width="1.4" fill="none" stroke-linecap="round" opacity=".9"/>
+  <circle cx="40" cy="73" r="1.8" fill="#c49200"/>
+  <circle cx="40" cy="73" r="0.9" fill="#f0c000"/>
+
+  <!-- Watch (left wrist) -->
+  <rect x="13" y="74" width="8" height="6" rx="2" fill="#1a1a1a"/>
+  <rect x="14" y="75" width="6" height="4" rx="1" fill="#f0c000"/>
+  <circle cx="17" cy="77" r="1.2" fill="#ffe040" opacity=".7"/>
+
+  <!-- Sleeves (baggy long-sleeve red, covers full arm) -->
+  <rect x="7" y="52" width="14" height="26" rx="5" fill="#c01818"/>
+  <rect x="59" y="52" width="14" height="26" rx="5" fill="#c01818"/>
+  <!-- Sleeve fold lines (bagginess) -->
+  <path d="M9,54 L8,75" stroke="#8a0000" stroke-width=".8" opacity=".4"/>
+  <path d="M72,54 L73,75" stroke="#8a0000" stroke-width=".8" opacity=".4"/>
+  <!-- Cuffs (slightly darker red rolled cuff) -->
+  <rect x="6" y="73" width="16" height="5" rx="2.5" fill="#8a0000"/>
+  <rect x="58" y="73" width="16" height="5" rx="2.5" fill="#8a0000"/>
+  <!-- Cuff highlight line -->
+  <path d="M7,74.5 L21,74.5" stroke="#c01818" stroke-width=".6" opacity=".5"/>
+  <path d="M59,74.5 L73,74.5" stroke="#c01818" stroke-width=".6" opacity=".5"/>
+  <!-- Hands -->
+  <ellipse cx="15" cy="78" rx="5.5" ry="4.5" fill="#5c3a1e"/>
+  <ellipse cx="65" cy="78" rx="5.5" ry="4.5" fill="#5c3a1e"/>
+  <!-- Ring (right hand, gold) -->
+  <rect x="68" y="77" width="4" height="2.5" rx="1" fill="#f0c000"/>
+
+  <!-- Neck -->
+  <rect x="32" y="40" width="16" height="14" rx="4" fill="#5c3a1e"/>
+
+  <!-- HEAD (dark brown skin, older man) -->
+  <ellipse cx="40" cy="28" rx="16" ry="18" fill="#5c3a1e"/>
+
+  <!-- DURAG (silk, deep blue/black with knot at back) -->
+  <!-- Main cap covering top of head -->
+  <path d="M24,18 Q30,8 40,7 Q50,8 56,18 Q52,14 40,14 Q28,14 24,18Z" fill="#0a0a2e"/>
+  <ellipse cx="40" cy="17" rx="16.5" ry="10" fill="#0a0a2e"/>
+  <!-- Durag front band/edge -->
+  <path d="M24,20 Q32,17 40,17 Q48,17 56,20" stroke="#1a1a50" stroke-width="1.5" fill="none"/>
+  <!-- Durag tie tail hanging down right side -->
+  <path d="M54,22 Q62,30 60,40" stroke="#0a0a2e" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M56,23 Q63,32 61,42" stroke="#1a1a50" stroke-width="1" stroke-linecap="round" fill="none" opacity=".5"/>
+  <!-- Durag sheen highlight -->
+  <path d="M28,16 Q35,12 42,13" stroke="#2a2a6a" stroke-width="1.2" stroke-linecap="round" opacity=".7"/>
+
+  <!-- FACE features -->
+  <!-- Jaw/chin definition (older man - slight beard) -->
+  <path d="M26,35 Q30,42 40,43 Q50,42 54,35" stroke="#4a2e10" stroke-width=".8" fill="none" opacity=".6"/>
+  <!-- Short beard (salt-and-pepper, mostly grey) -->
+  <path d="M28,36 Q32,41 40,42 Q48,41 52,36" fill="#888080" opacity=".45"/>
+  <!-- Mustache area -->
+  <path d="M34,31 Q37,33 40,32 Q43,33 46,31" stroke="#666050" stroke-width="1.2" fill="none" opacity=".5"/>
+
+  <!-- GOLD-FRAME SHADES -->
+  <!-- Frame bridge -->
+  <line x1="37" y1="24" x2="43" y2="24" stroke="#f0c000" stroke-width="1.2"/>
+  <!-- Left lens (dark tint) -->
+  <rect x="26" y="20" width="11" height="9" rx="3" fill="#1a1a0a" stroke="#f0c000" stroke-width="1.5" opacity=".95"/>
+  <!-- Right lens (dark tint) -->
+  <rect x="43" y="20" width="11" height="9" rx="3" fill="#1a1a0a" stroke="#f0c000" stroke-width="1.5" opacity=".95"/>
+  <!-- Left lens sheen -->
+  <path d="M28,22 Q31,21 35,22" stroke="#f0c000" stroke-width=".7" opacity=".3" stroke-linecap="round"/>
+  <!-- Right lens sheen -->
+  <path d="M45,22 Q48,21 52,22" stroke="#f0c000" stroke-width=".7" opacity=".3" stroke-linecap="round"/>
+  <!-- Temples (arms going back to ears) -->
+  <line x1="26" y1="24" x2="22" y2="24" stroke="#f0c000" stroke-width="1.2"/>
+  <line x1="54" y1="24" x2="58" y2="24" stroke="#f0c000" stroke-width="1.2"/>
+
+  <!-- Smile / expression (friendly, knowing) -->
+  <path d="M34,35 Q40,39 46,35" stroke="#3a1e08" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <!-- Teeth just visible -->
+  <path d="M35,35.5 Q40,38 45,35.5" fill="white" opacity=".5"/>
+
+  <!-- Gold dollar sign pendant glow effect -->
+  <circle cx="40" cy="65" r="4" fill="#f0c000" opacity=".12" style="filter:blur(3px)"/>
+
+  <!-- Aura / glow (rich, golden) -->
+  <ellipse cx="40" cy="60" rx="32" ry="45" fill="#f0c000" opacity=".03" style="filter:blur(8px)"/>
+</svg>`;
+}
+
 // ── Particles (arena atmosphere) ───────────────────────────────────────────
 function generateParticles() {
   const colors = ['#c8a2ff','#9966cc','#6644aa','#4422aa','#aa66ff'];
@@ -1700,14 +2756,15 @@ async function beginCombat(info) {
 async function doBeginCombat(info) {
   const nodeSubtype = info.is_anomaly ? 'boss' : (info.subtype || 'guard');
   const r = await api("/start_combat","POST",{
-    concept_id:     info.concept_id||null,
-    weapon_id:      player.weapon_id || info.weapon_id || "none",
-    armor_id:       player.armor_id  || info.armor_id  || "none",
-    node_god:       info.god||null,
-    node_modifiers: [],
-    bonus_insight:  player.insight||0,
-    is_anomaly:     !!(info.is_anomaly),
+    concept_id:      info.concept_id||null,
+    weapon_id:       player.weapon_id || info.weapon_id || "none",
+    armor_id:        player.armor_id  || info.armor_id  || "none",
+    node_god:        info.god||null,
+    node_modifiers:  [],
+    bonus_insight:   player.insight||0,
+    is_anomaly:      !!(info.is_anomaly),
     node_difficulty: info.difficulty||1,
+    bonus_abilities: playerBonusAbilities || [],
   });
   if (!r) { renderOverworld(); return; }
 
@@ -1795,8 +2852,8 @@ function renderCombat(q) {
   const ep = pct(combatHp.enemy,  combatHp.enemyMax);
   const subtype = combatEnemy.subtype || 'guard';
   const isBoss  = subtype === 'boss';
-  const wpnName = WEAPONS_CATALOG[player.weapon_id]?.name || 'Unarmed';
-  const armName = ARMORS_CATALOG[player.armor_id]?.name  || 'None';
+  const wpnName = getActiveWeaponData()?.name || player.weapon_id || 'Unarmed';
+  const armName = getActiveArmorData()?.name  || player.armor_id  || 'None';
 
   render(`
     <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
@@ -1818,7 +2875,7 @@ function renderCombat(q) {
             </div>
             <div class="sp-area">
               <div class="sp-shadow"></div>
-              ${getPlayerSprite()}
+              ${getCptShantySpriteHTML()}
             </div>
           </div>
 
@@ -1855,9 +2912,10 @@ function renderCombat(q) {
           <button class="insight-btn" id="insightBtn" ${combatInsightUses<=0?"disabled":""} onclick="useInsight()">
             💡 Insight (${combatInsightUses} left)
           </button>
-          <div id="expl" style="flex:1"></div>
         </div>
         <div id="insightHint"></div>
+        <!-- Answer feedback + proceed button render here -->
+        <div id="expl" style="margin-top:10px;"></div>
       </div>
 
     </div>
@@ -1967,7 +3025,8 @@ async function submitAnswer(qid, answer) {
 }
 
 async function _processAnswer(qid, answer) {
-  const r = await api("/answer","POST",{session_id:combatId, question_id:qid, answer:answer});
+  const _answerEndpoint = isTutorialMode ? "/api/tutorial/answer" : "/answer";
+  const r = await api(_answerEndpoint,"POST",{session_id:combatId, question_id:qid, answer:answer});
   if (!r) { combatLocked = false; return; }
 
   // ── Update HP ─────────────────────────────────────────────────────────────
@@ -2005,36 +3064,82 @@ async function _processAnswer(qid, answer) {
     if (sb) sb.innerHTML = `<span style="color:#f1c40f">${r.streak_feedback}</span>`;
   }
 
-  // ── Show explanation ───────────────────────────────────────────────────────
+  // ── Show explanation + correct answer reveal (wrong) ─────────────────────
   const explEl = document.getElementById("expl");
-  if (explEl && r.explanation) {
-    explEl.innerHTML = `<div class="expl ${r.correct?'good':'bad'}">${escHtml(r.explanation)}</div>`;
+  if (explEl) {
+    let html = '';
+    if (r.explanation) {
+      html += `<div class="expl ${r.correct?'good':'bad'}">${escHtml(r.explanation)}</div>`;
+    }
+    if (!r.correct && r.correct_answer) {
+      html += `<div class="correct-reveal">✅ <strong>Correct answer:</strong> ${escHtml(r.correct_answer)}</div>`;
+    }
+    explEl.innerHTML = html;
   }
 
   // ── Combat over? ──────────────────────────────────────────────────────────
   if (r.combat_over) {
-    if (r.winner === "player") {
+    if (r.correct) {
+      // Correct killing blow — auto-proceed after brief glory moment
       triggerEnemyHit();
       setTimeout(() => triggerEnemyDeath(), 380);
-      setTimeout(() => endCombat(true), 2400);
+      setTimeout(() => endCombat(true), 1800);
     } else {
+      // Wrong answer killed player — show button so they can read the correct answer first
       triggerPlayerHit();
-      setTimeout(() => endCombat(false), 2000);
+      if (explEl) {
+        explEl.innerHTML += `<button class="combat-proceed wrong-proceed" onclick="_resolveCombatOver(false)">💀 I understand — Continue →</button>`;
+      } else {
+        setTimeout(() => endCombat(false), 800);
+      }
     }
     return;
   }
 
-  // ── Next question ──────────────────────────────────────────────────────────
+  // ── Next question ─────────────────────────────────────────────────────────
   const next = r.next_question;
-  setTimeout(() => {
+  window._pendingNextQuestion = next;
+
+  if (r.correct) {
+    // Correct answer → auto-advance immediately (keep the streak flowing)
     combatLocked = false;
     if (next && next.question) {
       renderCombat(next);
     } else {
-      log("No more questions — combat ends");
       endCombat(true);
     }
-  }, 2000);
+  } else {
+    // Wrong answer → show proceed button so player can actually read and learn
+    if (explEl) {
+      explEl.innerHTML += `<button class="combat-proceed wrong-proceed" onclick="_advanceCombat()">→ Got it, next question</button>`;
+    } else {
+      // No expl element fallback
+      setTimeout(() => { combatLocked = false; next && next.question ? renderCombat(next) : endCombat(true); }, 2000);
+    }
+  }
+}
+
+function _advanceCombat() {
+  combatLocked = false;
+  const next = window._pendingNextQuestion;
+  window._pendingNextQuestion = null;
+  if (next && next.question) {
+    renderCombat(next);
+  } else {
+    log("No more questions — combat ends");
+    endCombat(true);
+  }
+}
+
+function _resolveCombatOver(victory) {
+  if (victory) {
+    triggerEnemyHit();
+    setTimeout(() => triggerEnemyDeath(), 380);
+    setTimeout(() => endCombat(true), 1200);
+  } else {
+    triggerPlayerHit();
+    setTimeout(() => endCombat(false), 800);
+  }
 }
 
 async function endCombat(victory) {
@@ -2060,6 +3165,34 @@ async function endCombat(victory) {
   }
 
   await syncPlayer();
+  checkAndGrantUnlocks();
+
+  // ── Check for weapon tier upgrade ──────────────────────────────────────────
+  if (playerPath && levelUp) {
+    const lvl = player.level;
+    // Weapon: T2 at level 4, T3 at level 7
+    if (lvl >= WEAPON_TIER_LEVELS[1] && playerWeaponTier === 0) {
+      pendingWeaponUpgrade = 1;
+    } else if (lvl >= WEAPON_TIER_LEVELS[2] && playerWeaponTier === 1) {
+      pendingWeaponUpgrade = 2;
+    }
+    // Armor: auto-upgrade at level 3 and 6 (no player choice)
+    if (lvl >= ARMOR_TIER_LEVELS[1] && playerArmorTier === 0) {
+      playerArmorTier = 1;
+      const a = getActiveArmorData();
+      player.armor_id = a.armor_id;
+      await api("/api/game/equip","POST",{ session_id:gameId, armor_id:a.armor_id });
+      log(`🛡️ Armor upgraded: ${a.name} — ${a.stat}`);
+      showUnlockToast(`Armor: ${a.name}`);
+    } else if (lvl >= ARMOR_TIER_LEVELS[2] && playerArmorTier === 1) {
+      playerArmorTier = 2;
+      const a = getActiveArmorData();
+      player.armor_id = a.armor_id;
+      await api("/api/game/equip","POST",{ session_id:gameId, armor_id:a.armor_id });
+      log(`🛡️ Armor upgraded: ${a.name} — ${a.stat}`);
+      showUnlockToast(`Armor: ${a.name}`);
+    }
+  }
 
   const isAnomaly = isAnomalyCombat;
   const borderCol = victory
@@ -2121,11 +3254,51 @@ async function endCombat(victory) {
 async function afterCombat() {
   combatId = null;
   combatLocked = false;
-  renderOverworld();
+
+  // Tutorial mode — handled by the tutorial afterCombat function defined above
+  if (isTutorialMode) {
+    // afterCombat for tutorial is defined in the Tutorial System section above
+    // Mark node cleared and advance
+    if (_currentNodeId && tutorialWorld && tutorialWorld[_currentNodeId]) {
+      tutorialWorld[_currentNodeId].state = 'cleared';
+    }
+    const _order = ['citadel','tut_combat_1','tut_tavern','tut_combat_2','tut_boss'];
+    const _idx   = _order.indexOf(_currentNodeId);
+    if (_idx >= 0 && _idx < _order.length - 1) curNode = _order[_idx + 1];
+
+    const _postDialogues = {
+      tut_combat_1: SIR_GETRICH_DIALOGUES.after_first_combat,
+      tut_combat_2: SIR_GETRICH_DIALOGUES.after_second_combat,
+      tut_boss:     SIR_GETRICH_DIALOGUES.tutorial_complete,
+    };
+    const _lines = _postDialogues[_currentNodeId];
+
+    if (_currentNodeId === 'tut_boss') {
+      renderTutorialComplete();
+      if (_lines) setTimeout(() => showTutorDialogue(_lines, null), 500);
+      return;
+    }
+    if (pendingWeaponUpgrade !== null) {
+      if (_lines) showTutorDialogue(_lines, () => renderWeaponUpgrade(pendingWeaponUpgrade));
+      else renderWeaponUpgrade(pendingWeaponUpgrade);
+    } else {
+      renderTutorialOverworld();
+      if (_lines) setTimeout(() => showTutorDialogue(_lines, null), 400);
+    }
+    return;
+  }
+
+  // Normal mode
+  if (pendingWeaponUpgrade !== null) {
+    const tier = pendingWeaponUpgrade;
+    renderWeaponUpgrade(tier);
+  } else {
+    renderOverworld();
+  }
 }
 
 function resetRun() {
-  // Wipe all run state — fresh start
+  // Wipe all run state — gear and path reset on death
   gameId        = null;
   world         = null;
   curNode       = null;
@@ -2135,14 +3308,24 @@ function resetRun() {
   combatStreak  = 0;
   isAnomalyCombat = false;
   combatXpReward  = 30;
-  playerDebuffs   = [];
-  playerUpgrades  = [];
-  pendingOpenAnswer = null;
-  navBack       = null;
-  logs          = [];
-  _libraryData  = null;   // force library reload for new run
-  player        = { level:1, xp:0, hp:100, max_hp:100, insight:0,
-                    weapon_id:'none', armor_id:'none' };
+  playerDebuffs        = [];
+  playerUpgrades       = [];
+  playerPath           = null;
+  playerArmorPath      = null;
+  playerWeaponTier     = 0;
+  playerArmorTier      = 0;
+  playerWeaponChoices  = [];
+  playerBonusAbilities = [];
+  pendingWeaponUpgrade = null;
+  pendingOpenAnswer    = null;
+  navBack              = null;
+  logs                 = [];
+  _libraryData         = null;
+  isTutorialMode       = false;
+  tutorialWorld        = null;
+  tutorialStep         = 0;
+  hideTutorDialogue();
+  player = { level:1, xp:0, hp:100, max_hp:100, insight:0, weapon_id:'none', armor_id:'none' };
   renderStart();
 }
 
@@ -2365,108 +3548,244 @@ function toggleBestiaryCard(idx) {
   if (el) el.classList.toggle('open');
 }
 
-// ── Equipment picker ─────────────────────────────────────────────────────────
-// BASE catalogs — never mutated. Custom subject entries are MERGED on top.
-const _BASE_WEAPONS = {
-  "none":            { name:"Bare Hands",      stat:"+0% damage",    ability:"None" },
-  "binary_blade":    { name:"Binary Blade",    stat:"+15% damage",   ability:"Binary Strike: +50% on hit" },
-  "recursive_staff": { name:"Recursive Staff", stat:"+10% damage",   ability:"Recursive Echo: deal 30% of last hit again" },
-  "balance_edge":    { name:"Balance Edge",    stat:"+8% damage",    ability:"Balance Shift: +40% damage reduction on wrong" },
-};
-const _BASE_ARMORS = {
-  "none":        { name:"No Armor",    stat:"0% reduction" },
-  "data_vest":   { name:"Data Vest",   stat:"15% damage reduction" },
-  "stack_plate": { name:"Stack Plate", stat:"25% damage reduction" },
+// ── Playstyle Paths ───────────────────────────────────────────────────────────
+// 3 weapon paths × 3 armor paths = 9 build combinations per run.
+// Chosen at run start. Weapon upgrades at Level 4 (T2) and Level 7 (T3) with
+// a player choice between 2 branches. Armor auto-upgrades at Level 3 and 6.
+
+const WEAPON_PATHS = {
+  aggressor: {
+    id:"aggressor", name:"Aggressor", icon:"⚔️", color:"#ff5544",
+    tagline:"Strike hard. Strike first.",
+    desc:"Maximum damage output. High risk — but the enemy dies before they get to hit back.",
+    tiers: [
+      { weapon_id:"binary_blade",    name:"Binary Blade",    stat:"+15% damage", ability:"Binary Strike: deal +50% bonus damage on a 2+ correct streak" },
+      { options: [
+        { weapon_id:"cleave_edge",   name:"Cleave Edge",    stat:"+25% damage", ability:"Chain Strike: 3+ streak adds 15 flat bonus damage per hit" },
+        { weapon_id:"blood_blade",   name:"Blood Blade",    stat:"+20% damage", ability:"Life Steal: correct answers restore 5 HP" },
+      ]},
+      { options: [
+        { weapon_id:"void_cleaver",      name:"Void Cleaver",     stat:"+35% damage", ability:"Execute: enemies below 25% HP die on your next correct answer" },
+        { weapon_id:"berserker_blade",   name:"Berserker Blade",  stat:"+30% damage", ability:"Berserk: deal double damage when your HP drops below 40" },
+      ]},
+    ]
+  },
+  scholar: {
+    id:"scholar", name:"Scholar", icon:"📚", color:"#aa55ff",
+    tagline:"Knowledge is the sharpest edge.",
+    desc:"Insight-rich and utility-heavy. Rewards you for playing smart and thinking ahead.",
+    tiers: [
+      { weapon_id:"recursive_staff",  name:"Recursive Staff", stat:"+10% damage", ability:"Recursive Echo: deal 30% of your last hit as bonus damage" },
+      { options: [
+        { weapon_id:"echo_codex",     name:"Echo Codex",     stat:"+18% damage", ability:"Double Echo: echo triggers twice; +1 Insight at combat start" },
+        { weapon_id:"seeker_rod",     name:"Seeker Rod",     stat:"+15% damage", ability:"Seeker: spending Insight grants +20% damage for that turn" },
+      ]},
+      { options: [
+        { weapon_id:"grand_codex",    name:"Grand Codex",    stat:"+28% damage", ability:"Echo Storm: triple echo; +2 Insight at every combat start" },
+        { weapon_id:"oracle_staff",   name:"Oracle Staff",   stat:"+22% damage", ability:"Oracle: every 4th correct answer grants a free Insight charge" },
+      ]},
+    ]
+  },
+  warden: {
+    id:"warden", name:"Warden", icon:"🛡️", color:"#4499ff",
+    tagline:"Every mistake makes you stronger.",
+    desc:"Defensive and forgiving. Wrong answers fuel your power instead of breaking you.",
+    tiers: [
+      { weapon_id:"balance_edge",    name:"Balance Edge",   stat:"+8% damage",  ability:"Balance Shift: +40% damage reduction on wrong answers" },
+      { options: [
+        { weapon_id:"iron_bulwark",  name:"Iron Bulwark",   stat:"+12% damage", ability:"Counter: wrong answers deal 10 damage back to the enemy" },
+        { weapon_id:"null_blade",    name:"Null Blade",     stat:"+10% damage", ability:"Null Shield: first wrong answer per combat deals 0 enemy damage" },
+      ]},
+      { options: [
+        { weapon_id:"fortress_edge", name:"Fortress Edge",  stat:"+15% damage", ability:"Fortify: +30 max HP; every 3-streak heals 5 HP" },
+        { weapon_id:"reflect_blade", name:"Reflect Blade",  stat:"+18% damage", ability:"Mirror: 20% chance to fully reflect enemy damage back at them" },
+      ]},
+    ]
+  },
 };
 
-// Live catalogs — used everywhere in the game. Rebuilt on each subject switch.
-const WEAPONS_CATALOG = { ..._BASE_WEAPONS };
-const ARMORS_CATALOG  = { ..._BASE_ARMORS  };
+const ARMOR_PATHS = {
+  iron_guard: {
+    id:"iron_guard", name:"Iron Guard", icon:"🛡️", color:"#8899cc",
+    tagline:"Take the hit. Stay standing.",
+    desc:"Maximum protection. Low damage, exceptional staying power.",
+    tiers: [
+      { armor_id:"cloth_wraps",   name:"Cloth Wraps",   stat:"5% damage reduction",  bonus:"" },
+      { armor_id:"data_vest",     name:"Data Vest",     stat:"15% damage reduction", bonus:"Fortified: first hit per combat reduced by 50%",    unlock_level:3 },
+      { armor_id:"stack_plate",   name:"Stack Plate",   stat:"25% damage reduction", bonus:"Bulwark: 3+ correct streak adds +10% DR this combat", unlock_level:6 },
+    ]
+  },
+  sorcerer: {
+    id:"sorcerer", name:"Sorcerer", icon:"✨", color:"#cc77ff",
+    tagline:"Insight is your shield.",
+    desc:"Lower armor but Insight-rich. Use knowledge to avoid damage entirely.",
+    tiers: [
+      { armor_id:"scholars_robe",  name:"Scholar's Robe",  stat:"3% reduction, +1 Insight/combat", bonus:"" },
+      { armor_id:"codex_cloak",    name:"Codex Cloak",     stat:"8% reduction, +2 Insight/combat",  bonus:"Insight Shield: spending Insight adds 15% DR this round", unlock_level:3 },
+      { armor_id:"void_shroud",    name:"Void Shroud",     stat:"12% reduction, +3 Insight/combat", bonus:"Shroud: Insight capacity +2",                               unlock_level:6 },
+    ]
+  },
+  drifter: {
+    id:"drifter", name:"Drifter", icon:"💨", color:"#44ddaa",
+    tagline:"Hit fast, hit often.",
+    desc:"Offensively-minded armor. Trade protection for raw output and mobility.",
+    tiers: [
+      { armor_id:"battle_wraps",   name:"Battle Wraps",  stat:"2% reduction, +5% damage",   bonus:"" },
+      { armor_id:"phase_coat",     name:"Phase Coat",    stat:"6% reduction, +10% damage",  bonus:"Phase: 10% dodge chance on wrong answers",                      unlock_level:3 },
+      { armor_id:"rift_cloak",     name:"Rift Cloak",    stat:"10% reduction, +15% damage", bonus:"Rift Step: 20% dodge chance; 3+ streak restores 5% max HP",     unlock_level:6 },
+    ]
+  },
+};
+
+// Level thresholds for weapon/armor tier progression
+const WEAPON_TIER_LEVELS = [0, 4, 7]; // T1 at start, T2 at lvl4, T3 at lvl7
+const ARMOR_TIER_LEVELS  = [0, 3, 6]; // T1 at start, T2 at lvl3, T3 at lvl6
+
+// ── Active gear helpers ───────────────────────────────────────────────────────
+function getActiveWeaponData() {
+  if (!playerPath) return { weapon_id:"none", name:"None", stat:"", ability:"" };
+  const p = WEAPON_PATHS[playerPath];
+  const tier = p.tiers[playerWeaponTier];
+  if (playerWeaponTier === 0) return tier;
+  return tier.options[playerWeaponChoices[playerWeaponTier - 1] ?? 0];
+}
+
+function getActiveArmorData() {
+  if (!playerArmorPath) return { armor_id:"none", name:"None", stat:"" };
+  return ARMOR_PATHS[playerArmorPath].tiers[playerArmorTier];
+}
+
+// Resolve which tier data to show for a given tier index on a weapon path
+function getWeaponTierData(path, tierIdx, choiceIdx) {
+  const tier = WEAPON_PATHS[path].tiers[tierIdx];
+  if (tierIdx === 0) return tier;
+  return tier.options[choiceIdx ?? 0];
+}
+
+// Placeholder catalogs so any legacy code that references WEAPONS_CATALOG/ARMORS_CATALOG
+// doesn't crash — resolved from active path where needed
+const WEAPONS_CATALOG = {};
+const ARMORS_CATALOG  = {};
+
+// ── Upgrade unlock system (passives only — gear is path-based now) ────────────
+const UNLOCKS_KEY = 'cram_unlocks';
+
+function getUnlocks() {
+  try { const r = localStorage.getItem(UNLOCKS_KEY); return r ? new Set(JSON.parse(r)) : new Set(); }
+  catch(_) { return new Set(); }
+}
+function saveUnlocks(s) { try { localStorage.setItem(UNLOCKS_KEY, JSON.stringify([...s])); } catch(_) {} }
+function isUnlocked(id) { return getUnlocks().has(id); }
+
+// Called after syncPlayer — checks level against passive upgrade thresholds
+function checkAndGrantUnlocks() {
+  const unlocks = getUnlocks();
+  const newItems = [];
+  const lvl = player.level || 1;
+  for (const [id, u] of Object.entries(UPGRADES_CATALOG)) {
+    if (!unlocks.has(id) && lvl >= (u.unlock_level || 0)) {
+      unlocks.add(id); newItems.push(u.name);
+    }
+  }
+  if (newItems.length) { saveUnlocks(unlocks); newItems.forEach(n => showUnlockToast(n)); }
+}
+
+function showUnlockToast(itemName) {
+  const el = document.createElement('div');
+  el.style.cssText = `position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+    background:#0d1a0d;border:1px solid #2a6a2a;border-radius:8px;padding:10px 20px;
+    color:#6fd86f;font-size:13px;font-weight:600;z-index:2000;pointer-events:none;
+    text-align:center;animation:fadeInUp 0.3s ease, fadeOut 0.5s ease 2.2s forwards;`;
+  el.textContent = `🔓 Passive Unlocked: ${itemName}`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2800);
+}
 
 // ── Subject game config loader ────────────────────────────────────────────────
-// Fetches /api/subject_config and merges any extra weapons/armors/upgrades
-// into the live catalogs. Called on game start and after every subject switch.
+// Fetches /api/subject_config and applies subject-specific ENEMIES only.
+// Weapons, armors, and upgrades are hardcoded — no JSON injection.
 async function loadSubjectGameConfig() {
   try {
-    const r = await api("/api/subject_config");
-    const cfg = r?.game_config || {};
-
-    // Reset live catalogs to base first, then apply subject additions
-    Object.keys(WEAPONS_CATALOG).forEach(k => delete WEAPONS_CATALOG[k]);
-    Object.assign(WEAPONS_CATALOG, _BASE_WEAPONS, cfg.extra_weapons || {});
-
-    Object.keys(ARMORS_CATALOG).forEach(k => delete ARMORS_CATALOG[k]);
-    Object.assign(ARMORS_CATALOG, _BASE_ARMORS, cfg.extra_armors || {});
-
-    // Merge extra upgrades into UPGRADES_CATALOG (defined later in this file)
-    if (typeof UPGRADES_CATALOG !== 'undefined' && cfg.extra_upgrades) {
-      // Remove previously-added custom upgrades (those not in base)
-      Object.keys(UPGRADES_CATALOG).forEach(k => {
-        if (!_BASE_UPGRADES_IDS.has(k)) delete UPGRADES_CATALOG[k];
-      });
-      Object.assign(UPGRADES_CATALOG, cfg.extra_upgrades);
-    }
+    await api("/api/subject_config");
+    // Custom enemies are applied server-side in combat.py — nothing to do here.
+    // (extra_weapons / extra_armors / extra_upgrades keys in subject JSON are ignored)
   } catch (_) {
-    // Non-fatal — custom config is optional
+    // Non-fatal — subject config is optional
   }
 }
 
-async function renderEquipment(backFn) {
+function renderEquipment(backFn) {
   navBack = backFn || (gameId ? renderOverworld : renderStart);
-  const selectedWeapon = player.weapon_id || "none";
-  const selectedArmor  = player.armor_id  || "none";
+  if (!playerPath) { render(`<div class="header"><h1>C.R.A.M — The Unbound</h1></div><div style="color:#444;text-align:center;padding:40px">No run active.</div>`); return; }
 
-  const weaponCards = Object.entries(WEAPONS_CATALOG).map(([id, w]) => `
-    <div class="equip-card ${selectedWeapon===id?'selected':''}" onclick="selectWeapon('${id}')">
-      <div class="eq-name">⚔️ ${escHtml(w.name)}</div>
-      <div class="eq-stat">${escHtml(w.stat)}</div>
-      <div class="eq-stat" style="color:#776">${escHtml(w.ability)}</div>
-    </div>
-  `).join('');
+  const wPath = WEAPON_PATHS[playerPath];
+  const aPath = ARMOR_PATHS[playerArmorPath];
 
-  const armorCards = Object.entries(ARMORS_CATALOG).map(([id, a]) => `
-    <div class="equip-card ${selectedArmor===id?'selected':''}" onclick="selectArmor('${id}')">
-      <div class="eq-name">🛡️ ${escHtml(a.name)}</div>
-      <div class="eq-stat">${escHtml(a.stat)}</div>
-    </div>
-  `).join('');
+  // Build weapon tier arc
+  function weaponTierRow(tierIdx) {
+    const isCurrent  = tierIdx === playerWeaponTier;
+    const isPast     = tierIdx < playerWeaponTier;
+    const isUpcoming = tierIdx > playerWeaponTier;
+    const cls = isCurrent ? 'current' : (isPast ? 'past' : 'upcoming');
+    const tierData = wPath.tiers[tierIdx];
+
+    let content;
+    if (tierIdx === 0) {
+      content = `<div class="pdt-name">⚔️ ${escHtml(tierData.name)}</div><div class="pdt-stat">${escHtml(tierData.stat)}</div><div class="pdt-ability">${escHtml(tierData.ability)}</div>`;
+    } else {
+      const chosen = playerWeaponChoices[tierIdx - 1];
+      if (chosen !== undefined) {
+        const c = tierData.options[chosen];
+        content = `<div class="pdt-name">⚔️ ${escHtml(c.name)}</div><div class="pdt-stat">${escHtml(c.stat)}</div><div class="pdt-ability">${escHtml(c.ability)}</div>`;
+      } else {
+        const opts = tierData.options.map(o => o.name).join(' / ');
+        content = `<div class="pdt-name" style="color:#444">⚔️ ${escHtml(opts)}</div><div class="pdt-ability" style="color:#333">Unlocks at Level ${WEAPON_TIER_LEVELS[tierIdx]}</div>`;
+      }
+    }
+    const badges = ['T1', 'T2', 'T3'];
+    return `<div class="pd-tier ${cls}"><div class="pdt-badge">${badges[tierIdx]}</div><div style="flex:1">${content}</div></div>`;
+  }
+
+  // Build armor tier arc
+  function armorTierRow(tierIdx) {
+    const isCurrent  = tierIdx === playerArmorTier;
+    const isPast     = tierIdx < playerArmorTier;
+    const cls = isCurrent ? 'current' : (isPast ? 'past' : 'upcoming');
+    const t = aPath.tiers[tierIdx];
+    const badges = ['T1', 'T2', 'T3'];
+    return `<div class="pd-tier ${cls}"><div class="pdt-badge">${badges[tierIdx]}</div>
+      <div style="flex:1">
+        <div class="pdt-name">🛡️ ${escHtml(t.name)}</div>
+        <div class="pdt-stat">${escHtml(t.stat)}</div>
+        ${t.bonus ? `<div class="pdt-ability">${escHtml(t.bonus)}</div>` : ''}
+        ${tierIdx > playerArmorTier ? `<div class="pdt-ability" style="color:#333">Unlocks at Level ${ARMOR_TIER_LEVELS[tierIdx]}</div>` : ''}
+      </div></div>`;
+  }
 
   render(`
     <div class="header"><h1>C.R.A.M — The Unbound</h1></div>
     <button class="back-btn" onclick="goBack()">← Back</button>
     ${gameId ? playerBar() : ''}
-    <div class="equip-panel">
-      <h2>🔧 Equipment</h2>
-      <div class="equip-section">
-        <h3>Weapons</h3>
-        ${weaponCards}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <div class="path-display">
+        <div class="pd-title" style="color:${wPath.color}">${wPath.icon} ${wPath.name} Path</div>
+        <div class="pd-tiers">
+          ${weaponTierRow(0)}<div class="pd-connector"></div>
+          ${weaponTierRow(1)}<div class="pd-connector"></div>
+          ${weaponTierRow(2)}
+        </div>
       </div>
-      <div class="equip-section">
-        <h3>Armor</h3>
-        ${armorCards}
+      <div class="path-display">
+        <div class="pd-title" style="color:${aPath.color}">${aPath.icon} ${aPath.name} Path</div>
+        <div class="pd-tiers">
+          ${armorTierRow(0)}<div class="pd-connector"></div>
+          ${armorTierRow(1)}<div class="pd-connector"></div>
+          ${armorTierRow(2)}
+        </div>
       </div>
-      <div id="equip-confirm" style="margin-top:10px;font-size:13px;color:#888"></div>
     </div>
     ${gameId ? renderLog() : ''}
   `);
-}
-
-async function selectWeapon(id) {
-  if (!gameId) return;
-  const r = await api("/api/game/equip","POST",{session_id:gameId, weapon_id:id});
-  if (!r) return;
-  player.weapon_id = r.weapon_id;
-  log(`⚔️ Equipped: ${WEAPONS_CATALOG[id]?.name}`);
-  renderEquipment(navBack); // preserve back destination
-}
-
-async function selectArmor(id) {
-  if (!gameId) return;
-  const r = await api("/api/game/equip","POST",{session_id:gameId, armor_id:id});
-  if (!r) return;
-  player.armor_id = r.armor_id;
-  log(`🛡️ Equipped: ${ARMORS_CATALOG[id]?.name}`);
-  renderEquipment(navBack);
 }
 
 // ── Tavern / Site of Grace ─────────────────────────────────────────────────
@@ -2577,64 +3896,78 @@ async function tavernAction(action) {
 }
 
 
-// ── Ability Upgrades / Crafting ────────────────────────────────────────────
+// ── Ability Upgrades ──────────────────────────────────────────────────────────
+// All upgrades are hardcoded. unlock_level = minimum level to see & purchase.
+// Upgrades reset each run (purchased with XP/Insight during the run),
+// but they BECOME AVAILABLE for future runs once the unlock level is hit.
+// Passive upgrades — bought with INSIGHT at taverns/citadel.
+// Insight is earned from leveling (+2 per level-up) and from combat.
+// Unlock level = minimum level before the upgrade appears in the shop.
 const UPGRADES_CATALOG = {
   "iron_mind": {
-    name: "Iron Mind",
-    icon: "🧠",
+    name: "Iron Mind",       icon: "🧠",
     desc: "Wrong answers deal 10% less damage to you.",
-    cost_type: "xp", cost: 40,
+    cost_type: "insight", cost: 3,
     flavor: "The pain is still there. You just stop flinching.",
+    unlock_level: 2,
   },
   "scholars_eye": {
-    name: "Scholar's Eye",
-    icon: "👁️",
+    name: "Scholar's Eye",   icon: "👁️",
     desc: "+1 Insight charge at the start of every combat.",
     cost_type: "insight", cost: 2,
     flavor: "You've learned to see the question behind the question.",
-  },
-  "streak_keeper": {
-    name: "Streak Keeper",
-    icon: "🔥",
-    desc: "Your answer streak only breaks after 2 consecutive wrong answers.",
-    cost_type: "xp", cost: 60,
-    flavor: "One slip doesn't define you. Two might.",
-  },
-  "void_step": {
-    name: "Void Step",
-    icon: "💨",
-    desc: "Once per combat, survive a lethal hit with 1 HP instead of dying.",
-    cost_type: "xp", cost: 90,
-    flavor: "Not immortality. Just a second chance you'll probably waste.",
+    unlock_level: 2,
   },
   "deep_memory": {
-    name: "Deep Memory",
-    icon: "🌀",
+    name: "Deep Memory",     icon: "🌀",
     desc: "XP gained from all sources increased by 20%.",
-    cost_type: "xp", cost: 50,
+    cost_type: "insight", cost: 3,
     flavor: "The more you remember, the more you become.",
+    unlock_level: 3,
+  },
+  "streak_keeper": {
+    name: "Streak Keeper",   icon: "🔥",
+    desc: "Your answer streak only breaks after 2 consecutive wrong answers.",
+    cost_type: "insight", cost: 4,
+    flavor: "One slip doesn't define you. Two might.",
+    unlock_level: 3,
   },
   "pale_resistance": {
-    name: "Pale Resistance",
-    icon: "🛡️",
+    name: "Pale Resistance", icon: "🛡️",
     desc: "Anomaly enemies deal 15% less damage.",
-    cost_type: "xp", cost: 75,
+    cost_type: "insight", cost: 5,
     flavor: "You've stared into the Drift long enough to stop blinking.",
+    unlock_level: 4,
+  },
+  "void_step": {
+    name: "Void Step",       icon: "💨",
+    desc: "Once per combat, survive a lethal hit with 1 HP instead of dying.",
+    cost_type: "insight", cost: 6,
+    flavor: "Not immortality. Just a second chance you'll probably waste.",
+    unlock_level: 5,
   },
 };
-// Snapshot of base upgrade IDs so we can strip custom ones on subject switch
-const _BASE_UPGRADES_IDS = new Set(Object.keys(UPGRADES_CATALOG));
 
 async function renderUpgrades(backFn) {
   navBack = backFn || renderOverworld;
+  const unlocks = getUnlocks();
 
   const cards = Object.entries(UPGRADES_CATALOG).map(([id, u]) => {
+    const unlocked  = unlocks.has(id);
     const owned     = playerUpgrades.includes(id);
-    const canAfford = u.cost_type === 'xp'
-      ? player.xp     >= u.cost
-      : player.insight >= u.cost;
+    const canAfford = player.insight >= u.cost;
+
+    if (!unlocked) {
+      return `
+        <div class="upgrade-card locked-card">
+          <div class="uc-icon" style="filter:grayscale(1);opacity:0.3">🔒</div>
+          <div class="uc-name" style="color:#2a2a3a">???</div>
+          <div class="uc-desc" style="color:#2a2a3a">Locked passive</div>
+          <div class="uc-cost" style="color:#3a3a5a">🔒 Reach Level ${u.unlock_level}</div>
+        </div>`;
+    }
+
     const cls = owned ? 'owned' : (!canAfford ? 'cant-afford' : '');
-    const costLabel = u.cost_type === 'xp' ? `${u.cost} XP` : `${u.cost} 💡 Insight`;
     return `
       <div class="upgrade-card ${cls}" onclick="${owned || !canAfford ? '' : `buyUpgrade('${id}')`}">
         <div class="uc-icon">${u.icon}</div>
@@ -2642,11 +3975,10 @@ async function renderUpgrades(backFn) {
         <div class="uc-desc">${escHtml(u.desc)}</div>
         <div class="uc-desc" style="color:#4a3a2a;font-style:italic">"${escHtml(u.flavor)}"</div>
         ${owned
-          ? `<div class="uc-owned">✓ Learned</div>`
-          : `<div class="uc-cost">Cost: ${costLabel}${!canAfford ? ' — insufficient' : ''}</div>`
+          ? `<div class="uc-owned">✓ Active this run</div>`
+          : `<div class="uc-cost">${u.cost} 💡 Insight${!canAfford ? ' — insufficient' : ''}</div>`
         }
-      </div>
-    `;
+      </div>`;
   }).join('');
 
   render(`
@@ -2654,8 +3986,8 @@ async function renderUpgrades(backFn) {
     <button class="back-btn" onclick="goBack()">← Back</button>
     ${playerBar()}
     <div style="background:#07060e;border:1px solid #1a1428;border-radius:10px;padding:18px;margin-bottom:14px">
-      <h2 style="color:#c8a2ff;margin-bottom:4px">⚗️ Ability Upgrades</h2>
-      <p style="color:#4a3a6a;font-size:12px;margin-bottom:16px">Permanent abilities learned at sites of grace. Spend XP or Insight to unlock.</p>
+      <h2 style="color:#c8a2ff;margin-bottom:4px">⚗️ Passive Abilities</h2>
+      <p style="color:#4a3a6a;font-size:12px;margin-bottom:16px">Level up to unlock passives. Spend 💡 Insight to activate them for this run — they reset on death.</p>
       <div class="upgrade-grid">${cards}</div>
       <div id="upgrade-msg"></div>
     </div>
@@ -2666,16 +3998,18 @@ async function renderUpgrades(backFn) {
 async function buyUpgrade(id) {
   const u = UPGRADES_CATALOG[id];
   if (!u || !gameId) return;
+  if (!isUnlocked(id)) { log(`🔒 ${u.name} not yet unlocked (need Level ${u.unlock_level}).`); return; }
+  if (player.insight < u.cost) { log(`💡 Need ${u.cost} Insight, you have ${player.insight}.`); return; }
   const r = await api("/api/game/upgrade","POST",{
     session_id: gameId,
     upgrade_id: id,
-    cost_type: u.cost_type,
+    cost_type: "insight",
     cost_amount: u.cost,
   });
   if (!r) return;
   playerUpgrades = r.upgrades || playerUpgrades;
   await syncPlayer();
-  log(`⚗️ Learned: ${u.name}`);
+  log(`⚗️ Activated: ${u.name}`);
   renderUpgrades(navBack);
 }
 
@@ -3223,8 +4557,286 @@ function escAttr(s) {
   return String(s).replace(/'/g,"\\'").replace(/"/g,'\\"');
 }
 
+// ── Cpt Shanyok sprite (dark-skinned knight in plate armour) ─────────────────
+function getCptShantySpriteHTML() {
+  return `<svg viewBox="0 0 80 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shadow -->
+  <ellipse cx="40" cy="126" rx="22" ry="5" fill="rgba(0,0,0,.4)"/>
+
+  <!-- Armoured sabatons (metal boots) -->
+  <rect x="20" y="108" width="14" height="17" rx="2" fill="#2c2c3e"/>
+  <rect x="46" y="108" width="14" height="17" rx="2" fill="#2c2c3e"/>
+  <ellipse cx="27" cy="125" rx="12" ry="4" fill="#1e1e2c"/>
+  <ellipse cx="53" cy="125" rx="12" ry="4" fill="#1e1e2c"/>
+  <path d="M18,119 Q27,115 36,119" stroke="#4a4a62" stroke-width=".8" opacity=".5"/>
+  <path d="M44,119 Q53,115 62,119" stroke="#4a4a62" stroke-width=".8" opacity=".5"/>
+
+  <!-- Greaves (lower leg plate) -->
+  <rect x="22" y="82" width="12" height="28" rx="2" fill="#303044"/>
+  <rect x="46" y="82" width="12" height="28" rx="2" fill="#303044"/>
+  <!-- Knee cops -->
+  <ellipse cx="28" cy="82" rx="8" ry="5" fill="#3c3c52"/>
+  <ellipse cx="52" cy="82" rx="8" ry="5" fill="#3c3c52"/>
+  <!-- Greave highlight seam -->
+  <path d="M26,86 L26,108" stroke="#4e4e68" stroke-width=".7" opacity=".45"/>
+  <path d="M50,86 L50,108" stroke="#4e4e68" stroke-width=".7" opacity=".45"/>
+
+  <!-- Tassets (hip/thigh armour plates) -->
+  <path d="M18,74 L19,90 L36,90 L37,74Z" fill="#2a2a3c"/>
+  <path d="M43,74 L44,90 L61,90 L62,74Z" fill="#2a2a3c"/>
+
+  <!-- Fauld / waist armour band -->
+  <rect x="16" y="71" width="48" height="7" rx="2" fill="#242436"/>
+  <!-- Belt buckle (blue gem) -->
+  <rect x="34" y="70" width="12" height="9" rx="2" fill="#1e1e30"/>
+  <rect x="36" y="72" width="8" height="5" rx="1" fill="#1a3888"/>
+  <circle cx="40" cy="74.5" r="2.2" fill="#2a58d8" opacity=".85"/>
+
+  <!-- Breastplate -->
+  <rect x="16" y="43" width="48" height="31" rx="4" fill="#2c2c40"/>
+  <!-- Centre ridge -->
+  <path d="M40,44 L40,74" stroke="#3e3e56" stroke-width="2" opacity=".55"/>
+  <!-- Bevel lines -->
+  <path d="M20,46 L60,46" stroke="#3e3e56" stroke-width=".7" opacity=".35"/>
+  <path d="M20,70 L60,70" stroke="#3e3e56" stroke-width=".7" opacity=".35"/>
+  <!-- Blue heraldic cross -->
+  <rect x="37" y="50" width="6" height="16" rx="1" fill="#1a3888" opacity=".8"/>
+  <rect x="29" y="55" width="22" height="6" rx="1" fill="#1a3888" opacity=".8"/>
+  <!-- Top highlight -->
+  <path d="M22,45 Q40,43 58,45" stroke="#50506e" stroke-width="1" opacity=".45" fill="none"/>
+
+  <!-- Pauldrons (shoulder plate armour) -->
+  <ellipse cx="15" cy="49" rx="9" ry="6" fill="#2a2a3e"/>
+  <ellipse cx="65" cy="49" rx="9" ry="6" fill="#2a2a3e"/>
+  <path d="M8,44 Q15,41 22,44" stroke="#3e3e56" stroke-width="1.2" fill="none"/>
+  <path d="M7,49 Q15,46 23,49" stroke="#3e3e56" stroke-width="1" fill="none"/>
+  <path d="M58,44 Q65,41 72,44" stroke="#3e3e56" stroke-width="1.2" fill="none"/>
+  <path d="M57,49 Q65,46 73,49" stroke="#3e3e56" stroke-width="1" fill="none"/>
+  <!-- Blue trim on pauldrons -->
+  <path d="M9,47 Q15,44 21,47" stroke="#1a3888" stroke-width="1.5" fill="none" opacity=".7"/>
+  <path d="M59,47 Q65,44 71,47" stroke="#1a3888" stroke-width="1.5" fill="none" opacity=".7"/>
+
+  <!-- Shield arm (left) — gauntlet -->
+  <rect x="9" y="51" width="11" height="22" rx="3" fill="#2c2c40"/>
+  <path d="M11,54 L11,71" stroke="#3e3e56" stroke-width=".7" opacity=".45"/>
+  <rect x="8" y="69" width="13" height="4" rx="2" fill="#242436"/>
+
+  <!-- Sword arm (right) — gauntlet -->
+  <rect x="60" y="51" width="11" height="22" rx="3" fill="#2c2c40"/>
+  <path d="M62,54 L62,71" stroke="#3e3e56" stroke-width=".7" opacity=".45"/>
+  <rect x="59" y="69" width="13" height="4" rx="2" fill="#242436"/>
+
+  <!-- SHIELD (round, strapped to left forearm) -->
+  <circle cx="6" cy="78" r="14" fill="#1e1e30" stroke="#2c2c44" stroke-width="2"/>
+  <!-- Shield boss -->
+  <circle cx="6" cy="78" r="5.5" fill="#2c2c40" stroke="#3e3e56" stroke-width="1.2"/>
+  <circle cx="6" cy="78" r="2.5" fill="#484860"/>
+  <!-- Heraldic cross on shield -->
+  <rect x="4.5" y="68" width="3" height="20" rx="1" fill="#1a3888" opacity=".75"/>
+  <rect x="-3" y="76" width="18" height="4" rx="1" fill="#1a3888" opacity=".75"/>
+  <!-- Shield rim glint -->
+  <path d="M-5,69 Q6,63 17,69" stroke="#4a4a64" stroke-width=".8" opacity=".35" fill="none"/>
+
+  <!-- SWORD (in right hand, angled diagonally up-right) -->
+  <rect x="65" y="12" width="4" height="42" rx="1.5" fill="#b8c4d0" transform="rotate(10,67,33)"/>
+  <rect x="66" y="12" width="1.5" height="42" rx=".5" fill="#dce8f0" opacity=".6" transform="rotate(10,67,33)"/>
+  <!-- Crossguard -->
+  <rect x="59" y="48" width="18" height="4" rx="2" fill="#8a7220" transform="rotate(10,68,50)"/>
+  <!-- Grip -->
+  <rect x="63" y="52" width="5" height="14" rx="2" fill="#3a2010" transform="rotate(10,65,59)"/>
+  <!-- Pommel -->
+  <circle cx="72" cy="68" r="3.5" fill="#8a7220"/>
+  <circle cx="72" cy="68" r="1.8" fill="#c0a840" opacity=".7"/>
+
+  <!-- Hands (dark skin) -->
+  <ellipse cx="13" cy="77" rx="5" ry="4" fill="#2a1506"/>
+  <ellipse cx="67" cy="77" rx="5" ry="4" fill="#2a1506"/>
+
+  <!-- Gorget (neck armour) -->
+  <rect x="30" y="37" width="20" height="9" rx="3" fill="#2c2c40"/>
+  <path d="M32,41 L48,41" stroke="#3e3e56" stroke-width=".7" opacity=".4"/>
+
+  <!-- HEAD (dark brown skin) -->
+  <ellipse cx="40" cy="25" rx="15" ry="16" fill="#2a1506"/>
+
+  <!-- HELMET (open-face bascinet, visor raised) -->
+  <!-- Skull cap -->
+  <path d="M25,16 Q26,3 40,2 Q54,3 55,16 Q50,10 40,10 Q30,10 25,16Z" fill="#1e1e30"/>
+  <ellipse cx="40" cy="16" rx="16" ry="9" fill="#2a2a3e"/>
+  <!-- Cheek guards -->
+  <path d="M26,16 L24,28 Q26,34 30,35 L33,35" stroke="#2a2a3e" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M54,16 L56,28 Q54,34 50,35 L47,35" stroke="#2a2a3e" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <!-- Cheek guard inner edge -->
+  <path d="M27,17 L25,29 Q27,33 31,34" stroke="#3e3e56" stroke-width=".8" fill="none" opacity=".6"/>
+  <path d="M53,17 L55,29 Q53,33 49,34" stroke="#3e3e56" stroke-width=".8" fill="none" opacity=".6"/>
+  <!-- Nasal bar -->
+  <rect x="38.5" y="16" width="3" height="14" rx="1.5" fill="#2a2a3e"/>
+  <!-- Visor slots (decorative) -->
+  <path d="M28,20 Q34,18 38,19" stroke="#4a4a64" stroke-width=".8" opacity=".5" fill="none"/>
+  <path d="M42,19 Q46,18 52,20" stroke="#4a4a64" stroke-width=".8" opacity=".5" fill="none"/>
+  <!-- Helmet ridge/comb -->
+  <path d="M34,2 Q40,-1 46,2" stroke="#3e3e56" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Blue plume -->
+  <path d="M40,2 Q37,-6 41,-9 Q45,-6 42,2" fill="#1a3888" opacity=".9"/>
+  <path d="M40,2 Q36,-4 40,-7 Q43,-5 40,2" fill="#2a58d8" opacity=".55"/>
+  <!-- Helmet highlight -->
+  <path d="M28,10 Q36,6 44,8" stroke="#505068" stroke-width="1" opacity=".4" fill="none"/>
+  <!-- Gold visor trim -->
+  <path d="M26,17 Q40,14 54,17" stroke="#8a7220" stroke-width=".9" opacity=".6" fill="none"/>
+
+  <!-- FACE (showing through open helmet) -->
+  <!-- Eyes -->
+  <ellipse cx="33" cy="23" rx="3.2" ry="2.2" fill="#150a02"/>
+  <ellipse cx="47" cy="23" rx="3.2" ry="2.2" fill="#150a02"/>
+  <ellipse cx="33" cy="23" rx="1.8" ry="1.5" fill="#6a3808"/>
+  <ellipse cx="47" cy="23" rx="1.8" ry="1.5" fill="#6a3808"/>
+  <circle cx="33" cy="23" r=".9" fill="#050302"/>
+  <circle cx="47" cy="23" r=".9" fill="#050302"/>
+  <ellipse cx="31.5" cy="22.2" rx=".8" ry=".5" fill="white" opacity=".5"/>
+  <ellipse cx="45.5" cy="22.2" rx=".8" ry=".5" fill="white" opacity=".5"/>
+  <!-- Brows (strong, slightly furrowed) -->
+  <path d="M29,20.5 Q33,18.5 37,20" stroke="#150a02" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M43,20 Q47,18.5 51,20.5" stroke="#150a02" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Nose -->
+  <path d="M38,25 Q40,29 42,25" stroke="#1e0c04" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <!-- Mouth (firm, determined) -->
+  <path d="M34,32 Q40,34 46,32" stroke="#150a02" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+  <!-- Short beard shadow -->
+  <path d="M29,31 Q33,37 40,38 Q47,37 51,31" fill="#1e0c04" opacity=".35"/>
+  <!-- Battle scar -->
+  <line x1="29" y1="26" x2="31" y2="30" stroke="#3a1508" stroke-width="1.2" stroke-linecap="round" opacity=".8"/>
+
+  <!-- Knight aura (blue-steel glow) -->
+  <ellipse cx="40" cy="65" rx="30" ry="44" fill="#1a3888" opacity=".03" style="filter:blur(8px)"/>
+</svg>`;
+}
+
+
+// ── GetRICH rotating facts / jokes ──────────────────────────────────────────
+// ~71% true facts, ~5% slightly wrong (marked with ⚠), ~24% Namlish jokes
+const GETRICH_FACTS = [
+  // ── True facts ──
+  { icon:'💡', text:"Octopuses have three hearts, bra. THREE. And blue blood. More chains than me, né?" },
+  { icon:'💡', text:"A group of flamingos is called a flamboyance. Sharp word for sharp birds." },
+  { icon:'💡', text:"The shortest war in history was 38–45 minutes. Anglo-Zanzibar, 1896. Jrrr." },
+  { icon:'💡', text:"Honey never expires. They found 3000-year-old honey in Egyptian tombs — still good." },
+  { icon:'💡', text:"A day on Venus is longer than a year on Venus. Time is lekker weird out there." },
+  { icon:'💡', text:"The human body has enough iron to make a 3-inch nail. Solid, né?" },
+  { icon:'💡', text:"Bananas are slightly radioactive. Don't stress — you'd need millions a day to worry." },
+  { icon:'💡', text:"Sharks are older than trees. They've been around for 450 million years, wanahela." },
+  { icon:'💡', text:"Hot water can freeze faster than cold water in some conditions. Called the Mpemba effect." },
+  { icon:'💡', text:"A snail can sleep for three years. Priorities different, but respect." },
+  { icon:'💡', text:"Cleopatra lived closer to the Moon landing than to the building of the Great Pyramid." },
+  { icon:'💡', text:"Wombats produce cube-shaped droppings. Nature said: be different, né?" },
+  { icon:'💡', text:"The Eiffel Tower grows about 15 cm taller in summer — metal expands in heat." },
+  { icon:'💡', text:"Oxford University is older than the Aztec Empire. Ancient knowledge, bra." },
+  { icon:'💡', text:"A bolt of lightning is five times hotter than the surface of the Sun." },
+  { icon:'💡', text:"Crows can recognise human faces and hold grudges for years. Don't disrespect crows." },
+  { icon:'💡', text:"The shortest complete sentence in English is 'Go.' Two letters. Powerful stuff." },
+  { icon:'💡', text:"There are more possible chess games than atoms in the observable universe. Think on that." },
+  { icon:'💡', text:"Sloths can hold their breath longer than dolphins — up to 40 minutes." },
+  { icon:'💡', text:"A group of owls is called a parliament. Government by owls, I respect that." },
+  { icon:'💡', text:"Humans and giraffes have the same number of neck bones — just different sizes." },
+  { icon:'💡', text:"The first email was sent in 1971. No chains yet, but progress, né?" },
+  { icon:'💡', text:"Butterflies taste with their feet. Different lifestyle but ek verstaan." },
+  { icon:'💡', text:"Sound travels four times faster in water than in air. Stay hydrated, stay fast." },
+  { icon:'💡', text:"The Great Wall of China is not visible from space with the naked eye. Popular myth, bra." },
+  { icon:'💡', text:"Platypuses don't have stomachs. Food goes straight to the intestine. Efficiency." },
+  { icon:'💡', text:"Cows have best friends and get stressed when separated from them. Lekker loyalty." },
+  { icon:'💡', text:"The Hawaiian alphabet has only 13 letters. Short list, big vibe." },
+  { icon:'💡', text:"Trees communicate through underground fungal networks — scientists call it the Wood Wide Web." },
+  { icon:'💡', text:"A human sneeze travels at about 160 km/h. Don't sneeze near my chains, né." },
+  { icon:'💡', text:"The planet Neptune was predicted with math before it was observed through a telescope." },
+  { icon:'💡', text:"Sea otters hold hands while sleeping so they don't drift apart. Relationship goals." },
+  // ── Slightly wrong facts (~5%) ──
+  { icon:'🤔', text:"The Great Wall of China is visible from the Moon. Sharp eyes bra, very sharp eyes... *cough* (not actually true but sounds good né?)" },
+  { icon:'🤔', text:"Goldfish only have a 3-second memory. Classic fact né — mara it's mostly wrong. They actually remember things for months." },
+  // ── Namlish jokes ──
+  { icon:'😂', text:"Why did the student bring a ladder to school? Because the teacher said the lesson was on a high level, né?" },
+  { icon:'😂', text:"Bra walks into the exam with nothing. Sits down. Writes his name. Jrrr — half mark already, we taking it." },
+  { icon:'😂', text:"What do you call a lazy student who still passes? Strategically efficient, bra. Don't @ me." },
+  { icon:'😂', text:"Why is math so hard? Because someone decided x should mean everything except what it already means." },
+  { icon:'😂', text:"I told the teacher the dog ate my homework. She said 'You don't have a dog.' I said 'Exactly — worst day of my life, né?'" },
+  { icon:'😂', text:"History exam bra — 'What happened in 1066?' Me: 'Stuff, né. A lot of stuff.'" },
+  { icon:'😂', text:"Why do scientists look at the floor? Because they don't want to make eye contact with their hypothesis when it fails." },
+  { icon:'😂', text:"I'm not saying I failed the test — I'm saying I successfully found 47 wrong answers, wanahela." },
+  { icon:'😂', text:"The physics teacher said energy can't be created or destroyed. My motivation says otherwise bra, it just disappears." },
+  { icon:'😂', text:"Why do teachers give homework? Because they also have a home and they want to make sure you think about school there too, né?" },
+  { icon:'😂', text:"Bra I studied for 10 minutes straight. No breaks. Pure focus. Jrrr, I deserve chains for that." },
+];
+
+// ── Intro splash screen (Sir GetRICH + Cpt Shanyok) ─────────────────────────
+const INTRO_BANTER = [
+  { speaker: 'cpt', line: "Eno bra — another student walks through the gate. You ready to learn something today, né?" },
+  { speaker: 'rich', line: "Wanahela! Sharp timing bra, I was just polishing my chains. This is C.R.A.M — where you study AND fight. Lekker combo, né?" },
+  { speaker: 'cpt', line: "Don't mind him. I'm Cpt Shanyok — I keep the real knowledge. The Rift tests what you know. Come in weak, you come out broken." },
+  { speaker: 'rich', line: "Mara you come in prepared? Jrrr bra, you leave RICH. Knowledge. Power. Maybe some chains like mine. Let's go." },
+];
+
+let _introBanterIdx = 0;
+
+function renderIntroScreen() {
+  _introBanterIdx = 0;
+  const banter = INTRO_BANTER[0];
+  const _richFact = GETRICH_FACTS[Math.floor(Math.random() * GETRICH_FACTS.length)];
+  render(`
+    <div class="intro-splash" id="introSplash">
+      <div class="intro-title">
+        <div class="intro-cram">C.R.A.M</div>
+        <div class="intro-subtitle">The Unbound</div>
+      </div>
+      <div class="intro-chars">
+        <div class="intro-char intro-shanty char-active" id="introShanty">
+          ${getCptShantySpriteHTML()}
+          <div class="intro-char-name">Cpt. Shanyok</div>
+        </div>
+        <div class="intro-char intro-getrich" id="introGetRich">
+          <div class="getrich-fact-bubble"><span class="getrich-fact-icon">${_richFact.icon}</span>${_richFact.text}</div>
+          ${getSirGetRICHSprite()}
+          <div class="intro-char-name">Sir GetRICH</div>
+        </div>
+      </div>
+      <div class="intro-dialogue" id="introDialogue">
+        <div class="intro-speaker ${banter.speaker === 'rich' ? 'spk-rich' : 'spk-cpt'}" id="introSpeaker">
+          ${banter.speaker === 'rich' ? 'Sir GetRICH 💰' : 'Cpt. Shanyok ⚓'}
+        </div>
+        <div class="intro-line" id="introLine">${banter.line}</div>
+        <button class="intro-next-btn" id="introProceedBtn" onclick="advanceIntroBanter()">
+          Continue →
+        </button>
+      </div>
+      <div class="intro-skip" onclick="renderStart()">Skip intro</div>
+    </div>
+  `);
+}
+
+function advanceIntroBanter() {
+  _introBanterIdx++;
+  if (_introBanterIdx >= INTRO_BANTER.length) {
+    renderStart();
+    return;
+  }
+  const banter = INTRO_BANTER[_introBanterIdx];
+  const spkEl  = document.getElementById('introSpeaker');
+  const lineEl = document.getElementById('introLine');
+  const btn    = document.getElementById('introProceedBtn');
+  const shantyEl   = document.getElementById('introShanty');
+  const getrichEl  = document.getElementById('introGetRich');
+
+  if (spkEl) spkEl.className = `intro-speaker ${banter.speaker === 'rich' ? 'spk-rich' : 'spk-cpt'}`;
+  if (spkEl) spkEl.textContent = banter.speaker === 'rich' ? 'Sir GetRICH 💰' : 'Cpt. Shanyok ⚓';
+  if (lineEl) lineEl.textContent = banter.line;
+
+  // Highlight active speaker
+  if (shantyEl)  shantyEl.classList.toggle('char-active', banter.speaker === 'cpt');
+  if (getrichEl) getrichEl.classList.toggle('char-active', banter.speaker === 'rich');
+
+  const isLast = _introBanterIdx >= INTRO_BANTER.length - 1;
+  if (btn) btn.textContent = isLast ? "Enter the Rift →" : "Continue →";
+}
+
 // ── Init ───────────────────────────────────────────────────────────────────
-renderStart();
+renderIntroScreen();
 </script>
 </body>
 </html>

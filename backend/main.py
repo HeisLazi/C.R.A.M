@@ -145,14 +145,15 @@ def reload_subjects():
 # Combat
 # ────────────────────────────────────────────────────────────────────────────
 class StartCombatRequest(BaseModel):
-    concept_id:      Optional[str] = None
-    weapon_id:       str = "none"
-    armor_id:        str = "none"
+    concept_id:      Optional[str]  = None
+    weapon_id:       str            = "none"
+    armor_id:        str            = "none"
     node_god:        Optional[str]  = None
     node_modifiers:  list[str]      = []
     bonus_insight:   int            = 0
     is_anomaly:      bool           = False
     node_difficulty: int            = 1
+    bonus_abilities: list[str]      = []    # stacked abilities from prior weapon tiers
 
 
 class AnswerRequest(BaseModel):
@@ -177,6 +178,7 @@ def post_start_combat(body: StartCombatRequest = StartCombatRequest()):
             bonus_insight=body.bonus_insight,
             is_anomaly=body.is_anomaly,
             node_difficulty=body.node_difficulty,
+            bonus_abilities=body.bonus_abilities,
         )
     except RuntimeError as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -311,8 +313,12 @@ def post_node_state(world_id: str, node_id: str, body: NodeStateRequest):
         raise HTTPException(status_code=400, detail=str(e))
 
 
+class NodeCombatRequest(BaseModel):
+    bonus_abilities: list[str] = []   # stacked abilities from prior weapon tiers
+
+
 @app.post("/world/{world_id}/node/{node_id}/combat")
-def post_node_combat(world_id: str, node_id: str):
+def post_node_combat(world_id: str, node_id: str, body: NodeCombatRequest = NodeCombatRequest()):
     """Start combat from a specific node, injecting its metadata into the session."""
     try:
         detail = get_node_detail(world_id, node_id)
@@ -328,6 +334,7 @@ def post_node_combat(world_id: str, node_id: str):
             node_god=node.get("god"),
             node_modifiers=node.get("modifiers", []),
             bonus_insight=player["bonus_insight"],
+            bonus_abilities=body.bonus_abilities,
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -418,8 +425,15 @@ def get_game_world(session_id: str) -> dict:
     if session_id not in _sessions:
         raise HTTPException(status_code=404, detail="Session not found")
     session = _sessions[session_id]
+    # Tutorial sessions have world=None (they use a flat dict, not WorldNode objects)
+    world_out = {}
+    if session.world is not None:
+        try:
+            world_out = {nid: _node_to_dict(n) for nid, n in session.world.items()}
+        except Exception:
+            world_out = {}
     return {
-        "world": {nid: _node_to_dict(n) for nid, n in session.world.items()},
+        "world": world_out,
         "current_node": session.current_node,
         "level": session.level,
         "xp": session.xp,
@@ -546,6 +560,224 @@ def _node_to_dict(node) -> dict:
         "state": node.state,
         "seed": node.seed,
         "god": node.god,
+    }
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# Tutorial Routes
+# ────────────────────────────────────────────────────────────────────────────
+
+# Tutorial uses its own simple linear world, separate from normal procedural gen
+# Structure: citadel → tut_combat_1 → tut_tavern → tut_combat_2 → tut_boss
+_TUTORIAL_WORLD = {
+    "citadel": {
+        "id": "citadel", "type": "citadel", "subtype": "start", "biome": "tutorial",
+        "depth": 0, "difficulty": 0, "modifiers": [], "god": None, "seed": 0,
+        "connections": ["tut_combat_1"], "state": "active",
+        "tutorial_step": "intro",
+    },
+    "tut_combat_1": {
+        "id": "tut_combat_1", "type": "combat", "subtype": "guard", "biome": "tutorial",
+        "depth": 1, "difficulty": 1, "modifiers": [], "god": None, "seed": 1,
+        "connections": ["tut_tavern"], "state": "pending",
+        "tutorial_step": "first_combat",
+    },
+    "tut_tavern": {
+        "id": "tut_tavern", "type": "tavern", "subtype": "rest", "biome": "tutorial",
+        "depth": 2, "difficulty": 0, "modifiers": [], "god": None, "seed": 2,
+        "connections": ["tut_combat_2"], "state": "pending",
+        "tutorial_step": "tavern",
+    },
+    "tut_combat_2": {
+        "id": "tut_combat_2", "type": "combat", "subtype": "elite", "biome": "tutorial",
+        "depth": 3, "difficulty": 2, "modifiers": [], "god": None, "seed": 3,
+        "connections": ["tut_boss"], "state": "pending",
+        "tutorial_step": "second_combat",
+    },
+    "tut_boss": {
+        "id": "tut_boss", "type": "boss", "subtype": "boss", "biome": "tutorial",
+        "depth": 4, "difficulty": 3, "modifiers": [], "god": None, "seed": 4,
+        "connections": [], "state": "pending",
+        "tutorial_step": "boss",
+    },
+}
+
+_tutorial_sessions: dict[str, GameSession] = {}
+
+
+@app.post("/api/tutorial/start")
+def start_tutorial() -> dict:
+    """Start a tutorial run with a linear world and easy general-knowledge questions."""
+    import copy
+    session_id = f"tutorial_{len(_tutorial_sessions) + 1}"
+    session = GameSession.__new__(GameSession)
+    session.world      = None           # tutorial uses flat dict, not gen_world() nodes
+    session.current_node = "citadel"
+    session.level      = 1
+    session.xp         = 0
+    session.hp         = 100
+    session.max_hp     = 100
+    session.insight    = 0
+    session.modifiers  = []
+    session.weapon_id  = "none"
+    session.armor_id   = "none"
+    session.debuffs    = []
+    session.is_tutorial = True
+    _tutorial_sessions[session_id] = session
+    _sessions[session_id] = session    # share the same dict so /api/game/* routes work
+
+    world_out = copy.deepcopy(_TUTORIAL_WORLD)
+    return {
+        "session_id": session_id,
+        "world": world_out,
+        "current_node": "citadel",
+        "is_tutorial": True,
+    }
+
+
+@app.post("/api/tutorial/combat/start")
+def start_tutorial_combat(body: StartCombatRequest = StartCombatRequest()):
+    """Start a tutorial combat with easy general-knowledge questions."""
+    from backend.tutorial_questions import get_tutorial_question
+    try:
+        # Use start_combat but override the question with a tutorial one
+        result = start_combat(
+            weapon_id=body.weapon_id,
+            armor_id=body.armor_id,
+            node_difficulty=body.node_difficulty or 1,
+            bonus_insight=body.bonus_insight,
+            bonus_abilities=body.bonus_abilities,
+        )
+        # Replace the question with a tutorial-level one
+        seen: set = set()
+        tut_q = get_tutorial_question(seen)
+        if tut_q:
+            # Find and update the session's current question
+            from backend.combat import _sessions as _combat_sessions
+            csession = _combat_sessions.get(result["session_id"])
+            if csession:
+                csession.current_question = tut_q
+                csession.question_tier    = "tutorial"
+                csession.seen_question_ids = {tut_q["id"]}
+            result["question"] = {
+                "id":       tut_q["id"],
+                "question": tut_q["question"],
+                "options":  tut_q.get("options", []),
+                "type":     tut_q.get("type", "multiple_choice"),
+                "tier":     "tutorial",
+                "concept":  "general",
+            }
+        return result
+    except RuntimeError as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/api/tutorial/answer")
+def answer_tutorial(body: AnswerRequest):
+    """
+    Self-contained tutorial answer handler.
+    Does NOT call resolve_action — evaluates entirely from TUTORIAL_QUESTIONS
+    so the regular question bank is never touched.
+    """
+    import random as _rand
+    from backend.tutorial_questions import TUTORIAL_QUESTIONS, get_tutorial_question
+    from backend.combat import _sessions as _combat_sessions
+
+    # ── 1. Fetch the combat session ─────────────────────────────────────────
+    csession = _combat_sessions.get(body.session_id)
+    if csession is None:
+        raise HTTPException(status_code=404, detail="Tutorial session not found.")
+    if csession.over:
+        raise HTTPException(status_code=400, detail="Combat already over.")
+
+    # ── 2. Find the question in TUTORIAL_QUESTIONS ──────────────────────────
+    tut_q = next((q for q in TUTORIAL_QUESTIONS if q["id"] == body.question_id), None)
+    if tut_q is None:
+        # Fallback: accept any question still in the session
+        tut_q = csession.current_question
+        if tut_q is None:
+            raise HTTPException(status_code=404, detail=f"Tutorial question '{body.question_id}' not found.")
+
+    # ── 3. Evaluate the answer ───────────────────────────────────────────────
+    correct_answer = tut_q.get("answer") or tut_q.get("correct_answer", "")
+    correct = correct_answer.strip().lower() == body.answer.strip().lower()
+    explanation = tut_q.get("explanation", "")
+
+    # ── 4. Apply simple damage ───────────────────────────────────────────────
+    streak_before = csession.streak
+    damage_dealt  = 0
+    enemy_damage  = 0
+
+    if correct:
+        # Base 15 + slight random + streak bonus
+        base = 15 + _rand.randint(0, 8)
+        streak_mult = 1.0 + (streak_before * 0.15)
+        damage_dealt = max(1, int(round(base * streak_mult)))
+        csession.enemy_hp  = max(0, csession.enemy_hp - damage_dealt)
+        csession.streak    = streak_before + 1
+        csession.last_feedback = f"Streak ×{csession.streak}!" if csession.streak > 1 else None
+    else:
+        enemy_damage = 8 + _rand.randint(0, 6)
+        if streak_before >= 3:
+            enemy_damage += 4          # counter-attack bonus for broken streaks
+        csession.player_hp = max(0, csession.player_hp - enemy_damage)
+        csession.streak    = 0
+        csession.last_feedback = "Streak broken!" if streak_before > 0 else None
+
+    # ── 5. Mark seen & check combat over ────────────────────────────────────
+    if csession.seen_question_ids is None:
+        csession.seen_question_ids = set()
+    csession.seen_question_ids.add(body.question_id)
+
+    combat_over = False
+    winner      = None
+    if csession.enemy_hp <= 0:
+        combat_over = True; winner = "player"
+        csession.over = True; csession.winner = "player"
+    elif csession.player_hp <= 0:
+        combat_over = True; winner = "enemy"
+        csession.over = True; csession.winner = "enemy"
+
+    # ── 6. Pick next tutorial question ──────────────────────────────────────
+    next_question = None
+    if not combat_over:
+        csession.round += 1
+        next_tq = get_tutorial_question(csession.seen_question_ids)
+        if next_tq:
+            csession.current_question = next_tq
+            csession.seen_question_ids.add(next_tq["id"])
+            next_question = {
+                "id":      next_tq["id"],
+                "question":next_tq["question"],
+                "options": next_tq.get("options", []),
+                "type":    next_tq.get("type", "multiple_choice"),
+                "tier":    "tutorial",
+                "concept": "general",
+            }
+
+    # ── 7. Return response in the exact same shape as resolve_action ─────────
+    return {
+        "correct":           correct,
+        "correct_answer":    correct_answer,
+        "explanation":       explanation,
+        "damage_dealt":      damage_dealt,
+        "dice_roll":         None,
+        "enemy_damage":      enemy_damage,
+        "player_hp":         csession.player_hp,
+        "player_max_hp":     csession.player_max_hp,
+        "enemy_hp":          csession.enemy_hp,
+        "enemy_max_hp":      csession.enemy["hp"],
+        "combat_over":       combat_over,
+        "winner":            winner,
+        "next_question":     next_question,
+        "round":             csession.round,
+        "streak":            csession.streak,
+        "damage_multiplier": 1.0 + (streak_before * 0.15),
+        "streak_feedback":   csession.last_feedback,
+        "weapon_mult":       1.0,
+        "ability_triggered": None,
+        "abilities_triggered": [],
+        "ability_bonus":     0,
     }
 
 
@@ -825,3 +1057,26 @@ def buy_upgrade(body: UpgradeRequest) -> dict:
         "xp":       getattr(session, "xp", 0),
         "insight":  getattr(session, "insight", 0),
     }
+
+
+class RestoreGearRequest(BaseModel):
+    session_id: str
+    upgrades: list[str] = []
+
+
+@app.post("/api/game/restore_gear")
+def restore_gear(body: RestoreGearRequest) -> dict:
+    """
+    Restore persistent upgrades to a new session without deducting cost.
+    Called on game start when the player already owns gear from a previous run.
+    """
+    if body.session_id not in _sessions:
+        raise HTTPException(status_code=404, detail="Session not found")
+    session = _sessions[body.session_id]
+    if not hasattr(session, "upgrades"):
+        session.upgrades = []
+    # Merge in any upgrades not already on this session
+    for uid in body.upgrades:
+        if uid not in session.upgrades:
+            session.upgrades.append(uid)
+    return {"upgrades": session.upgrades}

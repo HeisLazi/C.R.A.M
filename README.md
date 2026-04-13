@@ -1,166 +1,180 @@
-# Educational RPG Learning Platform (C.R.A.M)
+# C.R.A.M — The Unbound
 
-An educational RPG web application that makes learning computer science concepts engaging through gamified combat and challenge systems.
+> **Combat. Revision. Advancement. Mastery.**  
+> A full-stack educational RPG where you study by fighting. Answer questions correctly to deal damage, build streaks, and survive a procedurally generated world.
 
-## What I Built
+Built by **Lazarus Petrus** | [GitHub](https://github.com/HeisLazi)
 
-This is a full-stack learning RPG I built to make practicing programming concepts more interactive and fun. Instead of traditional quizzes, players explore a procedural world, fight enemies by answering questions correctly, and complete challenges to progress.
+---
 
-## Features
+## What is this?
 
-**Procedural World Generation** — A dynamically generated graph-based world with depth-scaled difficulty. Each playthrough creates a unique map with different node types (combat, challenge, utility, event, hub) and connections. The world spans 10 depth levels with bidirectional connections between nodes, rendered as an interactive spatial map.
+C.R.A.M is a desktop/web game I built to make revision feel like something worth doing. Instead of reading flashcards, you explore a procedural world, face enemies that test your knowledge, and survive using what you've learned. The harder the question, the harder the enemy hits back.
 
-**Question-Driven Combat** — Combat uses actual programming questions from topics like recursion, binary search, trees, and complexity analysis. Features include:
+It's a real game with real mechanics — streaks, equipment, god modifiers, ability stacking, anomaly events, boss fights — and it runs on actual university-level content (DSA, algorithms, complexity theory, etc.).
 
-- Multiple question types: multiple choice, true/false, and open-ended self-evaluation
-- Streak system rewarding consecutive correct answers with increasing damage multipliers
-- Visual combat arena with animated fighters and particle effects
-- Damage popups and hit animations
-- Insight system for revealing hints
+---
 
-**Layered Modifier System** — Multiple systems interact to create varied gameplay:
+## Demo
 
-- Level scaling: +5% player damage, +3% enemy damage per level
-- God domains: Aurex (streak boost), Vyra (consecutive hits), Khalen (damage reduction), Thren (damage boost), Nyx (asymmetric boost)
-- Equipment abilities: Binary Blade, Recursive Staff, Balance Shift
-- Run modifiers: Glass Cannon, Focused Mind, Corrupted, Precision
-- Debuffs from anomaly failures
+![C.R.A.M Combat Screen](static/index.html)
 
-**Game Modes** — Multiple ways to play:
-
-- **Run Mode**: Explore the world, fight enemies, complete challenges
-- **Past Papers Mode**: Timed quizzes with filtering by concept and difficulty
-- **Codex**: Review mistakes from previous runs
-- **Ancient Library**: Browse PDF resources from various subjects
-
-**Anomaly Challenges** — Non-combat puzzles with multiple steps including logic problems and self-evaluation questions. Features warning screens and debuff system for failures.
-
-**Progression System** — Earn XP from completing challenges to level up. Features:
-
-- XP bars showing progress to next level
-- Level up animations
-- HP and damage scaling with level
-- Insight charges for hints
-- Upgrades and crafting system
-
-**Equipment System** — Weapon and armor selection with ability system that synergizes with god domains and level scaling.
-
-**Tavern / Site of Grace** — Rest area for healing, changing equipment, viewing bestiary, and accessing upgrades.
-
-**Subject System** — Switch between different JSON question sets (DSA2, etc.) for varied content.
-
-## Desktop Application
-
-The game can also run as a standalone Windows desktop application:
-
-```
-dist/CRAM_The_Unbound/CRAM_The_Unbound.exe
-```
-
-Or build from source using the launcher:
-
-```
+**Run it yourself:**
+```bash
+# Clone and run (Python 3.11+)
+git clone https://github.com/HeisLazi/C.R.A.M.git
+cd C.R.A.M
+pip install -r requirements_launcher.txt
 python launcher.py
 ```
 
-This runs the game in a native window without requiring a browser.
+Or run as a standalone Windows `.exe` — see [Building](#building).
+
+---
 
 ## Tech Stack
 
-| Technology  | Purpose                      |
-| ----------- | ---------------------------- |
-| Python      | Backend logic                |
-| FastAPI     | REST API framework           |
-| HTML/CSS/JS | Browser-based game interface |
-| PDF.js      | PDF rendering in browser     |
-| PyInstaller | Desktop app bundling         |
-| pywebview   | Native window display        |
+| Layer | Tech |
+|---|---|
+| Backend | Python 3.11 + FastAPI + Uvicorn |
+| Frontend | Vanilla HTML / CSS / JavaScript (no frameworks) |
+| Desktop App | pywebview + PyInstaller |
+| Data | JSON question banks (no database — stateless by design) |
+| Build | PyInstaller (Windows `.exe`) |
 
-## Getting Started
+No React, no Vue, no ORM. I kept it lean on purpose — every byte of the frontend is hand-written in `play.html`.
 
-### Running the Backend
+---
 
-```bash
-cd backend
-pip install fastapi uvicorn pydantic
-python -m uvicorn main:app --reload --port 8000
-```
+## Features
 
-### Playing the Game (Web)
+### Core Gameplay
+- **Question-driven combat** — correct answers deal damage, wrong answers let the enemy hit back
+- **Streak system** — consecutive correct answers multiply your damage (up to ×3.4)
+- **Procedural world** — 10-depth graph with combat nodes, taverns, anomaly events, and boss rooms
+- **Tutorial mode** — guided intro with hand-crafted dialogue from Sir GetRICH and Cpt Shanyok
 
-Simply open `play.html` in your browser. The HTML file connects directly to the backend API at `http://localhost:8000`.
+### Game Systems
+- **Equipment** — weapons and armour with unique abilities (Binary Blade, Recursive Echo, Life Steal, etc.)
+- **Ability stacking** — T2 weapon abilities carry over when upgrading to T3
+- **God domains** — Aurex, Vyra, Khalen, Thren, Nyx — each modifies damage in a different direction
+- **Run modifiers** — Glass Cannon, Focused Mind, Corrupted, Precision — picked per run
+- **Anomaly events** — high-risk non-combat puzzles that permanently debuff you on failure
+- **Codex** — tracks every question you've gotten wrong so you can review your mistakes
+- **Past Papers mode** — timed quiz mode filtered by concept, tier, and question type
+- **Ancient Library** — in-game PDF viewer for study materials tied to subjects
 
-### Playing the Game (Desktop)
+### Study Content
+Subjects are swappable JSON question banks. Shipped with:
+- **DSA2** — Binary trees, AVL trees, recursion, sorting algorithms, complexity analysis
+- **ARI** — Arithmetic & reasoning
+- **CTE** — Core theory
+- **DTN** / **MAP** / **SPS** / **SVV** — Additional modules
 
-Run the pre-built executable:
+Each subject folder contains `questions.json`, `concepts.json`, and optional PDF resources the Library pulls from.
 
-```
-dist/CRAM_The_Unbound/CRAM_The_Unbound.exe
-```
+---
 
-Or build your own:
-
-```
-python launcher.py
-```
-
-Click "Begin Your Run" to start your adventure, or explore:
-
-- 📜 Past Papers Mode — Quick revision quizzes
-- 📕 Open Codex — Review your mistakes
-- 📚 Ancient Library — Browse PDF resources
-- 📂 Switch Subject — Change question sets
-
-## Project Structure
+## Architecture
 
 ```
-backend/
-├── main.py              # FastAPI entry point and game API routes
-├── combat.py            # Combat resolution with layered damage formula
-├── world.py             # Procedural graph-based world generation
-├── anomaly.py           # Non-combat puzzle challenge system
-├── progression.py      # XP and leveling system
-├── equipment.py         # Weapons, armor, and ability effects
-├── node_effects.py     # Node action handlers
-├── node_interaction.py # Action availability by node type
-├── run_modifiers.py    # Run-wide modifiers
-├── save.py             # In-memory save/load system
-├── codex.py           # Question attempt tracking
-├── question_engine.py  # Question data and answer evaluation
-└── overworld.py       # Alternative world system
-
-play.html               # Browser-based game interface (full UI overhaul)
+C.R.A.M/
+├── backend/
+│   ├── main.py              # FastAPI entry point — all API routes
+│   ├── combat.py            # Combat session state + damage resolution
+│   ├── question_engine.py   # Question loading, filtering, answer evaluation
+│   ├── equipment.py         # Weapons, armour, ability effects
+│   ├── world.py             # Procedural world graph generation
+│   ├── overworld.py         # Node detail, player state, progression
+│   ├── progression.py       # XP + leveling system
+│   ├── anomaly.py           # Non-combat anomaly challenge system
+│   ├── run_modifiers.py     # Per-run modifier effects
+│   ├── node_effects.py      # Node action handlers
+│   ├── node_interaction.py  # Action availability by node type
+│   ├── codex.py             # Attempt history + mistake tracking
+│   ├── save.py              # In-memory save/load
+│   └── tutorial_questions.py # Hardcoded general-knowledge tutorial Qs
+│
+├── play.html                # Entire frontend (~4500 lines, single file)
+├── launcher.py              # Desktop app entry (pywebview wrapper)
+├── static/                  # Static assets
+├── subjects/                # Swappable question banks (JSON + PDFs)
+├── docs/                    # Development documentation
+│   ├── ARCHITECTURE.md
+│   ├── DEVLOG.md
+│   ├── DEVELOPMENT_RULES.md
+│   ├── GAME_STORY.md
+│   └── NEXT_STEPS.md
+├── CRAM_SUBJECT_TEMPLATE.json  # Template for creating new subjects
+├── CRAM_The_Unbound.spec       # PyInstaller build spec
+├── build_windows.bat           # One-click Windows build script
+└── requirements_launcher.txt   # Python dependencies
 ```
+
+---
 
 ## Key Implementation Details
 
-**Combat Damage Formula** (applied in order):
+**Combat damage formula** (applied in sequence):
+```
+base_damage  = PLAYER_BASE_DAMAGE × dice_roll × streak_multiplier × weapon_multiplier
+scaled       = base_damage × level_scaling         # +5% per level
+god_modified = scaled × god_multiplier
+run_modified = god_modified × run_multiplier
+final        = run_modified + weapon_ability_bonus
+```
 
-1. Base damage = 20 _ dice_roll _ streak_mult \* weapon_mult
-2. Level scaling: damage _= (1 + (level-1) _ 0.05)
-3. God modifiers: damage \*= god_multiplier
-4. Run modifiers: damage \*= run_modifier
-5. Weapon ability: add ability_bonus
+**World generation:**
+- Citadel at depth 0 → 10 depth layers with 2–4 nodes each
+- Forward connections (depth → depth+1), occasional lateral same-depth links
+- Difficulty scales with depth; node type distribution shifts (more elites/bosses late game)
 
-**World Generation Algorithm**:
+**Ability stacking:**  
+When a player upgrades from a T2 to T3 weapon, the T2 ability ID is pushed into `playerBonusAbilities[]`. The backend's `apply_weapon_ability_on_hit()` fires all abilities in the stack — with echo deduplication (only highest echo tier fires).
 
-- Create hub node at depth 0 (citadel)
-- For each depth 1-10: generate 2-4 nodes with weighted type distribution
-- Connect forward: each node connects to 1-2 nodes at depth+1
-- Connect laterally: occasional same-depth connections
-- Enforce bidirectional connections
+**Tutorial flow:**  
+The tutorial uses a completely self-contained answer handler (`/api/tutorial/answer`) that evaluates against `TUTORIAL_QUESTIONS` directly — no dependency on the regular question bank, which might not be loaded.
 
-**Multiple Question Types**:
+---
 
-- Multiple choice (4 options)
-- True/False
-- Open-ended self-evaluation with model answer reveal
-- PDF viewing for study materials
+## Building
 
-## Notes
+Requires Python 3.11+ and the dependencies in `requirements_launcher.txt`.
 
-This project demonstrates my ability to build full-stack applications with clean architecture. Each system is modular and can be understood independently. The layered modifier system shows how multiple game mechanics can interact without becoming tangled — something I learned through iterative development.
+```bash
+pip install -r requirements_launcher.txt
 
-The game runs entirely in-memory without a database — this was a design choice to keep the project self-contained and easy to run. In a production environment, I'd add database persistence.
+# Run in dev mode (browser)
+uvicorn backend.main:app --reload --port 8000
+# then open play.html in a browser
 
-Built by Lazarus Petrus
+# Run as desktop app
+python launcher.py
+
+# Build Windows .exe
+build_windows.bat
+```
+
+---
+
+## What I learned building this
+
+- Designing a **modular backend** where combat, questions, equipment, and progression are all separate systems that interact through clean interfaces
+- Managing **in-memory session state** across a stateless HTTP API (UUID-keyed dicts, proper lifecycle management)
+- Building a **single-file frontend** at scale — `play.html` is ~4500 lines of vanilla JS and CSS that renders the entire game without any build tools
+- **Iterative game design** — balancing XP curves, damage formulas, and enemy difficulty through play-testing and adjustment
+- Writing a **procedural world generator** with graph traversal, depth-aware node distribution, and bidirectional connection enforcement
+
+---
+
+## Development Docs
+
+See the [`docs/`](docs/) folder for:
+- [`ARCHITECTURE.md`](docs/ARCHITECTURE.md) — system design decisions
+- [`DEVLOG.md`](docs/DEVLOG.md) — development history
+- [`DEVELOPMENT_RULES.md`](docs/DEVELOPMENT_RULES.md) — constraints and conventions
+- [`GAME_STORY.md`](docs/GAME_STORY.md) — narrative and world lore
+
+---
+
+*C.R.A.M — The Unbound was built as a personal project to make revision less terrible. It's also what I give to interviewers when they ask if I have any side projects.*

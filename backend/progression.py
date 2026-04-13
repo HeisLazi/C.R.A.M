@@ -24,9 +24,12 @@ def add_xp(session, amount: int) -> dict:
     if level_up:
         session.max_hp = getattr(session, "max_hp", 100) + 5
         session.hp = session.max_hp
+        # Award +2 Insight per level-up — fuels passive upgrade purchases
+        session.insight = min(20, getattr(session, "insight", 0) + 2)
 
     return {
         "xp": session.xp,
         "level": session.level,
         "level_up": level_up,
+        "insight": getattr(session, "insight", 0),
     }

@@ -95,6 +95,8 @@ def _dice_roll(wits: float = 1.0) -> float:
 
 ENEMIES = [
     # ── Standard enemies (depth 1–3, tier: standard) ──────────────────────────
+    # XP targets: ~55 per fight early, scaling to ~145 late.
+    # Level 10 needs 450 XP. Normal run ≈9 fights + boss = ~540 XP → Level 10 by boss.
     {
         "name": "Recursive Wraith",
         "concept_id": "recursion",
@@ -102,7 +104,7 @@ ENEMIES = [
         "question_tier": "standard",
         "preferred_types": ["multiple_choice", "true_false"],
         "preferred_concepts": ["recursion"],
-        "xp_reward": 20,
+        "xp_reward": 55,
     },
     {
         "name": "Complexity Specter",
@@ -111,7 +113,7 @@ ENEMIES = [
         "question_tier": "standard",
         "preferred_types": ["multiple_choice", "true_false"],
         "preferred_concepts": ["big_o"],
-        "xp_reward": 20,
+        "xp_reward": 55,
     },
     {
         "name": "Binary Shade",
@@ -120,7 +122,7 @@ ENEMIES = [
         "question_tier": "standard",
         "preferred_types": ["multiple_choice", "true_false"],
         "preferred_concepts": ["binary_search", "sorting"],
-        "xp_reward": 30,
+        "xp_reward": 70,
     },
     {
         "name": "BST Revenant",
@@ -129,7 +131,7 @@ ENEMIES = [
         "question_tier": "standard",
         "preferred_types": ["multiple_choice", "true_false"],
         "preferred_concepts": ["bst", "avl_tree"],
-        "xp_reward": 30,
+        "xp_reward": 70,
     },
 
     # ── Mid-tier enemies (depth 3–6, tier: standard/elite) ───────────────────
@@ -140,7 +142,7 @@ ENEMIES = [
         "question_tier": "standard",
         "preferred_types": ["multiple_choice", "define"],
         "preferred_concepts": ["sorting", "big_o"],
-        "xp_reward": 35,
+        "xp_reward": 80,
     },
     {
         "name": "Graph Lurker",
@@ -149,7 +151,7 @@ ENEMIES = [
         "question_tier": "standard",
         "preferred_types": ["multiple_choice", "true_false", "define"],
         "preferred_concepts": ["graphs"],
-        "xp_reward": 40,
+        "xp_reward": 95,
     },
     {
         "name": "Hash Wraith",
@@ -158,7 +160,7 @@ ENEMIES = [
         "question_tier": "standard",
         "preferred_types": ["multiple_choice", "define"],
         "preferred_concepts": ["hashing"],
-        "xp_reward": 40,
+        "xp_reward": 95,
     },
     {
         "name": "AVL Titan",
@@ -167,7 +169,7 @@ ENEMIES = [
         "question_tier": "standard",
         "preferred_types": ["multiple_choice", "short_exam"],
         "preferred_concepts": ["avl_tree", "bst"],
-        "xp_reward": 45,
+        "xp_reward": 110,
     },
 
     # ── Elite enemies (depth 5–8, tier: elite) ───────────────────────────────
@@ -178,7 +180,7 @@ ENEMIES = [
         "question_tier": "elite",
         "preferred_types": ["multiple_choice", "short_exam", "define"],
         "preferred_concepts": ["dp", "recursion"],
-        "xp_reward": 60,
+        "xp_reward": 130,
     },
     {
         "name": "Void Examiner",
@@ -187,7 +189,7 @@ ENEMIES = [
         "question_tier": "elite",
         "preferred_types": ["multiple_choice", "short_exam"],
         "preferred_concepts": ["big_o", "sorting", "graphs", "hashing"],
-        "xp_reward": 65,
+        "xp_reward": 145,
     },
 
     # ── Boss enemy (depth 8–10, tier: boss) ───────────────────────────────────
@@ -198,7 +200,7 @@ ENEMIES = [
         "question_tier": "boss",
         "preferred_types": ["multiple_choice", "short_exam", "long_exam"],
         "preferred_concepts": None,   # anything
-        "xp_reward": 150,
+        "xp_reward": 250,
     },
 
     # ── Anomaly enemy (spawns only on anomaly nodes) ───────────────────────────
@@ -209,7 +211,7 @@ ENEMIES = [
         "question_tier": "anomaly",
         "preferred_types": ["multiple_choice", "true_false", "short_exam"],
         "preferred_concepts": None,
-        "xp_reward": 200,
+        "xp_reward": 280,
         "is_anomaly_enemy": True,
     },
 ]
@@ -253,31 +255,34 @@ class CombatSession:
     round: int = 1
     seen_question_ids: object = dc_field(default_factory=set)  # set[str] — anti-repeat tracker
     # ── Node context (passed through, not used in calculations yet) ────────────
-    node_god:       Optional[str] = None
-    node_modifiers: list = None          # list[str]
-    run_modifiers:  list = None          # run-based modifiers
+    node_god:        Optional[str] = None
+    node_modifiers:  list = None          # list[str]
+    run_modifiers:   list = None          # run-based modifiers
     # ── Question filtering ────────────────────────────────────────────────────
-    question_tier:  str  = "standard"   # tier used for question selection
-    question_types: list = dc_field(default_factory=list)  # preferred question types
-    is_anomaly:     bool = False         # anomaly combat triggers debuff on loss
+    question_tier:   str  = "standard"   # tier used for question selection
+    question_types:  list = dc_field(default_factory=list)  # preferred question types
+    is_anomaly:      bool = False         # anomaly combat triggers debuff on loss
+    # ── Ability stacking from previous weapon tiers ───────────────────────────
+    bonus_abilities: list = dc_field(default_factory=list)
 
 
 _sessions: dict[str, CombatSession] = {}
 
 
 def start_combat(
-    concept_id:     Optional[str]  = None,
-    weapon_id:      str            = "none",
-    armor_id:       str            = "none",
-    node_god:       Optional[str]  = None,
-    node_modifiers: Optional[list] = None,
-    bonus_insight:  int            = 0,
-    player_hp:      Optional[int]  = None,
-    level:          int            = 1,
-    god:            Optional[str]  = None,
-    run_modifiers:  Optional[list] = None,
-    is_anomaly:     bool           = False,
-    node_difficulty: int           = 1,
+    concept_id:      Optional[str]  = None,
+    weapon_id:       str            = "none",
+    armor_id:        str            = "none",
+    node_god:        Optional[str]  = None,
+    node_modifiers:  Optional[list] = None,
+    bonus_insight:   int            = 0,
+    player_hp:       Optional[int]  = None,
+    level:           int            = 1,
+    god:             Optional[str]  = None,
+    run_modifiers:   Optional[list] = None,
+    is_anomaly:      bool           = False,
+    node_difficulty: int            = 1,
+    bonus_abilities: Optional[list] = None,   # stacked abilities from prior tiers
 ) -> dict:
     session_id = str(uuid.uuid4())
 
@@ -356,6 +361,7 @@ def start_combat(
         question_tier=q_tier,
         question_types=q_types,
         is_anomaly=is_anomaly,
+        bonus_abilities=bonus_abilities or [],
     )
     _sessions[session_id] = session
 
@@ -376,6 +382,7 @@ def resolve_action(session_id: str, question_id: str, answer: str) -> dict:
 
     roll = _dice_roll(session.player_wits)
     ability_triggered = None
+    abilities_triggered: list = []
 
     if result["correct"]:
         run_bonus = get_run_streak_bonus(session.run_modifiers)
@@ -399,12 +406,21 @@ def resolve_action(session_id: str, question_id: str, answer: str) -> dict:
         run_mult = get_run_player_damage_mult(session.run_modifiers, session.level)
         base_damage = int(round(base_damage * run_mult))
 
-        # ── Weapon ability (on-hit) ───────────────────────────────────────────
-        ability_bonus, ability_triggered = apply_weapon_ability_on_hit(
+        # ── Weapon ability (on-hit) — supports stacked abilities ────────────
+        ability_bonus, abilities_triggered = apply_weapon_ability_on_hit(
             session.weapon.ability, base_damage, session.last_damage,
-            god=session.god, streak=session.streak
+            god=session.god, streak=session.streak,
+            bonus_abilities=session.bonus_abilities,
         )
+        ability_triggered = abilities_triggered[0] if abilities_triggered else None
         damage_dealt = base_damage + ability_bonus
+
+        # Life Steal: restore HP for each life_steal ability in the stack
+        from backend.equipment import ABILITY_LIFE_STEAL
+        if ABILITY_LIFE_STEAL in (session.weapon.ability,) or \
+           ABILITY_LIFE_STEAL in session.bonus_abilities:
+            heal = 5
+            session.player_hp = min(session.player_max_hp, session.player_hp + heal)
 
         enemy_damage = 0
         session.last_damage = damage_dealt
@@ -507,6 +523,7 @@ def resolve_action(session_id: str, question_id: str, answer: str) -> dict:
         # ── Equipment fields ──────────────────────────────────────────────────
         "weapon_mult": weapon_mult,
         "ability_triggered": ability_triggered,
+        "abilities_triggered": abilities_triggered if result["correct"] else [],
         "ability_bonus": ability_bonus if result["correct"] else 0,
     }
 

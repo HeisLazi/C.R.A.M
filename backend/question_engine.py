@@ -269,6 +269,16 @@ def get_question(
 
 
 def get_question_by_id(question_id: str) -> Optional[dict]:
+    # Check tutorial questions first (they aren't in the JSON bank)
+    if question_id.startswith("tut_"):
+        from backend.tutorial_questions import TUTORIAL_QUESTIONS
+        for q in TUTORIAL_QUESTIONS:
+            if q["id"] == question_id:
+                # Normalise field name: tutorial uses "answer", engine expects "correct_answer"
+                out = dict(q)
+                if "answer" in out and "correct_answer" not in out:
+                    out["correct_answer"] = out["answer"]
+                return out
     questions = _load()
     for q in questions:
         if q["id"] == question_id:

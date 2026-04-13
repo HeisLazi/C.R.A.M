@@ -64,13 +64,6 @@ No React, no Vue, no ORM. I kept it lean on purpose — every byte of the fronte
 - **Past Papers mode** — timed quiz mode filtered by concept, tier, and question type
 - **Ancient Library** — in-game PDF viewer for study materials tied to subjects
 
-### Study Content
-Subjects are swappable JSON question banks. Shipped with:
-- **DSA2** — Binary trees, AVL trees, recursion, sorting algorithms, complexity analysis
-- **ARI** — Arithmetic & reasoning
-- **CTE** — Core theory
-- **DTN** / **MAP** / **SPS** / **SVV** — Additional modules
-
 Each subject folder contains `questions.json`, `concepts.json`, and optional PDF resources the Library pulls from.
 
 ---

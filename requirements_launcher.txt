@@ -1,0 +1,11 @@
+# StudyBuddy  ·  Launcher / Build dependencies
+# Install with:  pip install -r requirements_launcher.txt
+
+# Desktop window wrapper (embeds a system WebView2/WebKit window)
+pywebview>=4.4.0
+
+# ASGI server — runs FastAPI inside the launcher process
+uvicorn[standard]>=0.24.0
+
+# Build tool — packages everything into a single .exe folder
+pyinstaller>=6.0.0

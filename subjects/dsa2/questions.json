@@ -1,0 +1,2703 @@
+{
+  "_meta": {
+    "subject": "DSA2",
+    "version": "2.0",
+    "format": "cram-questions",
+    "ai_generation_prompt": "You are generating study questions for StudyBuddy, a dark fantasy learning RPG.\nFollow these rules EXACTLY when writing or adding questions to this file.\n\nQUESTION TYPES:\n  multiple_choice : 4 options (A-D style content). Options must all be plausible distractors.\n  true_false      : options must be exactly [\"True\",\"False\"]. Question is a statement (not a question).\n  define          : \"Define X\" or \"Which best describes X?\" — options are full definition sentences.\n  short_exam      : Concise exam question + concise options (no explanation in the option text).\n  long_exam       : Paragraph-length question + paragraph-length options. Used for bosses only.\n\nTIERS:\n  standard : Regular combat questions. Difficulty 1-2. Used by drones and guards.\n  elite    : Harder questions. Difficulty 2-3. Used by elite enemies only.\n  boss     : Boss encounter questions. Difficulty 3. Long_exam or define type. One question per key topic.\n  anomaly  : Anomaly node questions. Difficulty 3. Edge cases, trick questions, gotchas.\n             Failure in anomaly combat permanently debuffs the player — make these truly hard.\n\nENEMY FAVORITES (which enemies draw from which pools):\n  Recursive Wraith    -> concept_id: recursion, types: [multiple_choice, true_false], tier: standard\n  Binary Shade        -> concept_id: binary_search, types: [multiple_choice, short_exam], tier: standard\n  BST Revenant        -> concept_id: bst, types: [multiple_choice, define], tier: standard\n  Complexity Specter  -> concept_id: big_o, types: [true_false, multiple_choice], tier: standard\n  AVL Titan           -> concept_id: avl_tree, types: [short_exam, multiple_choice], tier: elite\n  Sort Daemon         -> concept_id: sorting, types: [multiple_choice, short_exam], tier: elite\n  Graph Lurker        -> concept_id: graphs, types: [define, multiple_choice], tier: elite\n  Hash Wraith         -> concept_id: hashing, types: [multiple_choice, short_exam], tier: elite\n  DP Colossus         -> concept_id: dynamic_programming, types: [long_exam, define], tier: boss\n  Grand Examiner      -> any concept, types: [long_exam, short_exam, define], tier: boss\n  ANOMALY ENEMY       -> any concept, types: [true_false, multiple_choice, short_exam], tier: anomaly\n\nFORMAT RULES:\n  id             : \"q_<concept_id>_<3digit_number>\" e.g. \"q_recursion_042\"\n  correct_answer : must exactly match one option string\n  explanation    : 1-3 sentences, educational, states WHY the answer is correct\n  tags           : 2-4 relevant keywords\n  difficulty     : 1 (easy), 2 (medium), 3 (hard)\n  tier           : standard | elite | boss | anomaly\n  type           : multiple_choice | true_false | define | short_exam | long_exam\n\nDISTRIBUTION TARGET per concept:\n  10 standard multiple_choice (difficulty 1-2)\n  4  true_false               (difficulty 1-2)\n  4  define                   (difficulty 2)\n  4  short_exam               (difficulty 2-3)\n  2  elite                    (difficulty 3, tier: elite)\n  2  boss                     (difficulty 3, type: long_exam, tier: boss)\n  2  anomaly                  (difficulty 3, tier: anomaly — edge cases/gotchas)\n"
+  },
+  "questions": [
+    {
+      "id": "rec_001",
+      "concept_id": "recursion",
+      "question": "What is the base case in a recursive function?",
+      "options": [
+        "The case where the function calls itself",
+        "The case that stops the recursion",
+        "The first call to the function",
+        "The maximum depth allowed"
+      ],
+      "correct_answer": "The case that stops the recursion",
+      "explanation": "The base case is the condition that terminates recursion. Without it, you get infinite recursion and a stack overflow.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_002",
+      "concept_id": "recursion",
+      "question": "What happens if a recursive function has no base case?",
+      "options": [
+        "It returns null",
+        "It runs once",
+        "It causes a stack overflow",
+        "It returns 0"
+      ],
+      "correct_answer": "It causes a stack overflow",
+      "explanation": "Without a base case, the function keeps calling itself indefinitely until the call stack runs out of memory.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_003",
+      "concept_id": "recursion",
+      "question": "What is the time complexity of computing Fibonacci(n) with naive recursion?",
+      "options": [
+        "O(n)",
+        "O(n log n)",
+        "O(2^n)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(2^n)",
+      "explanation": "Each call branches into two more calls, creating an exponential tree of calls. Memoization reduces this to O(n).",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_004",
+      "concept_id": "recursion",
+      "question": "Which of the following best describes tail recursion?",
+      "options": [
+        "Recursion that only happens in loops",
+        "Recursion where the recursive call is the last operation",
+        "Recursion with no base case",
+        "Recursion that calls two functions"
+      ],
+      "correct_answer": "Recursion where the recursive call is the last operation",
+      "explanation": "Tail recursion allows compilers to optimise by reusing the same stack frame, effectively converting it to iteration.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_005",
+      "concept_id": "recursion",
+      "question": "What is the call stack used for in recursion?",
+      "options": [
+        "Storing global variables",
+        "Tracking each function call's state and return address",
+        "Sorting function arguments",
+        "Managing heap memory"
+      ],
+      "correct_answer": "Tracking each function call's state and return address",
+      "explanation": "Each recursive call pushes a stack frame containing local variables and the return address. Too many frames causes a stack overflow.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_006",
+      "concept_id": "recursion",
+      "question": "What is the recurrence relation for merge sort?",
+      "options": [
+        "T(n) = T(n-1) + O(n)",
+        "T(n) = 2T(n/2) + O(n)",
+        "T(n) = T(n/2) + O(1)",
+        "T(n) = 2T(n-1) + O(1)"
+      ],
+      "correct_answer": "T(n) = 2T(n/2) + O(n)",
+      "explanation": "Merge sort splits the array in half (2 recursive calls on n/2) and merges in O(n) time, giving O(n log n) overall.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_007",
+      "concept_id": "recursion",
+      "question": "Which technique converts overlapping subproblems in recursion into an efficient solution?",
+      "options": [
+        "Backtracking",
+        "Memoization",
+        "Greedy approach",
+        "Binary lifting"
+      ],
+      "correct_answer": "Memoization",
+      "explanation": "Memoization caches the results of expensive function calls so they are computed only once, reducing exponential time to polynomial.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_008",
+      "concept_id": "recursion",
+      "question": "How many recursive calls does standard binary search make per step?",
+      "options": [
+        "2",
+        "n",
+        "1",
+        "log n"
+      ],
+      "correct_answer": "1",
+      "explanation": "Binary search makes exactly one recursive call per step, eliminating half the search space each time.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_009",
+      "concept_id": "recursion",
+      "question": "What is the space complexity of a recursive algorithm with depth d?",
+      "options": [
+        "O(1)",
+        "O(d)",
+        "O(2^d)",
+        "O(d^2)"
+      ],
+      "correct_answer": "O(d)",
+      "explanation": "Each level of recursion adds one stack frame, so space complexity equals the maximum recursion depth d.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_010",
+      "concept_id": "recursion",
+      "question": "In the Tower of Hanoi with n discs, how many moves are required?",
+      "options": [
+        "n^2",
+        "n log n",
+        "2^n - 1",
+        "n!"
+      ],
+      "correct_answer": "2^n - 1",
+      "explanation": "Each disc requires moving the discs above it, resulting in T(n) = 2T(n-1) + 1, which solves to 2^n - 1.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_011",
+      "concept_id": "recursion",
+      "question": "What is mutual recursion?",
+      "options": [
+        "Two functions that each call themselves",
+        "Two functions where each calls the other",
+        "A function with two base cases",
+        "Recursion inside a loop"
+      ],
+      "correct_answer": "Two functions where each calls the other",
+      "explanation": "Mutual recursion is when function A calls function B and function B calls function A. Both must eventually reach a base case.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "rec_012",
+      "concept_id": "recursion",
+      "question": "Which of these is NOT naturally solved with recursion?",
+      "options": [
+        "Tree traversal",
+        "Factorial",
+        "Finding the maximum in an unsorted array",
+        "Bubble sort"
+      ],
+      "correct_answer": "Bubble sort",
+      "explanation": "Bubble sort is inherently iterative. Tree traversal, factorial, and finding array max all decompose naturally into smaller subproblems.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_001",
+      "concept_id": "big_o",
+      "question": "What does Big-O notation describe?",
+      "options": [
+        "The exact running time of an algorithm",
+        "The best-case performance",
+        "An upper bound on an algorithm's growth rate",
+        "The average memory usage"
+      ],
+      "correct_answer": "An upper bound on an algorithm's growth rate",
+      "explanation": "Big-O gives an asymptotic upper bound — it describes how an algorithm scales in the worst case as input size grows.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_002",
+      "concept_id": "big_o",
+      "question": "What is the Big-O of a loop running n times nested inside another loop running n times?",
+      "options": [
+        "O(n)",
+        "O(n log n)",
+        "O(n^2)",
+        "O(2n)"
+      ],
+      "correct_answer": "O(n^2)",
+      "explanation": "Nested loops each running n times give n x n = n^2 iterations. Constants and lower-order terms are dropped.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_003",
+      "concept_id": "big_o",
+      "question": "Which time complexity is most efficient for large n?",
+      "options": [
+        "O(n^2)",
+        "O(n log n)",
+        "O(2^n)",
+        "O(n!)"
+      ],
+      "correct_answer": "O(n log n)",
+      "explanation": "Ordering from best to worst: O(1) < O(log n) < O(n) < O(n log n) < O(n^2) < O(2^n) < O(n!).",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_004",
+      "concept_id": "big_o",
+      "question": "What is the Big-O of binary search?",
+      "options": [
+        "O(n)",
+        "O(n^2)",
+        "O(log n)",
+        "O(1)"
+      ],
+      "correct_answer": "O(log n)",
+      "explanation": "Binary search halves the search space each step, so the number of steps is log2(n).",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_005",
+      "concept_id": "big_o",
+      "question": "If an algorithm runs in O(1), what does this mean?",
+      "options": [
+        "It runs once regardless of input",
+        "Its time is constant regardless of input size",
+        "It runs in linear time",
+        "It uses constant memory"
+      ],
+      "correct_answer": "Its time is constant regardless of input size",
+      "explanation": "O(1) means the runtime does not grow with input size n. Accessing an array element by index is O(1).",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_006",
+      "concept_id": "big_o",
+      "question": "What is the space complexity of an algorithm that creates a 2D n x n matrix?",
+      "options": [
+        "O(n)",
+        "O(n^2)",
+        "O(2n)",
+        "O(log n)"
+      ],
+      "correct_answer": "O(n^2)",
+      "explanation": "A 2D n x n matrix stores n^2 elements, so space grows quadratically with n.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_007",
+      "concept_id": "big_o",
+      "question": "What is the amortised time complexity of appending to a dynamic array (e.g. Python list)?",
+      "options": [
+        "O(n)",
+        "O(log n)",
+        "O(1)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(1)",
+      "explanation": "Although occasionally the array must double and copy (O(n)), this cost is spread over n appends, giving amortised O(1) per append.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_008",
+      "concept_id": "big_o",
+      "question": "Which notation gives a LOWER bound on an algorithm's growth rate?",
+      "options": [
+        "O (Big-O)",
+        "Theta (Big-Theta)",
+        "Omega (Big-Omega)",
+        "o (little-o)"
+      ],
+      "correct_answer": "Omega (Big-Omega)",
+      "explanation": "Omega is the lower bound. O is the upper bound. Theta is a tight bound covering both upper and lower.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_009",
+      "concept_id": "big_o",
+      "question": "What is the time complexity of accessing an element by index in an array?",
+      "options": [
+        "O(n)",
+        "O(log n)",
+        "O(1)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(1)",
+      "explanation": "Arrays store elements contiguously; index arithmetic gives the address directly without any search.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_010",
+      "concept_id": "big_o",
+      "question": "What is the worst-case time complexity of quicksort?",
+      "options": [
+        "O(n log n)",
+        "O(n)",
+        "O(n^2)",
+        "O(log n)"
+      ],
+      "correct_answer": "O(n^2)",
+      "explanation": "Quicksort degrades to O(n^2) when the pivot is always the smallest or largest element, such as with already-sorted input and a naive pivot.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_011",
+      "concept_id": "big_o",
+      "question": "Which of these has the same Big-O complexity as O(3n^2 + 7n + 100)?",
+      "options": [
+        "O(n)",
+        "O(n^2)",
+        "O(n^3)",
+        "O(3n^2)"
+      ],
+      "correct_answer": "O(n^2)",
+      "explanation": "We drop constants and lower-order terms. 3n^2 + 7n + 100 simplifies to O(n^2).",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bigo_012",
+      "concept_id": "big_o",
+      "question": "What is the time complexity of linear search in the worst case?",
+      "options": [
+        "O(1)",
+        "O(log n)",
+        "O(n)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(n)",
+      "explanation": "In the worst case the target is at the end or absent, requiring checking every element once.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bs_001",
+      "concept_id": "binary_search",
+      "question": "What is the precondition for binary search to work correctly?",
+      "options": [
+        "The array must be unsorted",
+        "The array must be sorted",
+        "The array must contain unique elements",
+        "The array must have odd length"
+      ],
+      "correct_answer": "The array must be sorted",
+      "explanation": "Binary search compares the target to the midpoint and eliminates half the array. This only works if elements are in sorted order.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bs_002",
+      "concept_id": "binary_search",
+      "question": "Given a sorted array of 16 elements, what is the maximum number of comparisons binary search makes?",
+      "options": [
+        "4",
+        "5",
+        "8",
+        "16"
+      ],
+      "correct_answer": "4",
+      "explanation": "log2(16) = 4. Binary search halves the space each step: 16 to 8 to 4 to 2 to 1.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bs_003",
+      "concept_id": "binary_search",
+      "question": "In binary search, if the target is less than the midpoint element, what do you do?",
+      "options": [
+        "Search the right half",
+        "Return -1",
+        "Search the left half",
+        "Start over"
+      ],
+      "correct_answer": "Search the left half",
+      "explanation": "If target is less than mid, the target must be in the left portion. The right half is eliminated.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bs_004",
+      "concept_id": "binary_search",
+      "question": "Which mid-index formula avoids integer overflow?",
+      "options": [
+        "mid = (low + high) / 2",
+        "mid = low + (high - low) / 2",
+        "mid = high - low / 2",
+        "mid = low * high / 2"
+      ],
+      "correct_answer": "mid = low + (high - low) / 2",
+      "explanation": "(low + high) can overflow for large indices. low + (high - low) / 2 avoids overflow by never exceeding high.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bs_005",
+      "concept_id": "binary_search",
+      "question": "What does binary search return when the target is not found?",
+      "options": [
+        "0",
+        "null",
+        "-1 or a sentinel value",
+        "The nearest element"
+      ],
+      "correct_answer": "-1 or a sentinel value",
+      "explanation": "Convention is to return -1 (or throw/return None) to signal that the target does not exist in the array.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bs_006",
+      "concept_id": "binary_search",
+      "question": "What is the best-case time complexity of binary search?",
+      "options": [
+        "O(n)",
+        "O(log n)",
+        "O(1)",
+        "O(n log n)"
+      ],
+      "correct_answer": "O(1)",
+      "explanation": "Best case: the target is exactly at the midpoint on the first check — constant time.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bs_007",
+      "concept_id": "binary_search",
+      "question": "How does binary search on 1,000,000 elements compare to linear search?",
+      "options": [
+        "Binary needs up to 1,000,000 checks; linear needs up to 20",
+        "Binary needs up to 20 checks; linear needs up to 1,000,000",
+        "Both need the same number of checks",
+        "Binary is only faster for small arrays"
+      ],
+      "correct_answer": "Binary needs up to 20 checks; linear needs up to 1,000,000",
+      "explanation": "log2(1,000,000) is approximately 20. Binary search's logarithmic growth makes it dramatically faster for large sorted datasets.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bs_008",
+      "concept_id": "binary_search",
+      "question": "Which data structure allows binary-search-like performance without a sorted array?",
+      "options": [
+        "Linked list",
+        "Binary Search Tree",
+        "Stack",
+        "Queue"
+      ],
+      "correct_answer": "Binary Search Tree",
+      "explanation": "A BST maintains left < root < right, enabling O(log n) search without requiring a sorted array.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bs_009",
+      "concept_id": "binary_search",
+      "question": "To find the leftmost occurrence of a duplicate, what must change in binary search?",
+      "options": [
+        "Nothing — it works as-is",
+        "When target equals mid, continue searching left instead of returning",
+        "When target equals mid, continue searching right",
+        "Sort the array in reverse first"
+      ],
+      "correct_answer": "When target equals mid, continue searching left instead of returning",
+      "explanation": "For leftmost occurrence, record the current position when target equals mid but continue searching left to find an earlier occurrence.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bs_010",
+      "concept_id": "binary_search",
+      "question": "What is binary search's space complexity for the iterative version?",
+      "options": [
+        "O(n)",
+        "O(log n)",
+        "O(1)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(1)",
+      "explanation": "The iterative version uses only a fixed number of variables (low, high, mid) regardless of array size.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bst_001",
+      "concept_id": "bst",
+      "question": "In a BST, where are values smaller than the root stored?",
+      "options": [
+        "Right subtree",
+        "Left subtree",
+        "Either side",
+        "At the root"
+      ],
+      "correct_answer": "Left subtree",
+      "explanation": "BST property: all values in the left subtree are less than the root; all values in the right subtree are greater.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bst_002",
+      "concept_id": "bst",
+      "question": "What is the average-case time complexity of search in a balanced BST?",
+      "options": [
+        "O(n)",
+        "O(1)",
+        "O(log n)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(log n)",
+      "explanation": "In a balanced BST, each comparison eliminates half the remaining nodes, giving O(log n) search time.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bst_003",
+      "concept_id": "bst",
+      "question": "What is the worst-case time complexity of search in an unbalanced BST?",
+      "options": [
+        "O(log n)",
+        "O(n)",
+        "O(n log n)",
+        "O(1)"
+      ],
+      "correct_answer": "O(n)",
+      "explanation": "A degenerate BST (e.g. inserting sorted data) becomes a linked list. Search must traverse all n nodes in the worst case.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bst_004",
+      "concept_id": "bst",
+      "question": "Which traversal of a BST visits nodes in sorted ascending order?",
+      "options": [
+        "Pre-order",
+        "Post-order",
+        "In-order",
+        "Level-order"
+      ],
+      "correct_answer": "In-order",
+      "explanation": "In-order traversal (left, root, right) visits a BST's nodes in sorted ascending order due to the BST property.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bst_005",
+      "concept_id": "bst",
+      "question": "When deleting a BST node with two children, which node typically replaces it?",
+      "options": [
+        "The root",
+        "Its left child directly",
+        "Its in-order successor",
+        "Its parent"
+      ],
+      "correct_answer": "Its in-order successor",
+      "explanation": "The in-order successor (smallest node in the right subtree) replaces the deleted node, preserving the BST property.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bst_006",
+      "concept_id": "bst",
+      "question": "Which insertion sequence into an empty BST produces a degenerate (linked-list-like) tree?",
+      "options": [
+        "5, 3, 7, 1, 9",
+        "1, 2, 3, 4, 5",
+        "5, 1, 9, 3, 7",
+        "3, 5, 1, 7, 2"
+      ],
+      "correct_answer": "1, 2, 3, 4, 5",
+      "explanation": "Inserting an already-sorted sequence always appends to the rightmost path, producing a tree with height n-1.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bst_007",
+      "concept_id": "bst",
+      "question": "What is the height of a perfectly balanced BST with 7 nodes?",
+      "options": [
+        "7",
+        "4",
+        "3",
+        "2"
+      ],
+      "correct_answer": "2",
+      "explanation": "A perfect BST with 7 nodes has 3 levels (root + 2 + 4), so height = 2 (counting from 0).",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bst_008",
+      "concept_id": "bst",
+      "question": "Which of the following is a valid BST configuration given root = 10?",
+      "options": [
+        "Left child = 12",
+        "Right child = 5",
+        "Left child = 8, right child = 15",
+        "Left child = 10"
+      ],
+      "correct_answer": "Left child = 8, right child = 15",
+      "explanation": "8 < 10 so it can be the left child. 15 > 10 so it can be the right child. This satisfies the BST property.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bst_009",
+      "concept_id": "bst",
+      "question": "What does BST stand for?",
+      "options": [
+        "Binary Sorted Tree",
+        "Balanced Search Tree",
+        "Binary Search Tree",
+        "Base Sequence Tree"
+      ],
+      "correct_answer": "Binary Search Tree",
+      "explanation": "BST = Binary Search Tree. Each node has at most two children with the ordering property: left < node < right.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "bst_010",
+      "concept_id": "bst",
+      "question": "What is the minimum number of nodes in a BST of height h?",
+      "options": [
+        "h",
+        "h+1",
+        "2^h",
+        "h^2"
+      ],
+      "correct_answer": "h+1",
+      "explanation": "The minimum is a single path from root to leaf — a chain of h+1 nodes with no branching.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "avl_001",
+      "concept_id": "avl_tree",
+      "question": "What is the balance factor of a node in an AVL tree?",
+      "options": [
+        "Number of nodes in the tree",
+        "Height of right subtree minus height of left subtree",
+        "Depth of the node from the root",
+        "Total number of children"
+      ],
+      "correct_answer": "Height of right subtree minus height of left subtree",
+      "explanation": "Balance factor = height(right) - height(left). AVL trees keep this in {-1, 0, 1} for every node.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "avl_002",
+      "concept_id": "avl_tree",
+      "question": "What is the allowed balance factor range in an AVL tree?",
+      "options": [
+        "0 only",
+        "-2 to 2",
+        "-1 to 1",
+        "Any value"
+      ],
+      "correct_answer": "-1 to 1",
+      "explanation": "AVL trees self-balance to keep every node's balance factor within {-1, 0, 1}. A factor of plus or minus 2 triggers a rotation.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "avl_003",
+      "concept_id": "avl_tree",
+      "question": "Which rotation fixes a Left-Left imbalance in an AVL tree?",
+      "options": [
+        "Left rotation",
+        "Right rotation",
+        "Left-Right rotation",
+        "Right-Left rotation"
+      ],
+      "correct_answer": "Right rotation",
+      "explanation": "LL imbalance (left child's left subtree is too tall) is fixed with a single right rotation around the imbalanced node.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "avl_004",
+      "concept_id": "avl_tree",
+      "question": "What is the worst-case time complexity of insertion in an AVL tree?",
+      "options": [
+        "O(n)",
+        "O(n^2)",
+        "O(log n)",
+        "O(1)"
+      ],
+      "correct_answer": "O(log n)",
+      "explanation": "Because AVL trees stay balanced, their height is O(log n), so insertion including rebalancing is O(log n).",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "avl_005",
+      "concept_id": "avl_tree",
+      "question": "What triggers rebalancing in an AVL tree?",
+      "options": [
+        "Any insertion",
+        "When tree height exceeds 10",
+        "When a node's balance factor becomes plus or minus 2",
+        "When two nodes have the same value"
+      ],
+      "correct_answer": "When a node's balance factor becomes plus or minus 2",
+      "explanation": "After insertion or deletion, if any ancestor's balance factor is plus or minus 2, one or two rotations are performed to restore balance.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "avl_006",
+      "concept_id": "avl_tree",
+      "question": "What is the key difference between a BST and an AVL tree?",
+      "options": [
+        "AVL trees don't support search",
+        "AVL trees self-balance after insertion/deletion; BSTs don't",
+        "BSTs are always faster",
+        "They are the same structure"
+      ],
+      "correct_answer": "AVL trees self-balance after insertion/deletion; BSTs don't",
+      "explanation": "A BST makes no guarantee about balance. AVL trees use rotations to maintain O(log n) height at all times.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "avl_007",
+      "concept_id": "avl_tree",
+      "question": "Which rotation fixes a Left-Right imbalance?",
+      "options": [
+        "Single right rotation",
+        "Single left rotation",
+        "Left rotation on child then right rotation on root",
+        "Right rotation on child then left rotation on root"
+      ],
+      "correct_answer": "Left rotation on child then right rotation on root",
+      "explanation": "LR imbalance requires a double rotation: first left-rotate the left child, then right-rotate the imbalanced node.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "avl_008",
+      "concept_id": "avl_tree",
+      "question": "What is the maximum height of an AVL tree with n nodes?",
+      "options": [
+        "n",
+        "n/2",
+        "1.44 log2(n)",
+        "log2(n)"
+      ],
+      "correct_answer": "1.44 log2(n)",
+      "explanation": "The maximum height of an AVL tree is approximately 1.44 log2(n), derived from the Fibonacci-based worst-case AVL structure.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "avl_009",
+      "concept_id": "avl_tree",
+      "question": "After a right rotation on node X with left child Y, who becomes the new subtree root?",
+      "options": [
+        "X",
+        "X's right child",
+        "Y",
+        "Y's right child"
+      ],
+      "correct_answer": "Y",
+      "explanation": "In a right rotation: Y rises to take X's position. X becomes Y's right child. Y's original right child becomes X's left child.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "avl_010",
+      "concept_id": "avl_tree",
+      "question": "How many rotations does a Left-Right imbalance fix require?",
+      "options": [
+        "1",
+        "2",
+        "3",
+        "0"
+      ],
+      "correct_answer": "2",
+      "explanation": "LR imbalance requires exactly 2 rotations: a left rotation followed by a right rotation.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_001",
+      "concept_id": "sorting",
+      "question": "What is the time complexity of merge sort in all cases?",
+      "options": [
+        "O(n^2)",
+        "O(n)",
+        "O(n log n)",
+        "O(log n)"
+      ],
+      "correct_answer": "O(n log n)",
+      "explanation": "Merge sort always divides in half and merges, giving O(n log n) in best, average, and worst case.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_002",
+      "concept_id": "sorting",
+      "question": "Which sorting algorithm is stable?",
+      "options": [
+        "Quicksort",
+        "Heapsort",
+        "Merge sort",
+        "Shell sort"
+      ],
+      "correct_answer": "Merge sort",
+      "explanation": "Merge sort preserves the relative order of equal elements, making it stable. Quicksort and heapsort are generally not stable.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_003",
+      "concept_id": "sorting",
+      "question": "What is the worst-case time complexity of bubble sort?",
+      "options": [
+        "O(n log n)",
+        "O(n)",
+        "O(n^2)",
+        "O(log n)"
+      ],
+      "correct_answer": "O(n^2)",
+      "explanation": "Bubble sort compares adjacent pairs repeatedly. In the worst case (reverse sorted), it does n(n-1)/2 comparisons.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_004",
+      "concept_id": "sorting",
+      "question": "Quicksort's worst case occurs when:",
+      "options": [
+        "The array is random",
+        "The pivot is always the median",
+        "The pivot is always the smallest or largest element",
+        "The array has all equal elements"
+      ],
+      "correct_answer": "The pivot is always the smallest or largest element",
+      "explanation": "When the pivot is always the extreme value, one partition is always empty and recursion degenerates to O(n^2).",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_005",
+      "concept_id": "sorting",
+      "question": "What is the space complexity of merge sort?",
+      "options": [
+        "O(1)",
+        "O(log n)",
+        "O(n)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(n)",
+      "explanation": "Merge sort requires O(n) auxiliary space for the temporary arrays used during merging.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_006",
+      "concept_id": "sorting",
+      "question": "Which sort runs in O(n) time under certain conditions?",
+      "options": [
+        "Bubble sort",
+        "Counting sort",
+        "Selection sort",
+        "Shell sort"
+      ],
+      "correct_answer": "Counting sort",
+      "explanation": "Counting sort runs in O(n + k) where k is the value range. When k = O(n), it is effectively O(n), faster than comparison sorts.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_007",
+      "concept_id": "sorting",
+      "question": "Insertion sort is most efficient for:",
+      "options": [
+        "Large random arrays",
+        "Nearly sorted arrays",
+        "Reverse-sorted arrays",
+        "Arrays with many duplicates"
+      ],
+      "correct_answer": "Nearly sorted arrays",
+      "explanation": "Insertion sort is O(n) for nearly sorted data because few elements need to move far. It degrades to O(n^2) for random data.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_008",
+      "concept_id": "sorting",
+      "question": "Which sorting algorithm uses a heap data structure?",
+      "options": [
+        "Merge sort",
+        "Quicksort",
+        "Heapsort",
+        "Counting sort"
+      ],
+      "correct_answer": "Heapsort",
+      "explanation": "Heapsort builds a max-heap then repeatedly extracts the maximum. It runs in O(n log n) with O(1) extra space.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_009",
+      "concept_id": "sorting",
+      "question": "What is the best-case time complexity of insertion sort?",
+      "options": [
+        "O(n^2)",
+        "O(n log n)",
+        "O(n)",
+        "O(1)"
+      ],
+      "correct_answer": "O(n)",
+      "explanation": "If the array is already sorted, insertion sort makes only one comparison per element — O(n) total.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_010",
+      "concept_id": "sorting",
+      "question": "Which is NOT a comparison-based sorting algorithm?",
+      "options": [
+        "Merge sort",
+        "Quicksort",
+        "Radix sort",
+        "Heapsort"
+      ],
+      "correct_answer": "Radix sort",
+      "explanation": "Radix sort sorts by individual digits without comparing elements directly, bypassing the O(n log n) lower bound for comparison sorts.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sort_011",
+      "concept_id": "sorting",
+      "question": "What is the lower bound for comparison-based sorting algorithms?",
+      "options": [
+        "O(n)",
+        "O(n log n)",
+        "O(n^2)",
+        "O(log n)"
+      ],
+      "correct_answer": "O(n log n)",
+      "explanation": "Information theory proves you need at least log2(n!) comparisons to distinguish all n! permutations, which is Theta(n log n).",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_001",
+      "concept_id": "graphs",
+      "question": "What is the difference between a directed and undirected graph?",
+      "options": [
+        "Directed graphs have weights; undirected don't",
+        "In directed graphs edges have a direction; in undirected they don't",
+        "Directed graphs can't have cycles",
+        "Undirected graphs must be connected"
+      ],
+      "correct_answer": "In directed graphs edges have a direction; in undirected they don't",
+      "explanation": "A directed graph (digraph) has edges with a source and destination. Undirected edges are bidirectional.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_002",
+      "concept_id": "graphs",
+      "question": "Which graph traversal uses a queue?",
+      "options": [
+        "DFS",
+        "BFS",
+        "Pre-order",
+        "In-order"
+      ],
+      "correct_answer": "BFS",
+      "explanation": "BFS (Breadth-First Search) uses a queue to explore all neighbours at the current depth before going deeper.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_003",
+      "concept_id": "graphs",
+      "question": "Which graph traversal uses a stack or recursion?",
+      "options": [
+        "BFS",
+        "DFS",
+        "Level-order",
+        "Topological sort"
+      ],
+      "correct_answer": "DFS",
+      "explanation": "DFS (Depth-First Search) uses a stack — either explicitly or via the call stack in recursive implementations.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_004",
+      "concept_id": "graphs",
+      "question": "What is the time complexity of BFS on a graph with V vertices and E edges?",
+      "options": [
+        "O(V)",
+        "O(E)",
+        "O(V + E)",
+        "O(V * E)"
+      ],
+      "correct_answer": "O(V + E)",
+      "explanation": "BFS visits each vertex once (O(V)) and processes each edge once (O(E)), giving O(V + E) total.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_005",
+      "concept_id": "graphs",
+      "question": "Which data structure represents a graph as a list of neighbours per vertex?",
+      "options": [
+        "Adjacency matrix",
+        "Edge list",
+        "Adjacency list",
+        "Incidence matrix"
+      ],
+      "correct_answer": "Adjacency list",
+      "explanation": "An adjacency list stores each vertex's neighbours in a list. Space-efficient for sparse graphs: O(V + E).",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_006",
+      "concept_id": "graphs",
+      "question": "What is the space complexity of an adjacency matrix for V vertices?",
+      "options": [
+        "O(V)",
+        "O(E)",
+        "O(V^2)",
+        "O(V + E)"
+      ],
+      "correct_answer": "O(V^2)",
+      "explanation": "An adjacency matrix is a V x V 2D array storing 1 or 0 for every possible pair of vertices.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_007",
+      "concept_id": "graphs",
+      "question": "Which algorithm finds the shortest path in an unweighted graph?",
+      "options": [
+        "Dijkstra",
+        "Bellman-Ford",
+        "BFS",
+        "DFS"
+      ],
+      "correct_answer": "BFS",
+      "explanation": "BFS explores layer by layer. The first time it reaches a vertex is via the fewest edges, giving the shortest unweighted path.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_008",
+      "concept_id": "graphs",
+      "question": "What is a cycle in a graph?",
+      "options": [
+        "A path that visits every vertex once",
+        "A path that starts and ends at the same vertex",
+        "An edge connecting two disconnected components",
+        "A vertex with no edges"
+      ],
+      "correct_answer": "A path that starts and ends at the same vertex",
+      "explanation": "A cycle is a path where the first and last vertex are the same, with no repeated edges.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_009",
+      "concept_id": "graphs",
+      "question": "What is topological sort used for?",
+      "options": [
+        "Sorting nodes by weight",
+        "Ordering nodes in a DAG so all edges point forward",
+        "Finding the shortest path",
+        "Detecting negative cycles"
+      ],
+      "correct_answer": "Ordering nodes in a DAG so all edges point forward",
+      "explanation": "Topological sort produces a linear ordering of a DAG's vertices such that for every edge u to v, u comes before v.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_010",
+      "concept_id": "graphs",
+      "question": "Which algorithm detects negative weight cycles in a graph?",
+      "options": [
+        "Dijkstra",
+        "BFS",
+        "Bellman-Ford",
+        "Prim's"
+      ],
+      "correct_answer": "Bellman-Ford",
+      "explanation": "Bellman-Ford relaxes edges V-1 times. If a further relaxation is possible on the V-th pass, a negative weight cycle exists.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "graph_011",
+      "concept_id": "graphs",
+      "question": "What makes a graph a DAG?",
+      "options": [
+        "It has weighted edges",
+        "It is directed and has no cycles",
+        "It has exactly one path between any two vertices",
+        "All vertices have the same degree"
+      ],
+      "correct_answer": "It is directed and has no cycles",
+      "explanation": "DAG = Directed Acyclic Graph. Directed edges with no cycles. Used to model dependencies, build systems, and scheduling.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "hash_001",
+      "concept_id": "hashing",
+      "question": "What is the purpose of a hash function?",
+      "options": [
+        "To sort data",
+        "To map a key to an index in a fixed-size table",
+        "To compress data for storage",
+        "To encrypt passwords"
+      ],
+      "correct_answer": "To map a key to an index in a fixed-size table",
+      "explanation": "A hash function converts a key into an integer index, allowing O(1) average-case lookup in a hash table.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "hash_002",
+      "concept_id": "hashing",
+      "question": "What is a collision in a hash table?",
+      "options": [
+        "When a key is not found",
+        "When two keys hash to the same index",
+        "When the hash table is full",
+        "When a key is deleted"
+      ],
+      "correct_answer": "When two keys hash to the same index",
+      "explanation": "A collision occurs when the hash function maps two distinct keys to the same bucket. Collision resolution is needed.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "hash_003",
+      "concept_id": "hashing",
+      "question": "Which collision resolution strategy uses linked lists at each bucket?",
+      "options": [
+        "Linear probing",
+        "Quadratic probing",
+        "Separate chaining",
+        "Double hashing"
+      ],
+      "correct_answer": "Separate chaining",
+      "explanation": "Separate chaining stores all keys that hash to the same index in a linked list or other structure at that bucket.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "hash_004",
+      "concept_id": "hashing",
+      "question": "What is linear probing?",
+      "options": [
+        "Hashing using prime numbers",
+        "Searching for the next empty slot sequentially",
+        "Using two hash functions",
+        "Chaining with sorted lists"
+      ],
+      "correct_answer": "Searching for the next empty slot sequentially",
+      "explanation": "On collision, linear probing checks index+1, index+2, etc. until an empty slot is found. Can cause primary clustering.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "hash_005",
+      "concept_id": "hashing",
+      "question": "What is the load factor of a hash table?",
+      "options": [
+        "The number of buckets",
+        "The ratio of stored elements to total buckets",
+        "The size of the largest chain",
+        "The number of collisions"
+      ],
+      "correct_answer": "The ratio of stored elements to total buckets",
+      "explanation": "Load factor = n / m where n is the number of entries and m is the number of buckets. Higher load factor means more collisions.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "hash_006",
+      "concept_id": "hashing",
+      "question": "What is the average-case time complexity of hash table lookup?",
+      "options": [
+        "O(n)",
+        "O(log n)",
+        "O(1)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(1)",
+      "explanation": "With a good hash function and low load factor, hash table lookup is O(1) on average.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "hash_007",
+      "concept_id": "hashing",
+      "question": "What is the worst-case time complexity of hash table lookup with separate chaining?",
+      "options": [
+        "O(1)",
+        "O(log n)",
+        "O(n)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(n)",
+      "explanation": "In the worst case, all n keys hash to the same bucket, creating a chain of length n requiring O(n) traversal.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "hash_008",
+      "concept_id": "hashing",
+      "question": "Primary clustering is a problem with which collision resolution method?",
+      "options": [
+        "Separate chaining",
+        "Linear probing",
+        "Double hashing",
+        "Quadratic probing"
+      ],
+      "correct_answer": "Linear probing",
+      "explanation": "Linear probing creates long contiguous runs of filled slots (clusters), making future insertions and lookups slower.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "hash_009",
+      "concept_id": "hashing",
+      "question": "Which hash table operation triggers rehashing?",
+      "options": [
+        "Lookup",
+        "Deletion",
+        "Insertion when load factor exceeds threshold",
+        "Search miss"
+      ],
+      "correct_answer": "Insertion when load factor exceeds threshold",
+      "explanation": "When the load factor exceeds a threshold (e.g. 0.75), the table is resized, usually doubled, and all entries are rehashed.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "hash_010",
+      "concept_id": "hashing",
+      "question": "Why should hash table sizes be prime numbers?",
+      "options": [
+        "Primes make modulo arithmetic faster",
+        "Primes reduce clustering and distribute keys more uniformly",
+        "Primes enable binary search",
+        "Primes prevent collisions entirely"
+      ],
+      "correct_answer": "Primes reduce clustering and distribute keys more uniformly",
+      "explanation": "Prime table sizes reduce patterns in the modulo operation, spreading keys more evenly across buckets.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "dp_001",
+      "concept_id": "dynamic_programming",
+      "question": "What two properties make a problem suitable for dynamic programming?",
+      "options": [
+        "It must be recursive and NP-hard",
+        "Overlapping subproblems and optimal substructure",
+        "It must involve sorting and graphs",
+        "Greedy choices and divide-and-conquer"
+      ],
+      "correct_answer": "Overlapping subproblems and optimal substructure",
+      "explanation": "DP applies when the same subproblems recur (overlapping) and optimal solutions can be built from optimal sub-solutions (optimal substructure).",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "dp_002",
+      "concept_id": "dynamic_programming",
+      "question": "What is the difference between top-down and bottom-up DP?",
+      "options": [
+        "Top-down is always faster",
+        "Top-down uses memoization; bottom-up fills a table iteratively",
+        "Bottom-up requires more memory",
+        "They produce different results"
+      ],
+      "correct_answer": "Top-down uses memoization; bottom-up fills a table iteratively",
+      "explanation": "Top-down starts from the original problem and caches results. Bottom-up starts from base cases and builds up, avoiding recursion overhead.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "dp_003",
+      "concept_id": "dynamic_programming",
+      "question": "What is the time complexity of the classic 0/1 knapsack DP solution?",
+      "options": [
+        "O(n)",
+        "O(n log n)",
+        "O(n * W)",
+        "O(2^n)"
+      ],
+      "correct_answer": "O(n * W)",
+      "explanation": "The DP table has n rows (items) and W columns (capacity). Filling each cell is O(1), giving O(n * W) total.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "dp_004",
+      "concept_id": "dynamic_programming",
+      "question": "What is the time complexity of finding the LCS of two strings of length m and n?",
+      "options": [
+        "O(m + n)",
+        "O(m * n)",
+        "O(m log n)",
+        "O(2^n)"
+      ],
+      "correct_answer": "O(m * n)",
+      "explanation": "LCS builds an m x n DP table where each cell depends only on the cell above, left, and diagonally above-left.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "dp_005",
+      "concept_id": "dynamic_programming",
+      "question": "Which problem is NOT typically solved with dynamic programming?",
+      "options": [
+        "Fibonacci sequence",
+        "Shortest path (Bellman-Ford)",
+        "Binary search",
+        "Longest increasing subsequence"
+      ],
+      "correct_answer": "Binary search",
+      "explanation": "Binary search is a divide-and-conquer technique, not DP. The others all have overlapping subproblems and optimal substructure.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "dp_006",
+      "concept_id": "dynamic_programming",
+      "question": "What does optimal substructure mean?",
+      "options": [
+        "The problem can be solved greedily",
+        "The optimal solution contains optimal solutions to its subproblems",
+        "All subproblems are independent",
+        "The problem must be solved recursively"
+      ],
+      "correct_answer": "The optimal solution contains optimal solutions to its subproblems",
+      "explanation": "Optimal substructure means you can build the globally optimal answer from locally optimal sub-answers — a prerequisite for DP.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "dp_007",
+      "concept_id": "dynamic_programming",
+      "question": "What is memoization?",
+      "options": [
+        "Writing comments in code",
+        "Caching the results of function calls to avoid recomputation",
+        "A sorting technique",
+        "Memorising algorithms"
+      ],
+      "correct_answer": "Caching the results of function calls to avoid recomputation",
+      "explanation": "Memoization stores the return value of a function for a given input so it is computed only once, turning exponential recursion into polynomial time.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "dp_008",
+      "concept_id": "dynamic_programming",
+      "question": "The Floyd-Warshall algorithm finds shortest paths between:",
+      "options": [
+        "One source to all vertices",
+        "All pairs of vertices",
+        "Two specific vertices",
+        "Adjacent vertices only"
+      ],
+      "correct_answer": "All pairs of vertices",
+      "explanation": "Floyd-Warshall is an all-pairs shortest path DP algorithm running in O(V^3). It works with negative edges but not negative cycles.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "heap_001",
+      "concept_id": "heaps",
+      "question": "What property does a max-heap maintain?",
+      "options": [
+        "Every parent is less than its children",
+        "Every parent is greater than or equal to its children",
+        "The tree is always balanced",
+        "All leaf nodes have the same depth"
+      ],
+      "correct_answer": "Every parent is greater than or equal to its children",
+      "explanation": "In a max-heap, every node's value is greater than or equal to its children's values. The maximum is always at the root.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "heap_002",
+      "concept_id": "heaps",
+      "question": "What is the time complexity of inserting into a heap?",
+      "options": [
+        "O(1)",
+        "O(log n)",
+        "O(n)",
+        "O(n log n)"
+      ],
+      "correct_answer": "O(log n)",
+      "explanation": "Insertion adds to the bottom and bubbles up. In the worst case this traverses the full height, which is O(log n).",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "heap_003",
+      "concept_id": "heaps",
+      "question": "What is the time complexity of extracting the maximum from a max-heap?",
+      "options": [
+        "O(1)",
+        "O(log n)",
+        "O(n)",
+        "O(n log n)"
+      ],
+      "correct_answer": "O(log n)",
+      "explanation": "Extraction removes the root, places the last element at the root, then sifts down to restore heap order — O(log n).",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "heap_004",
+      "concept_id": "heaps",
+      "question": "How is a binary heap typically stored?",
+      "options": [
+        "As a linked list",
+        "As a BST",
+        "As a flat array",
+        "As a hash table"
+      ],
+      "correct_answer": "As a flat array",
+      "explanation": "Heaps are stored in arrays. For a node at index i: left child = 2i+1, right child = 2i+2, parent = (i-1)/2.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "heap_005",
+      "concept_id": "heaps",
+      "question": "What is the time complexity of building a heap from an unsorted array using Floyd's method?",
+      "options": [
+        "O(n log n)",
+        "O(n)",
+        "O(n^2)",
+        "O(log n)"
+      ],
+      "correct_answer": "O(n)",
+      "explanation": "Floyd's heapify runs in O(n) — most nodes are near the bottom and only need to sift down a short distance.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "heap_006",
+      "concept_id": "heaps",
+      "question": "Which data structure is best for implementing a priority queue?",
+      "options": [
+        "Array",
+        "Linked list",
+        "Heap",
+        "Stack"
+      ],
+      "correct_answer": "Heap",
+      "explanation": "A heap gives O(log n) insert and O(log n) extract-min/max, making it ideal for priority queues.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "heap_007",
+      "concept_id": "heaps",
+      "question": "What is the height of a binary heap with n elements?",
+      "options": [
+        "n",
+        "n/2",
+        "floor(log2 n)",
+        "sqrt(n)"
+      ],
+      "correct_answer": "floor(log2 n)",
+      "explanation": "A binary heap is a complete binary tree. The height of a complete binary tree with n nodes is floor(log2 n).",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "ll_001",
+      "concept_id": "linked_lists",
+      "question": "What is the time complexity of accessing the k-th element in a singly linked list?",
+      "options": [
+        "O(1)",
+        "O(log n)",
+        "O(k)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(k)",
+      "explanation": "Unlike arrays, linked lists have no index. You must traverse from the head, taking O(k) steps to reach the k-th element.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "ll_002",
+      "concept_id": "linked_lists",
+      "question": "What is the advantage of a linked list over an array for front insertion?",
+      "options": [
+        "Linked lists are faster to search",
+        "Linked list insertion at head is O(1); array is O(n)",
+        "Linked lists use less memory",
+        "Arrays cannot store the same data"
+      ],
+      "correct_answer": "Linked list insertion at head is O(1); array is O(n)",
+      "explanation": "Inserting at the front of a linked list just updates the head pointer — O(1). Arrays must shift all elements right — O(n).",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "ll_003",
+      "concept_id": "linked_lists",
+      "question": "How do you detect a cycle in a linked list efficiently?",
+      "options": [
+        "Count the nodes",
+        "Use a hash set to track visited nodes",
+        "Use Floyd's tortoise and hare algorithm",
+        "Sort the list first"
+      ],
+      "correct_answer": "Use Floyd's tortoise and hare algorithm",
+      "explanation": "Floyd's cycle detection uses two pointers at different speeds. If they meet, a cycle exists. O(n) time, O(1) space.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "ll_004",
+      "concept_id": "linked_lists",
+      "question": "What does a doubly linked list add compared to a singly linked list?",
+      "options": [
+        "Faster search",
+        "A pointer to the previous node",
+        "Random access",
+        "More memory efficiency"
+      ],
+      "correct_answer": "A pointer to the previous node",
+      "explanation": "Each node in a doubly linked list has both next and prev pointers, allowing O(1) deletion given a node reference.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "ll_005",
+      "concept_id": "linked_lists",
+      "question": "What is the space overhead of a singly linked list compared to an array storing the same data?",
+      "options": [
+        "No overhead",
+        "One extra pointer per node",
+        "Two extra pointers per node",
+        "Depends on the data type"
+      ],
+      "correct_answer": "One extra pointer per node",
+      "explanation": "Each node stores the data plus one next pointer. An array stores only the data, so linked lists use more memory per element.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "ll_006",
+      "concept_id": "linked_lists",
+      "question": "What is the time complexity of deleting a node given only a pointer to that node in a doubly linked list?",
+      "options": [
+        "O(n)",
+        "O(log n)",
+        "O(1)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(1)",
+      "explanation": "With prev and next pointers available, you can splice out the node by updating its neighbours' pointers — O(1).",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "ll_007",
+      "concept_id": "linked_lists",
+      "question": "How do you reverse a singly linked list in-place?",
+      "options": [
+        "Sort it in reverse",
+        "Use a stack then rebuild",
+        "Iterate once, reversing each next pointer",
+        "Recursively swap values"
+      ],
+      "correct_answer": "Iterate once, reversing each next pointer",
+      "explanation": "Keep prev, curr, and next pointers. In one pass, redirect each node's next to point backwards. O(n) time, O(1) space.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sq_001",
+      "concept_id": "stacks_queues",
+      "question": "Which data structure follows LIFO order?",
+      "options": [
+        "Queue",
+        "Stack",
+        "Priority queue",
+        "Deque"
+      ],
+      "correct_answer": "Stack",
+      "explanation": "LIFO = Last In, First Out. The last element pushed is the first to be popped — like a stack of plates.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sq_002",
+      "concept_id": "stacks_queues",
+      "question": "Which data structure follows FIFO order?",
+      "options": [
+        "Stack",
+        "Heap",
+        "Queue",
+        "BST"
+      ],
+      "correct_answer": "Queue",
+      "explanation": "FIFO = First In, First Out. The first element enqueued is the first to be dequeued — like a queue at a shop.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sq_003",
+      "concept_id": "stacks_queues",
+      "question": "Which algorithm naturally uses a stack for its implementation?",
+      "options": [
+        "BFS",
+        "Dijkstra",
+        "DFS",
+        "Prim's"
+      ],
+      "correct_answer": "DFS",
+      "explanation": "DFS explores as deep as possible before backtracking — this LIFO behaviour maps directly to a stack.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sq_004",
+      "concept_id": "stacks_queues",
+      "question": "What is the time complexity of push and pop on an array-backed stack?",
+      "options": [
+        "O(n)",
+        "O(log n)",
+        "O(1)",
+        "O(n^2)"
+      ],
+      "correct_answer": "O(1)",
+      "explanation": "Array-backed stacks add and remove from the end. No shifting needed — O(1) amortised for both push and pop.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sq_005",
+      "concept_id": "stacks_queues",
+      "question": "How would you implement a queue using two stacks?",
+      "options": [
+        "It is impossible",
+        "Enqueue to stack1; for dequeue, if stack2 empty move all from stack1 to stack2",
+        "Always move elements between stacks on every operation",
+        "Use one stack for each direction"
+      ],
+      "correct_answer": "Enqueue to stack1; for dequeue, if stack2 empty move all from stack1 to stack2",
+      "explanation": "Each element is moved at most once. Enqueue is O(1); dequeue is O(1) amortised.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sq_006",
+      "concept_id": "stacks_queues",
+      "question": "What problem arises in a fixed-size circular queue when it is full?",
+      "options": [
+        "Elements are automatically deleted",
+        "New elements overwrite old ones if not handled",
+        "The queue sorts itself",
+        "The front pointer resets"
+      ],
+      "correct_answer": "New elements overwrite old ones if not handled",
+      "explanation": "In a basic circular queue, the tail wraps around. Without a full-check, new enqueues can overwrite the oldest data.",
+      "difficulty": 3,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sq_007",
+      "concept_id": "stacks_queues",
+      "question": "Which is a classic use case for a stack?",
+      "options": [
+        "Print queue",
+        "Undo and redo in text editors",
+        "CPU scheduling",
+        "Graph shortest path"
+      ],
+      "correct_answer": "Undo and redo in text editors",
+      "explanation": "Undo/redo is a classic stack use case: each action is pushed; undo pops the last action. LIFO matches perfectly.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "sq_008",
+      "concept_id": "stacks_queues",
+      "question": "What is a deque?",
+      "options": [
+        "A double-ended queue allowing insertions and deletions at both ends",
+        "A priority queue",
+        "A sorted queue",
+        "A circular stack"
+      ],
+      "correct_answer": "A double-ended queue allowing insertions and deletions at both ends",
+      "explanation": "Deque (double-ended queue) supports O(1) push/pop from both front and back, generalising both stack and queue.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard"
+    },
+    {
+      "id": "q_recursion_tf_001",
+      "concept_id": "recursion",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 1,
+      "question": "Every recursive function must have at least one base case to avoid infinite recursion.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "True",
+      "explanation": "A base case terminates the recursion. Without one, the call stack fills up and a stack overflow error occurs.",
+      "tags": [
+        "recursion",
+        "base-case"
+      ]
+    },
+    {
+      "id": "q_recursion_tf_002",
+      "concept_id": "recursion",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 1,
+      "question": "Tail recursion can always be optimised by a compiler into an iterative loop.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "True",
+      "explanation": "Tail-call optimisation (TCO) replaces the recursive call with a jump, reusing the same stack frame. Not all languages guarantee this, but the transformation is always valid.",
+      "tags": [
+        "tail-recursion",
+        "optimisation"
+      ]
+    },
+    {
+      "id": "q_recursion_tf_003",
+      "concept_id": "recursion",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Memoised recursion always has the same space complexity as its iterative DP equivalent.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "False",
+      "explanation": "Memoised recursion uses O(n) extra space for the memo table AND O(d) for the call stack, where d is the recursion depth. Iterative DP typically uses only O(n) for the table.",
+      "tags": [
+        "memoization",
+        "space-complexity"
+      ]
+    },
+    {
+      "id": "q_big_o_tf_001",
+      "concept_id": "big_o",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 1,
+      "question": "O(n log n) is asymptotically faster than O(n²) for sufficiently large n.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "True",
+      "explanation": "For large n, n log n grows much slower than n². Any O(n log n) algorithm will eventually outperform O(n²).",
+      "tags": [
+        "big-o",
+        "comparison"
+      ]
+    },
+    {
+      "id": "q_big_o_tf_002",
+      "concept_id": "big_o",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 1,
+      "question": "An algorithm with O(1) space complexity can use extra memory proportional to the input size.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "False",
+      "explanation": "O(1) space means the extra memory used does not grow with input size. If it used memory proportional to n, that would be O(n) space.",
+      "tags": [
+        "space-complexity",
+        "big-o"
+      ]
+    },
+    {
+      "id": "q_big_o_tf_003",
+      "concept_id": "big_o",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "The average-case and worst-case time complexity of merge sort are both O(n log n).",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "True",
+      "explanation": "Merge sort always divides in half and merges in O(n), regardless of input order. Both average and worst cases are O(n log n).",
+      "tags": [
+        "merge-sort",
+        "complexity"
+      ]
+    },
+    {
+      "id": "q_bs_tf_001",
+      "concept_id": "binary_search",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 1,
+      "question": "Binary search can be applied to a linked list with the same O(log n) efficiency as on an array.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "False",
+      "explanation": "Linked lists do not support O(1) random access. Finding the midpoint of a linked list takes O(n), making binary search O(n log n) — worse than linear search.",
+      "tags": [
+        "binary-search",
+        "linked-list"
+      ]
+    },
+    {
+      "id": "q_bst_tf_001",
+      "concept_id": "bst",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 1,
+      "question": "An in-order traversal of a Binary Search Tree produces elements in sorted ascending order.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "True",
+      "explanation": "In-order traversal visits left subtree → root → right subtree. The BST property guarantees this visits nodes in ascending order.",
+      "tags": [
+        "bst",
+        "traversal"
+      ]
+    },
+    {
+      "id": "q_sorting_tf_001",
+      "concept_id": "sorting",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 1,
+      "question": "Bubble sort has a best-case time complexity of O(n) when the input is already sorted.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "True",
+      "explanation": "With an early-exit optimisation (stop if no swaps occur in a pass), bubble sort completes in one pass for sorted input, giving O(n).",
+      "tags": [
+        "bubble-sort",
+        "best-case"
+      ]
+    },
+    {
+      "id": "q_sorting_tf_002",
+      "concept_id": "sorting",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Merge sort is an in-place sorting algorithm.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "False",
+      "explanation": "Merge sort requires O(n) auxiliary space for merging. In-place algorithms like insertion sort and heapsort use O(1) extra space.",
+      "tags": [
+        "merge-sort",
+        "in-place"
+      ]
+    },
+    {
+      "id": "q_graphs_tf_001",
+      "concept_id": "graphs",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 1,
+      "question": "In a directed graph, if there is an edge from A to B, there must also be an edge from B to A.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "False",
+      "explanation": "Directed graphs (digraphs) have one-way edges. An edge A→B does not imply B→A. Undirected graphs have bidirectional edges.",
+      "tags": [
+        "graphs",
+        "directed"
+      ]
+    },
+    {
+      "id": "q_hashing_tf_001",
+      "concept_id": "hashing",
+      "type": "true_false",
+      "tier": "standard",
+      "difficulty": 1,
+      "question": "A perfect hash function guarantees no collisions for a given set of keys.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "True",
+      "explanation": "A perfect hash function maps each key to a unique bucket with no collisions. These are built specifically for a known fixed set of keys.",
+      "tags": [
+        "hashing",
+        "perfect-hash"
+      ]
+    },
+    {
+      "id": "q_recursion_def_001",
+      "concept_id": "recursion",
+      "type": "define",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Which of the following best defines 'divide and conquer'?",
+      "options": [
+        "Breaking a problem into independent subproblems, solving each recursively, then combining results",
+        "Sorting data by dividing it in half until single elements remain",
+        "A technique that avoids recursion by using iterative loops",
+        "Splitting the call stack into parallel execution threads"
+      ],
+      "correct_answer": "Breaking a problem into independent subproblems, solving each recursively, then combining results",
+      "explanation": "Divide and conquer recursively breaks a problem into smaller independent parts, solves each, then combines the results. Merge sort and quicksort are classic examples.",
+      "tags": [
+        "divide-conquer",
+        "recursion"
+      ]
+    },
+    {
+      "id": "q_big_o_def_001",
+      "concept_id": "big_o",
+      "type": "define",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Which statement best defines 'amortised time complexity'?",
+      "options": [
+        "The cost of the worst single operation in a sequence",
+        "The average cost per operation over a long sequence of operations",
+        "The guaranteed minimum cost of any operation",
+        "The total time divided by the number of unique operations"
+      ],
+      "correct_answer": "The average cost per operation over a long sequence of operations",
+      "explanation": "Amortised analysis spreads an occasional expensive operation (like resizing a dynamic array) across many cheap ones, giving a lower average cost per operation.",
+      "tags": [
+        "amortised",
+        "complexity"
+      ]
+    },
+    {
+      "id": "q_bst_def_001",
+      "concept_id": "bst",
+      "type": "define",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Which best defines the 'BST property'?",
+      "options": [
+        "Every node has exactly two children",
+        "For every node N, all keys in the left subtree are < N and all keys in the right subtree are > N",
+        "All leaf nodes are at the same depth",
+        "The tree is always perfectly balanced"
+      ],
+      "correct_answer": "For every node N, all keys in the left subtree are < N and all keys in the right subtree are > N",
+      "explanation": "The BST property defines the ordering invariant. It allows O(log n) search, insert, and delete in a balanced tree.",
+      "tags": [
+        "bst",
+        "property"
+      ]
+    },
+    {
+      "id": "q_hashing_def_001",
+      "concept_id": "hashing",
+      "type": "define",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Which best defines 'separate chaining' as a collision resolution strategy?",
+      "options": [
+        "Storing the overflowing element in the next available empty slot",
+        "Each bucket holds a linked list of all keys that hash to it",
+        "Rehashing the key with a secondary hash function",
+        "Doubling the table size when load factor exceeds 0.75"
+      ],
+      "correct_answer": "Each bucket holds a linked list of all keys that hash to it",
+      "explanation": "Separate chaining handles collisions by letting each bucket contain a list of entries. All keys with the same hash coexist in the same bucket's list.",
+      "tags": [
+        "hashing",
+        "collision",
+        "chaining"
+      ]
+    },
+    {
+      "id": "q_graphs_def_001",
+      "concept_id": "graphs",
+      "type": "define",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Which best defines a 'strongly connected component' in a directed graph?",
+      "options": [
+        "A subgraph where every node has at least one outgoing edge",
+        "A maximal set of vertices such that every vertex is reachable from every other vertex",
+        "A set of vertices with no incoming edges",
+        "A cycle of exactly two vertices"
+      ],
+      "correct_answer": "A maximal set of vertices such that every vertex is reachable from every other vertex",
+      "explanation": "In a strongly connected component (SCC), there is a directed path from every vertex to every other vertex. Tarjan's and Kosaraju's algorithms find SCCs in O(V+E).",
+      "tags": [
+        "graphs",
+        "SCC",
+        "directed"
+      ]
+    },
+    {
+      "id": "q_dp_def_001",
+      "concept_id": "dynamic_programming",
+      "type": "define",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Which best defines 'optimal substructure' in the context of dynamic programming?",
+      "options": [
+        "The problem can be solved by sorting subproblems first",
+        "An optimal solution to the whole problem contains optimal solutions to its subproblems",
+        "The problem is always solvable in polynomial time",
+        "Subproblems never overlap"
+      ],
+      "correct_answer": "An optimal solution to the whole problem contains optimal solutions to its subproblems",
+      "explanation": "Optimal substructure means you can build the optimal answer from optimal answers to sub-parts. It is a prerequisite for both greedy algorithms and DP.",
+      "tags": [
+        "dp",
+        "optimal-substructure"
+      ]
+    },
+    {
+      "id": "q_avl_def_001",
+      "concept_id": "avl_tree",
+      "type": "define",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Which best defines the 'balance factor' of a node in an AVL tree?",
+      "options": [
+        "The number of nodes in its left subtree",
+        "The difference between the height of its left and right subtrees",
+        "The maximum depth of any leaf in its subtree",
+        "The ratio of left children to right children"
+      ],
+      "correct_answer": "The difference between the height of its left and right subtrees",
+      "explanation": "Balance factor = height(left) - height(right). An AVL tree maintains |balance factor| ≤ 1 for every node, triggering rotations when violated.",
+      "tags": [
+        "avl",
+        "balance-factor"
+      ]
+    },
+    {
+      "id": "q_sorting_def_001",
+      "concept_id": "sorting",
+      "type": "define",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Which best defines a 'stable' sorting algorithm?",
+      "options": [
+        "An algorithm that always runs in O(n log n)",
+        "An algorithm that never modifies the original array",
+        "An algorithm that preserves the relative order of equal elements",
+        "An algorithm with O(1) space complexity"
+      ],
+      "correct_answer": "An algorithm that preserves the relative order of equal elements",
+      "explanation": "Stability matters when elements have secondary keys. Merge sort and insertion sort are stable; quicksort and heapsort are not stable by default.",
+      "tags": [
+        "sorting",
+        "stable",
+        "algorithms"
+      ]
+    },
+    {
+      "id": "q_recursion_se_001",
+      "concept_id": "recursion",
+      "type": "short_exam",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "T(n) = 2T(n/2) + O(n). Using the Master Theorem, the solution is:",
+      "options": [
+        "O(n)",
+        "O(n log n)",
+        "O(n²)",
+        "O(log n)"
+      ],
+      "correct_answer": "O(n log n)",
+      "explanation": "Case 2 of the Master Theorem applies (a=2, b=2, f(n)=n, log_b(a)=1). Since f(n) = Θ(n^log_b(a)), T(n) = Θ(n log n).",
+      "tags": [
+        "master-theorem",
+        "recurrence"
+      ]
+    },
+    {
+      "id": "q_big_o_se_001",
+      "concept_id": "big_o",
+      "type": "short_exam",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "What is the tight (Theta) bound for: 5n³ + 200n² + 1000n + 42?",
+      "options": [
+        "Θ(n²)",
+        "Θ(5n³)",
+        "Θ(n³)",
+        "Θ(n⁴)"
+      ],
+      "correct_answer": "Θ(n³)",
+      "explanation": "Constants and lower-order terms are dropped. The dominant term is n³, so the tight bound is Θ(n³).",
+      "tags": [
+        "big-theta",
+        "asymptotic"
+      ]
+    },
+    {
+      "id": "q_bst_se_001",
+      "concept_id": "bst",
+      "type": "short_exam",
+      "tier": "standard",
+      "difficulty": 3,
+      "question": "A BST of n nodes is created by inserting elements in sorted order. The search time is:",
+      "options": [
+        "O(log n)",
+        "O(n)",
+        "O(n log n)",
+        "O(1)"
+      ],
+      "correct_answer": "O(n)",
+      "explanation": "Inserting sorted elements creates a degenerate (skewed) tree with height n, not log n. Every node has only a right child, making it a linked list.",
+      "tags": [
+        "bst",
+        "degenerate",
+        "worst-case"
+      ]
+    },
+    {
+      "id": "q_sorting_se_001",
+      "concept_id": "sorting",
+      "type": "short_exam",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Which sort is typically fastest in practice for small arrays (n < 20)?",
+      "options": [
+        "Merge sort",
+        "Quicksort",
+        "Insertion sort",
+        "Heapsort"
+      ],
+      "correct_answer": "Insertion sort",
+      "explanation": "Insertion sort has low overhead and excellent cache behaviour. For small arrays its O(n²) constant is smaller than merge/heap sort's O(n log n) overhead.",
+      "tags": [
+        "insertion-sort",
+        "practical"
+      ]
+    },
+    {
+      "id": "q_graphs_se_001",
+      "concept_id": "graphs",
+      "type": "short_exam",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "Dijkstra's algorithm fails when the graph contains:",
+      "options": [
+        "Disconnected vertices",
+        "Negative weight edges",
+        "Self-loops",
+        "More than 1000 nodes"
+      ],
+      "correct_answer": "Negative weight edges",
+      "explanation": "Dijkstra's greedy relaxation assumes once a node is finalised its shortest path is found. Negative edges can create paths that make already-finalised distances wrong.",
+      "tags": [
+        "dijkstra",
+        "negative-weights"
+      ]
+    },
+    {
+      "id": "q_hashing_se_001",
+      "concept_id": "hashing",
+      "type": "short_exam",
+      "tier": "standard",
+      "difficulty": 2,
+      "question": "The load factor of a hash table is defined as:",
+      "options": [
+        "table size / number of keys",
+        "number of keys / table size",
+        "number of collisions / table size",
+        "hash function output / table size"
+      ],
+      "correct_answer": "number of keys / table size",
+      "explanation": "Load factor λ = n/m where n = keys stored, m = table capacity. High load factor increases collision probability. Rehashing occurs when λ exceeds a threshold (often 0.75).",
+      "tags": [
+        "hashing",
+        "load-factor"
+      ]
+    },
+    {
+      "id": "q_dp_se_001",
+      "concept_id": "dynamic_programming",
+      "type": "short_exam",
+      "tier": "standard",
+      "difficulty": 3,
+      "question": "Longest Common Subsequence (LCS) of two strings of length m and n has time complexity:",
+      "options": [
+        "O(m+n)",
+        "O(m×n)",
+        "O(m log n)",
+        "O(2^(m+n))"
+      ],
+      "correct_answer": "O(m×n)",
+      "explanation": "The standard DP table for LCS fills an m×n matrix, computing each cell in O(1). Total time is O(mn).",
+      "tags": [
+        "LCS",
+        "dp",
+        "complexity"
+      ]
+    },
+    {
+      "id": "q_avl_se_001",
+      "concept_id": "avl_tree",
+      "type": "short_exam",
+      "tier": "elite",
+      "difficulty": 3,
+      "question": "After inserting a node causes a left-right imbalance, the rotations performed are:",
+      "options": [
+        "Single right rotation",
+        "Single left rotation",
+        "Left rotation then right rotation",
+        "Right rotation then left rotation"
+      ],
+      "correct_answer": "Left rotation then right rotation",
+      "explanation": "A left-right imbalance (left child has right-heavy subtree) requires two rotations: first a left rotation on the child, then a right rotation on the imbalanced node.",
+      "tags": [
+        "avl",
+        "rotation",
+        "left-right"
+      ]
+    },
+    {
+      "id": "q_graphs_se_002",
+      "concept_id": "graphs",
+      "type": "short_exam",
+      "tier": "elite",
+      "difficulty": 3,
+      "question": "Bellman-Ford detects negative cycles by:",
+      "options": [
+        "Checking if any edge still relaxes after V-1 iterations",
+        "Running Dijkstra and comparing results",
+        "Checking if the queue is empty after BFS",
+        "Verifying all distances are positive"
+      ],
+      "correct_answer": "Checking if any edge still relaxes after V-1 iterations",
+      "explanation": "Bellman-Ford performs V-1 relaxation passes. If a V-th pass still improves a distance, a negative cycle exists — since no path without a cycle visits more than V-1 edges.",
+      "tags": [
+        "bellman-ford",
+        "negative-cycle"
+      ]
+    },
+    {
+      "id": "q_recursion_elite_001",
+      "concept_id": "recursion",
+      "type": "multiple_choice",
+      "tier": "elite",
+      "difficulty": 3,
+      "question": "What is the exact number of recursive calls made by a standard naive recursive Fibonacci(6) implementation?",
+      "options": [
+        "11",
+        "13",
+        "25",
+        "64"
+      ],
+      "correct_answer": "25",
+      "explanation": "Fib(6) spawns Fib(5)+Fib(4). Expanding the full tree: Fib(6)→25 calls total. The call count follows 2×Fib(n+1)−1.",
+      "tags": [
+        "fibonacci",
+        "call-count",
+        "elite"
+      ]
+    },
+    {
+      "id": "q_big_o_elite_001",
+      "concept_id": "big_o",
+      "type": "short_exam",
+      "tier": "elite",
+      "difficulty": 3,
+      "question": "A function runs in O(log log n). Which statement is most accurate?",
+      "options": [
+        "It grows faster than O(log n)",
+        "It is effectively constant for practical input sizes",
+        "It grows at the same rate as O(log n)",
+        "It runs in O(1) time"
+      ],
+      "correct_answer": "It is effectively constant for practical input sizes",
+      "explanation": "Even for n = 2^(2^64), log log n ≈ 64. O(log log n) grows so slowly it is nearly constant for any realistic input, though technically not O(1).",
+      "tags": [
+        "log-log",
+        "growth-rate",
+        "elite"
+      ]
+    },
+    {
+      "id": "q_recursion_boss_001",
+      "concept_id": "recursion",
+      "type": "long_exam",
+      "tier": "boss",
+      "difficulty": 3,
+      "question": "A programmer implements a recursive solution for the Fibonacci sequence without memoisation. For Fibonacci(40) this causes the program to hang. Explain why this happens, what the exact time complexity is, and describe two different techniques to bring it to O(n), distinguishing the trade-offs between them.",
+      "options": [
+        "Fibonacci(40) requires 40 recursive calls. The solution can be fixed with a for loop or by using a hash map. Both are equivalent.",
+        "The naive recursion recomputes overlapping subproblems exponentially. Fibonacci(n) makes O(2^n) calls. Top-down memoisation caches results in a hash map (O(n) time, O(n) space + call stack). Bottom-up iteration fills a table from base cases (O(n) time, O(n) space, no stack risk). Iteration avoids stack overflow for large n.",
+        "Fibonacci is only slow because Python has poor recursion handling. Using C++ would fix the performance without algorithm changes. O(n²) is the correct complexity.",
+        "The recursion is exponential because Fibonacci numbers grow exponentially. The fix is to use Fibonacci's closed-form formula (Binet's formula), giving O(1) time."
+      ],
+      "correct_answer": "The naive recursion recomputes overlapping subproblems exponentially. Fibonacci(n) makes O(2^n) calls. Top-down memoisation caches results in a hash map (O(n) time, O(n) space + call stack). Bottom-up iteration fills a table from base cases (O(n) time, O(n) space, no stack risk). Iteration avoids stack overflow for large n.",
+      "explanation": "Naive Fibonacci is O(2^n) due to recomputed overlapping subproblems. Memoisation (top-down) and tabulation (bottom-up) both achieve O(n). Tabulation avoids call stack overflow, making it safer for large n.",
+      "tags": [
+        "fibonacci",
+        "memoisation",
+        "dp",
+        "boss"
+      ]
+    },
+    {
+      "id": "q_bst_boss_001",
+      "concept_id": "bst",
+      "type": "long_exam",
+      "tier": "boss",
+      "difficulty": 3,
+      "question": "A BST is built by inserting the keys [50, 25, 75, 10, 30, 60, 80] in that order. What is the height of the resulting tree, what traversal order produces the keys in sorted order, and what is the worst-case search time complexity if keys had instead been inserted in sorted order (1, 2, 3, ... 100)?",
+      "options": [
+        "Height: 3. In-order traversal. Sorted insertion gives O(log n) search — the BST stays balanced.",
+        "Height: 2. Pre-order traversal. Sorted insertion gives O(1) search because keys are already sorted.",
+        "Height: 3. In-order traversal. Sorted insertion creates a degenerate tree of height n, giving O(n) worst-case search.",
+        "Height: 4. Post-order traversal. Sorted insertion is handled by the BST's self-balancing mechanism, giving O(log n)."
+      ],
+      "correct_answer": "Height: 3. In-order traversal. Sorted insertion creates a degenerate tree of height n, giving O(n) worst-case search.",
+      "explanation": "The tree [50,25,75,10,30,60,80] is perfectly balanced at height 3. In-order (left→root→right) gives sorted output. Inserting 1..100 in order creates a right-skewed list of height 100, degrading search to O(n). Self-balancing trees (AVL, Red-Black) avoid this.",
+      "tags": [
+        "bst",
+        "height",
+        "traversal",
+        "boss"
+      ]
+    },
+    {
+      "id": "q_dp_boss_001",
+      "concept_id": "dynamic_programming",
+      "type": "long_exam",
+      "tier": "boss",
+      "difficulty": 3,
+      "question": "You must find the length of the Longest Increasing Subsequence (LIS) of an array. A naive O(2^n) approach checks all subsequences. Describe the O(n²) DP approach and the O(n log n) patience-sorting approach, including what additional data structure enables the faster solution.",
+      "options": [
+        "The O(n²) DP solution stores each element's LIS length using a hash map. The O(n log n) solution uses a sorted array and linear search, giving O(n²) in practice.",
+        "The O(n²) DP maintains dp[i] = length of LIS ending at index i. The O(n log n) approach maintains a 'tails' array where tails[k] is the smallest tail of all increasing subsequences of length k+1, using binary search to update it — reducing each update from O(n) to O(log n).",
+        "Both approaches are O(n log n). The DP solution uses memoisation while the patience sort uses a stack instead of binary search.",
+        "The O(n log n) solution eliminates the need for a DP table entirely by using a hash set to track seen values and a greedy prefix sum."
+      ],
+      "correct_answer": "The O(n²) DP maintains dp[i] = length of LIS ending at index i. The O(n log n) approach maintains a 'tails' array where tails[k] is the smallest tail of all increasing subsequences of length k+1, using binary search to update it — reducing each update from O(n) to O(log n).",
+      "explanation": "LIS DP: fill dp[i] by checking all j < i where arr[j] < arr[i]. O(n²) time. Patience sort: maintain 'tails' array and binary search for placement position. Each insertion is O(log n), giving O(n log n) total. The key data structure is a sorted auxiliary array enabling binary search.",
+      "tags": [
+        "LIS",
+        "dp",
+        "patience-sort",
+        "boss"
+      ]
+    },
+    {
+      "id": "q_anomaly_001",
+      "concept_id": "big_o",
+      "type": "true_false",
+      "tier": "anomaly",
+      "difficulty": 3,
+      "question": "An algorithm can be O(n) in time complexity but simultaneously Ω(n²) in time complexity.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "False",
+      "explanation": "By definition, if an algorithm is O(n) (upper bound n), it cannot be Ω(n²) (lower bound n²) simultaneously, since n < n² for large n. A function cannot be asymptotically bounded above by a smaller function while bounded below by a larger one.",
+      "tags": [
+        "anomaly",
+        "big-o",
+        "contradiction"
+      ]
+    },
+    {
+      "id": "q_anomaly_002",
+      "concept_id": "recursion",
+      "type": "multiple_choice",
+      "tier": "anomaly",
+      "difficulty": 3,
+      "question": "A function calls itself twice per invocation and has O(1) work per call. The recursion tree has height log₂n. What is the time complexity?",
+      "options": [
+        "O(n)",
+        "O(log n)",
+        "O(n log n)",
+        "O(n²)"
+      ],
+      "correct_answer": "O(n)",
+      "explanation": "Tree height log₂n with 2 calls per node means 2^(log₂n) = n leaf nodes total. The total number of nodes in a complete binary tree of height h is 2^(h+1) - 1 = O(n). This is a classic trap — the branching factor, not just height, determines total work.",
+      "tags": [
+        "anomaly",
+        "recursion",
+        "tree-calls"
+      ]
+    },
+    {
+      "id": "q_anomaly_003",
+      "concept_id": "hashing",
+      "type": "short_exam",
+      "tier": "anomaly",
+      "difficulty": 3,
+      "question": "A hash table with n slots stores n keys. All keys hash to the same slot. The search time is:",
+      "options": [
+        "O(1)",
+        "O(log n)",
+        "O(n)",
+        "O(n²)"
+      ],
+      "correct_answer": "O(n)",
+      "explanation": "This is the worst-case collision scenario for separate chaining. All n keys form a single chain in one slot — searching degrades to traversing a linked list of length n, giving O(n). This is why the load factor and hash function quality matter.",
+      "tags": [
+        "anomaly",
+        "hashing",
+        "worst-case",
+        "collision"
+      ]
+    },
+    {
+      "id": "q_anomaly_004",
+      "concept_id": "sorting",
+      "type": "multiple_choice",
+      "tier": "anomaly",
+      "difficulty": 3,
+      "question": "Which of the following is provably impossible for a comparison-based sorting algorithm?",
+      "options": [
+        "O(n log n) average case",
+        "O(n) best case with already-sorted input",
+        "O(n log n) worst case",
+        "O(n) worst case for all inputs"
+      ],
+      "correct_answer": "O(n) worst case for all inputs",
+      "explanation": "The comparison-based sorting lower bound proof uses decision trees: any algorithm must make at least log₂(n!) ≈ n log n comparisons in the worst case to distinguish all n! permutations. O(n) worst-case comparison sort is mathematically impossible.",
+      "tags": [
+        "anomaly",
+        "sorting",
+        "lower-bound",
+        "proof"
+      ]
+    },
+    {
+      "id": "q_anomaly_005",
+      "concept_id": "graphs",
+      "type": "true_false",
+      "tier": "anomaly",
+      "difficulty": 3,
+      "question": "Dijkstra's algorithm with a Fibonacci heap runs in O(V log V + E) and is always faster than Bellman-Ford's O(VE) regardless of graph structure.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "False",
+      "explanation": "For sparse graphs (E ≈ V), Dijkstra with Fibonacci heap is O(V log V), faster than Bellman-Ford's O(V²). But for dense graphs (E ≈ V²), Dijkstra is O(V² log V + V²) = O(V² log V) — slower than Bellman-Ford's O(V³). The claim 'always faster' is false. Also Dijkstra cannot handle negative edges at all.",
+      "tags": [
+        "anomaly",
+        "dijkstra",
+        "bellman-ford",
+        "comparison"
+      ]
+    },
+    {
+      "id": "q_anomaly_006",
+      "concept_id": "dynamic_programming",
+      "type": "short_exam",
+      "tier": "anomaly",
+      "difficulty": 3,
+      "question": "Given a 0/1 Knapsack problem with n items and capacity W, what is the space-optimised DP solution's space complexity?",
+      "options": [
+        "O(n×W)",
+        "O(n)",
+        "O(W)",
+        "O(1)"
+      ],
+      "correct_answer": "O(W)",
+      "explanation": "The standard 2D DP table is O(n×W). By filling the table right-to-left using only one row (since row i depends only on row i-1), you reduce space to O(W). This is a key optimisation — the trick is iterating backwards to avoid using the same item twice.",
+      "tags": [
+        "anomaly",
+        "knapsack",
+        "space-optimisation"
+      ]
+    },
+    {
+      "id": "q_anomaly_007",
+      "concept_id": "avl_tree",
+      "type": "multiple_choice",
+      "tier": "anomaly",
+      "difficulty": 3,
+      "question": "You perform n insertions into an AVL tree. Each insertion triggers at most how many rotations to restore balance?",
+      "options": [
+        "O(log n)",
+        "O(n)",
+        "O(1)",
+        "O(log n) per insertion, O(n log n) total"
+      ],
+      "correct_answer": "O(1)",
+      "explanation": "A single AVL insertion requires at most 2 rotations (one single or one double rotation) to restore balance. Deletions may require O(log n) rotations propagating up the tree. This is a subtle but important distinction between AVL insert and delete.",
+      "tags": [
+        "anomaly",
+        "avl",
+        "rotations",
+        "insertion"
+      ]
+    },
+    {
+      "id": "q_anomaly_008",
+      "concept_id": "binary_search",
+      "type": "true_false",
+      "tier": "anomaly",
+      "difficulty": 3,
+      "question": "Binary search on a sorted array of n elements always terminates in exactly ⌊log₂n⌋ + 1 comparisons.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "correct_answer": "False",
+      "explanation": "Binary search terminates in AT MOST ⌊log₂n⌋ + 1 comparisons in the worst case, but can terminate in 1 comparison if the target is the midpoint at the first step. The actual count depends on where the target is. 'Always' makes this false.",
+      "tags": [
+        "anomaly",
+        "binary-search",
+        "comparisons",
+        "worst-case"
+      ]
+    }
+  ]
+}

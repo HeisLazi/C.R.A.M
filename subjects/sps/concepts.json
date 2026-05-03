@@ -1,0 +1,210 @@
+[
+  {
+    "id": "software_process_foundations",
+    "name": "Software Process Foundations",
+    "icon": "⚙️",
+    "difficulty": 1,
+    "explanation": "A software process is the structured set of activities used to develop software from concept through deployment and maintenance. In the SPS notes, software process thinking is about quality, discipline, risk control, and aligning work with stakeholder expectations.",
+    "notes": "The introductory SPS slides define a software process as a structured set of activities required to develop a software system from concept to deployment and maintenance. This is important because software work is not only coding. The notes repeatedly connect software processes to high-quality delivery, risk management, and alignment with stakeholder expectations. They also present process structure as a way to make projects more predictable and efficient.\n\nA key idea running through the notes is that disciplined work early in the life cycle saves cost later. Traceability, formal reviews, documentation, architecture work, and staged testing are not overhead for their own sake; they exist because defects found late are expensive. The lectures also stress that design is not the same thing as code, and that bad architecture can doom a project early. Teams are therefore expected to follow a defined process, not skip steps in the hope of moving faster.\n\nIn short, software process foundations in SPS are about understanding that successful software comes from organized activities, not from programming alone.",
+    "examples": [
+      "Using requirements, design, implementation, testing, deployment, and maintenance as linked parts of one life cycle",
+      "Treating reviews and traceability as process investments rather than as optional paperwork",
+      "Recognizing that architecture and documentation affect long-term quality, not just coding speed"
+    ]
+  },
+  {
+    "id": "sdlc_models",
+    "name": "SDLC and Process Models",
+    "icon": "🧭",
+    "difficulty": 2,
+    "explanation": "The SDLC describes the major phases of software work, while process models describe how teams move through those phases. The SPS notes compare linear, iterative, validation-focused, and risk-driven models.",
+    "notes": "The SPS material presents the Software Development Life Cycle as a structured approach that promotes quality and efficiency. The core phases listed in the notes are Requirements, Design, Implementation, Testing, Deployment, and Maintenance. These phases describe the major types of work that have to happen in a software project.\n\nProcess models explain how these phases are organized. Waterfall is shown as a linear and sequential model suited to projects with well-defined requirements and minimal expected change. The V-Model extends Waterfall by pairing development activities with corresponding validation and verification activities. Spiral is described as a risk-driven model that combines iteration with repeated risk analysis. Iterative development repeats planning, design, implementation, testing, and review in cycles so the system can improve over time. Prototyping is presented as an especially useful support for requirements elicitation and validation.\n\nThe notes emphasize that there is no one-size-fits-all model. Model choice depends on project size, risk, validation needs, required flexibility, time, cost, and how much change the team expects.",
+    "examples": [
+      "Choosing Waterfall when the scope is stable and fully understood up front",
+      "Using Spiral when risk analysis must happen repeatedly through the project",
+      "Using iterative cycles when continuous refinement and feedback are expected"
+    ]
+  },
+  {
+    "id": "requirements_engineering",
+    "name": "Requirements Engineering",
+    "icon": "📝",
+    "difficulty": 2,
+    "explanation": "Requirements engineering is the process of finding out what a system should do, analysing those needs, documenting them, validating them, and managing change. The SPS notes treat it as one of the most critical phases in software development.",
+    "notes": "The requirements engineering presentation breaks the process into five activities: elicitation, analysis, specification, validation, and management. Elicitation asks what services end users require. Analysis focuses on classification, prioritisation, and negotiation. Specification formally documents the requirements. Validation checks whether the proposed system meets what users actually need. Management deals with the reality that requirements often change over time.\n\nThe SPS lab reinforces this theory with project practice. Students are expected to identify stakeholders, use elicitation techniques to gather functional and non-functional requirements, and then turn that information into an SRS document. The notes make it clear that poor requirements work leads to confusion, rework, and project trouble later.\n\nRequirements engineering in this course is therefore not just about writing lists of features. It is about systematically understanding the problem space, identifying the right people to speak to, capturing needs clearly, and keeping those needs under control as the project evolves.",
+    "examples": [
+      "Interviewing users before deciding what the system must provide",
+      "Negotiating between different stakeholder priorities during analysis",
+      "Managing requirement changes instead of pretending the first draft will never evolve"
+    ]
+  },
+  {
+    "id": "requirements_specification",
+    "name": "Requirements Specification",
+    "icon": "📘",
+    "difficulty": 2,
+    "explanation": "Requirements specification turns gathered needs into structured, formal statements about what the system must do. The SPS notes tie this to requirement types, SRS structure, and the distinction between what and how.",
+    "notes": "The SPS notes distinguish business requirements, user requirements, and system requirements. Business requirements describe organizational goals, user requirements describe what users expect to do, and system requirements describe how the system must behave to meet those needs. The notes also distinguish functional, non-functional, and domain requirements.\n\nThe software requirements document is described as the official statement of what is required of the system developers. It should state what the software must do, not turn into a design document that explains how implementation will happen. The notes further outline a structured requirements document with chapters such as preface, introduction, glossary, user requirements definition, system architecture, system requirements specification, system models, system evolution, and appendices.\n\nSpecification quality matters because vague or incomplete statements cause confusion later. The lectures encourage precise wording, measurable targets where possible, and structured documentation that different audiences can understand. In SPS, requirements specification is both a technical and communication task.",
+    "examples": [
+      "Writing a system requirement for alerts via SMS and email",
+      "Separating business goals from technical system behavior",
+      "Using an SRS to document functional and non-functional requirements formally"
+    ]
+  },
+  {
+    "id": "traceability_validation",
+    "name": "Traceability and Validation",
+    "icon": "🔗",
+    "difficulty": 2,
+    "explanation": "Traceability tracks the relationship between requirements and later artifacts, while validation checks whether the right system is being defined. The SPS notes present both as central quality practices.",
+    "notes": "Traceability in the SPS material means being able to follow requirements through design, implementation, and testing. Forward traceability asks what later work exists to satisfy a requirement. Backward traceability asks what original requirement justifies an implemented feature. Bidirectional traceability combines both directions. A traceability matrix is the practical tool used to connect requirements with design work, code, and test cases.\n\nValidation, by contrast, focuses on whether the right product is being built. The notes describe it as making sure requirements are correct, complete, realistic, and aligned with stakeholder needs. Validation techniques named in the material include reviews, prototyping, walkthroughs, and test-case design.\n\nTogether, traceability and validation reduce the risk of missing, misinterpreting, or badly implementing requirements. They also support impact analysis when changes occur, because a change to one requirement can be traced to other artifacts that may also need revision.",
+    "examples": [
+      "Linking a password reset requirement to design elements and test cases",
+      "Using a traceability matrix to check that no requirement has been ignored",
+      "Reviewing requirements with stakeholders before implementation begins"
+    ]
+  },
+  {
+    "id": "agile_scrum",
+    "name": "Agile and Scrum Overview",
+    "icon": "🏃",
+    "difficulty": 2,
+    "explanation": "Agile in the SPS notes emphasizes flexibility, collaboration, and responsiveness to change. Scrum is presented as the main example of how Agile ideas are organized into a working team process.",
+    "notes": "The Agile material highlights the familiar value contrasts: individuals and interactions over processes and tools, working software over comprehensive documentation, customer collaboration over contract negotiation, and responding to change over following a plan. In the Week 2 slides, Agile is described as iterative, flexible, and oriented around collaboration and customer feedback.\n\nThe SPS notes also present Scrum as a practical example of Agile work. Scrum uses short Sprints, backlog-driven planning, and frequent inspection and adaptation. User stories are treated as a lightweight way of expressing requirements in Agile work. At the same time, the course notes warn against a careless interpretation of Agile. Agile is not described as an excuse for undisciplined or undefined work. The material explicitly warns that Agile is not cowboy coding and that long-lived systems still need enough documentation, defined process, and quality discipline.\n\nSo the Agile and Scrum overview topic in SPS is really about flexibility with structure, not flexibility without accountability.",
+    "examples": [
+      "Using short Sprints to add functionality incrementally",
+      "Using user stories to express features from a user perspective",
+      "Responding to change while still following a defined process"
+    ]
+  },
+  {
+    "id": "git_version_control",
+    "name": "Git and Version Control Fundamentals",
+    "icon": "🌿",
+    "difficulty": 2,
+    "explanation": "Git is the distributed version control system used in the SPS notes to manage file history and collaboration. The fundamentals focus on repositories, file states, staging, commits, and the purpose of version control itself.",
+    "notes": "The Git lecture notes define version control as a system that records changes to files over time. They distinguish centralized version control from distributed version control and identify Git as a distributed system originally developed for Linux kernel work. In SPS, Git matters because the project rubric explicitly expects meaningful version control use.\n\nThe fundamental workflow starts with a repository. A new repository can be created with git init, while an existing one can be copied locally with git clone. The notes explain that files in a working copy can be untracked or tracked, and tracked files can be unmodified, modified, or staged. git status is used to inspect these states, git add begins tracking or stages changes, and git commit records a snapshot into repository history. The slides also mention commit hashes and the shortcut git commit -a for already tracked files.\n\nThese basics matter because they create a reliable history of work and make team collaboration more manageable and auditable.",
+    "examples": [
+      "Using git init to create a repository for a new project",
+      "Checking file state with git status before committing",
+      "Using git add and git commit to move changes into project history"
+    ]
+  },
+  {
+    "id": "sps_project_mvp",
+    "name": "SPS Project and MVP Planning",
+    "icon": "🚀",
+    "difficulty": 2,
+    "explanation": "The SPS semester project applies software process ideas to a K-12 STEM education platform. Its planning is explicitly iterative, with an early MVP followed by expansion and refinement.",
+    "notes": "The project brief frames the SPS semester work as a practical application of requirements gathering, design, development, testing, and documentation. The system to be built is a K-12 technology education platform for Namibian schools, with goals such as accessibility, interactivity, educator support, and AI-enhanced features.\n\nA central planning idea in the notes is the Minimum Viable Product. The project should begin with a smaller but functional early version rather than waiting for a fully expanded platform. The MVP phase focuses on core platform functionality such as authentication, a dashboard, a basic lesson structure, a basic AI recommendation feature, and initial user testing. Later phases expand content, dashboards, recommendations, testing, deployment, and scalability.\n\nThis topic matters because it connects software process theory to actual project scope control. The course materials are clear that teams should identify stakeholders, define requirements, produce documentation, and prioritize core value before trying to build everything at once.",
+    "examples": [
+      "Treating login, dashboard, and a basic lesson as early MVP scope",
+      "Using initial user testing before expanding the platform",
+      "Moving from MVP to broader feature expansion in later phases"
+    ]
+  },
+  {
+    "id": "process_quality_reviews",
+    "name": "Process Quality, Reviews, and Testing",
+    "icon": "🧪",
+    "difficulty": 2,
+    "explanation": "The SPS notes stress that software quality improves when reviews, traceability, and layered testing happen early and consistently. Reviews and testing are presented as part of process health, not as late cleanup.",
+    "notes": "Several SPS lectures argue that finding bugs early is one of the main goals of a good software process. Product testing is described as late and expensive, while design peer review, code peer review, and staged testing are earlier and cheaper. The notes also link this to traceability, because good process connects requirements to design, detailed design, code, and testing.\n\nThe V-model material is especially useful here. Unit testing is linked to detailed design, integration testing to high-level design, software testing to the SRS, and acceptance testing to product requirements. The notes also mention Software Quality Assurance as checking whether the process itself is being followed correctly, and regression testing as a way to ensure fixed bugs stay fixed.\n\nThe overall message is that testing should not be treated as a single late phase where all quality problems are expected to disappear. Instead, reviews, validation, verification, and structured testing are distributed across the life cycle so that quality is built in gradually.",
+    "examples": [
+      "Using design peer review before implementation to catch architecture problems",
+      "Tracing unit tests back to detailed design artifacts",
+      "Running regression tests after a bug fix to confirm the defect stays resolved"
+    ]
+  },
+  {
+    "id": "stakeholders_elicitation",
+    "name": "Stakeholders and Elicitation",
+    "icon": "🗣️",
+    "difficulty": 2,
+    "explanation": "Stakeholder analysis and elicitation are practical SPS topics focused on discovering what different people need from the system. The notes treat the quality of these conversations as a major determinant of requirement quality.",
+    "notes": "The requirements engineering lecture and lab place strong emphasis on stakeholders. A stakeholder is not just a developer or manager; it includes users, support staff, domain specialists, and anyone whose needs, expectations, or influence matter to the project. The example patient record system lists patients, doctors, nurses, receptionists, IT staff, and managers as stakeholders with different perspectives.\n\nElicitation is about gathering these perspectives systematically. The notes name interviews, surveys, workshops, prototyping, scenarios, ethnography, and JAD as elicitation techniques. The lab turns this into a project task by requiring a stakeholder matrix that records roles, needs or expectations, and influence on the project. Example interview questions focus on current system problems, desired features, accessibility concerns, and security expectations.\n\nThis topic matters because missing the right stakeholder input early often creates later rework. SPS therefore treats stakeholder analysis and elicitation as disciplined discovery work, not as casual conversation.",
+    "examples": [
+      "Interviewing teachers, students, and IT staff about platform needs",
+      "Recording stakeholder influence and expectations in a matrix",
+      "Using focused interview questions to uncover usability, accessibility, and security concerns"
+    ]
+  },
+  {
+    "id": "requirements_quality",
+    "name": "Quality Measures of Requirements",
+    "icon": "📏",
+    "difficulty": 2,
+    "explanation": "The SPS notes define requirement quality in terms such as clarity, consistency, completeness, verifiability, and feasibility. Good requirements are written so they can be understood, tested, and maintained.",
+    "notes": "The traceability and quality notes explicitly list quality measures for software requirements. Clarity means requirements should be unambiguous and understandable to all stakeholders. Consistency means they should not conflict with one another. Completeness means important functionality or constraints are not missing. Verifiability means a requirement can be tested or otherwise checked. Feasibility means the requirement can realistically be achieved within the project's technology, budget, and time constraints.\n\nThe notes also mention traceability, modifiability, and prioritization as quality-related concerns. A good requirement should be traceable across the life cycle, easy to update when change occurs, and clearly prioritised relative to other requirements. SMART wording supports this quality goal by making vague statements more specific and measurable.\n\nIn SPS, requirement quality is not treated as cosmetic editing. It is a core software process concern because weak requirements create misunderstandings, delays, rework, and unreliable validation later in the project.",
+    "examples": [
+      "Replacing vague wording like 'fast' with measurable performance targets",
+      "Checking for contradictions before finalizing a requirements document",
+      "Making every important requirement testable and traceable"
+    ]
+  },
+  {
+    "id": "user_stories_prioritization",
+    "name": "User Stories and Prioritisation",
+    "icon": "📚",
+    "difficulty": 2,
+    "explanation": "The SPS notes use user stories to capture user-centered requirements in Agile work and MoSCoW prioritisation to decide what belongs in the MVP first. Together they help teams express value and manage scope.",
+    "notes": "User stories are introduced in the requirements engineering presentation as short, simple descriptions of a feature from the user's perspective. The required format is: As a [user role], I want [feature] so that [benefit]. The notes emphasize that this structure makes the actor, desired feature, and reason for the feature explicit. The worked example of password reset shows how a stronger story becomes more specific and actionable.\n\nThe slides then connect user stories to sprint work by breaking stories into concrete tasks and assigning them to backlog items. This leads directly into prioritisation. The SPS lab and slides use MoSCoW prioritisation to separate Must-Have, Should-Have, Could-Have, and Won't-Have items. This is especially important for the semester MVP, because teams need to identify essential features before chasing optional ones.\n\nIn SPS, user stories and prioritisation are therefore not isolated Agile tricks. They are process tools for turning stakeholder needs into well-scoped, actionable development work.",
+    "examples": [
+      "\"As a student, I want to log in to my account so that I can access my lessons\"",
+      "Classifying login as a Must-Have feature in the MVP",
+      "Treating dark mode as a Should-Have rather than a core MVP requirement"
+    ]
+  },
+  {
+    "id": "scrum_framework",
+    "name": "Scrum Roles, Events, and Artifacts",
+    "icon": "🧩",
+    "difficulty": 3,
+    "explanation": "The Scrum Guide used in SPS defines Scrum through specific roles, events, artifacts, and commitments. This concept focuses on the detailed structure that makes Scrum work in practice.",
+    "notes": "The Scrum Guide defines the Scrum Team as one Product Owner, one Scrum Master, and Developers. The Product Owner is accountable for maximizing product value and managing the Product Backlog. The Scrum Master is accountable for establishing Scrum and improving team effectiveness. Developers are accountable for planning Sprint work, creating increments, and maintaining quality through the Definition of Done.\n\nScrum events include the Sprint, Sprint Planning, Daily Scrum, Sprint Review, and Sprint Retrospective. These events exist to support transparency, inspection, and adaptation. The core artifacts are the Product Backlog, Sprint Backlog, and Increment. Each artifact has a commitment: Product Goal, Sprint Goal, or Definition of Done. The Definition of Done matters because work that does not meet it cannot be considered part of an increment.\n\nThe notes also stress that Scrum is not just a collection of meetings. The framework depends on empiricism, shared visibility, and disciplined adaptation based on what the team learns.",
+    "examples": [
+      "A Product Owner ordering backlog items by value and importance",
+      "Using Sprint Planning to decide what can be done in the current Sprint",
+      "Refusing to treat unfinished work as part of the Increment because it does not meet the Definition of Done"
+    ]
+  },
+  {
+    "id": "git_branching_sync",
+    "name": "Git Branching and Synchronisation",
+    "icon": "🔀",
+    "difficulty": 3,
+    "explanation": "Beyond basic commits, the SPS Git notes cover how teams collaborate through branches, remotes, merge or rebase workflows, and synchronization commands such as fetch, pull, and push.",
+    "notes": "The collaboration portion of the Git notes explains that a branch is a lightweight movable pointer to a commit, and that HEAD is a symbolic reference to the branch currently checked out. The notes show how git branch can create, list, rename, and delete branches, while git switch moves between them.\n\nBranching matters because it allows developers to work safely without damaging the central copy of the project. The notes even recommend keeping main unchanged as the local copy of the central repository and doing personal work on separate branches. Collaboration with other repositories is handled through remotes. A cloned repository usually creates a remote called origin automatically.\n\nSynchronization is then handled with git fetch, git pull, and git push. fetch imports remote commits without integrating them immediately, pull fetches and then merges, and push exports local branch commits to a remote repository. The notes also mention merge and rebase as two ways of integrating branch work. In SPS, this topic connects directly to good project teamwork and version control assessment.",
+    "examples": [
+      "Creating a feature branch instead of working directly on main",
+      "Using git fetch to review remote changes before integrating them",
+      "Using git push to publish local commits to the shared repository"
+    ]
+  },
+  {
+    "id": "project_deliverables_assessment",
+    "name": "Project Deliverables and Assessment",
+    "icon": "📦",
+    "difficulty": 2,
+    "explanation": "The SPS project documents and rubric define what teams must produce and how that work is judged. This includes requirements, documentation, implementation quality, testing, version control, and presentation.",
+    "notes": "The SPS project and SRS documents make deliverables very explicit. Early work includes stakeholder analysis, requirements specification, and a project plan. Later deliverables include system architecture documents, wireframes, risk assessment, a functional platform, test reports, deployment reports, feedback reports, technical documentation, a sustainability plan, and a final presentation.\n\nAssessment is likewise structured. The SRS project rubric evaluates requirement elicitation, SRS quality, use of tools and techniques, life-cycle products, and evidence of software process quality. The MVP rubric then evaluates areas such as identified process model, core functionality, interactivity, AI recommendations, user testing, code structure, version control usage, and documentation. Version control is not optional polish in this course; it is explicitly graded.\n\nThis concept matters because SPS is not assessed on code alone. The course expects students to show that they can connect process theory, documentation, planning, implementation, and testing into a coherent project outcome.",
+    "examples": [
+      "Submitting a requirements specification before deep implementation work",
+      "Showing meaningful GitHub commit history as part of version control assessment",
+      "Providing test and deployment reports alongside the final platform"
+    ]
+  },
+  {
+    "id": "process_selection_challenges",
+    "name": "Process Selection and Common Challenges",
+    "icon": "⚠️",
+    "difficulty": 3,
+    "explanation": "The SPS notes emphasize that teams must choose process models based on context and must also manage common project challenges such as changing requirements, tight deadlines, limited resources, and weak oversight.",
+    "notes": "The Week 2 process model slides discuss how to choose the right process model by looking at project size and complexity, risk level, flexibility needs, and time or budget constraints. Agile and Iterative are better fits when requirements evolve rapidly. Waterfall and the V-Model are better suited to more structured contexts. Spiral is strongest when risk management is central.\n\nThe same notes also identify common software process challenges: changing requirements, tight deadlines, and resource constraints. The Boeing 737 MAX activity marking guide adds a cautionary case-oriented perspective by explicitly pointing to rush to market, lack of testing, and weak process oversight as issues to analyse. That guide also asks students to justify an appropriate methodology and reflect on the importance of robust software processes.\n\nThis topic matters because process choice is never purely theoretical. In SPS, teams are expected to recognize that the wrong model or weak discipline can amplify project risk instead of reducing it.",
+    "examples": [
+      "Choosing Spiral when risk analysis matters more than speed alone",
+      "Recognizing that changing requirements can make rigid models harder to manage",
+      "Linking rushed delivery and insufficient testing to broader process failure"
+    ]
+  }
+]

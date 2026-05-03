@@ -1,0 +1,41 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.egg-info/
+.eggs/
+
+# ── Virtual environments ───────────────────────────────────────────────────────
+venv/
+.venv/
+.venv-1/
+env/
+.env/
+
+# ── PyInstaller build output ───────────────────────────────────────────────────
+build/
+dist/
+
+# ── Node / npm / pnpm ─────────────────────────────────────────────────────────
+node_modules/
+pnpm-lock.yaml
+
+# ── Replit platform files (not needed outside Replit) ─────────────────────────
+.replit
+.replitignore
+.npmrc
+.agents/
+uv.lock
+
+# ── OS files ──────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo

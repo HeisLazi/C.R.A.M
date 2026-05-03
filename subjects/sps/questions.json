@@ -1,0 +1,2570 @@
+{
+  "_meta": {
+    "subject": "SPS",
+    "subject_id": "sps",
+    "version": "2.0",
+    "format": "cram-questions"
+  },
+  "questions": [
+    {
+      "id": "q_software_process_foundations_001",
+      "concept_id": "software_process_foundations",
+      "question": "Which statement best matches the definition of a software process in the SPS notes?",
+      "options": [
+        "A structured set of activities used to develop software from concept to deployment and maintenance",
+        "A list of programming languages selected for implementation",
+        "A test plan used only after coding is complete",
+        "A collection of tools installed for developers"
+      ],
+      "correct_answer": "A structured set of activities used to develop software from concept to deployment and maintenance",
+      "explanation": "The notes define a software process as a structured set of activities across the whole life cycle. It is broader than tools, code, or late testing alone.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["software-process", "definition", "foundations"]
+    },
+    {
+      "id": "q_software_process_foundations_002",
+      "concept_id": "software_process_foundations",
+      "question": "According to the SPS material, why do software processes matter?",
+      "options": [
+        "They help deliver quality software, manage risks, and align work with stakeholder expectations",
+        "They eliminate the need for architecture and design",
+        "They make documentation unnecessary once coding starts",
+        "They guarantee that no defects will ever be found in production"
+      ],
+      "correct_answer": "They help deliver quality software, manage risks, and align work with stakeholder expectations",
+      "explanation": "The introduction slides explicitly tie software processes to quality, risk management, and stakeholder alignment. The other options contradict the notes.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["importance", "quality", "risk"]
+    },
+    {
+      "id": "q_software_process_foundations_003",
+      "concept_id": "software_process_foundations",
+      "question": "Which practice is described as a good investment in the software process lectures?",
+      "options": [
+        "Traceability and formal reviews",
+        "Skipping steps to reach testing faster",
+        "Treating implementation comments as the full design",
+        "Replacing all early reviews with final product test"
+      ],
+      "correct_answer": "Traceability and formal reviews",
+      "explanation": "Koopman's notes say process formality is a good investment and specifically mention traceability and formal reviews. Skipping these steps increases later cost.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["traceability", "reviews", "process-formality"]
+    },
+    {
+      "id": "q_software_process_foundations_004",
+      "concept_id": "software_process_foundations",
+      "question": "In the defect-finding comparison from the notes, which activity is described as late and expensive?",
+      "options": [
+        "Product testing",
+        "Design peer review",
+        "Code peer review",
+        "Layered testing within development"
+      ],
+      "correct_answer": "Product testing",
+      "explanation": "The notes contrast product testing with earlier activities and call product testing late and expensive. Reviews are presented as earlier and cheaper.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["testing", "defects", "cost"]
+    },
+    {
+      "id": "q_software_process_foundations_005",
+      "concept_id": "software_process_foundations",
+      "question": "Comments in the code are the same thing as the design.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The lectures explicitly state that implementation is the code itself and that comments describe implementation, not design. High-level and detailed design are separate work products.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["design", "implementation"]
+    },
+    {
+      "id": "q_software_process_foundations_006",
+      "concept_id": "software_process_foundations",
+      "question": "Which option best defines High Level Design (HLD) from the notes?",
+      "options": [
+        "The architecture of the system, including major pieces, functional allocation, and interfaces between them",
+        "The final source code after the modules have already been implemented",
+        "A customer-facing acceptance checklist written after deployment",
+        "A brief summary of programmer comments inside each file"
+      ],
+      "correct_answer": "The architecture of the system, including major pieces, functional allocation, and interfaces between them",
+      "explanation": "The HLD section describes architecture, component definitions, functional allocation, and interfaces. It is not the same as code or late acceptance paperwork.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["hld", "architecture", "definition"]
+    },
+    {
+      "id": "q_software_process_foundations_007",
+      "concept_id": "software_process_foundations",
+      "question": "A team skips design peer reviews because it wants to reach system testing faster. Based on the notes, what is the most likely result?",
+      "options": [
+        "More bugs will be discovered later in testing, where fixes are costlier",
+        "The total bug count will stay the same because testing replaces reviews",
+        "Documentation effort will drop and overall quality will improve",
+        "Subsystem architecture will become easier to validate without reviews"
+      ],
+      "correct_answer": "More bugs will be discovered later in testing, where fixes are costlier",
+      "explanation": "The notes warn that skipping steps to get to testing faster means more bugs in test, and finding defects later is more expensive. Reviews exist to catch issues earlier.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["peer-review", "testing", "cost"]
+    },
+    {
+      "id": "q_software_process_foundations_008",
+      "concept_id": "software_process_foundations",
+      "question": "A team plans to keep almost no documentation for a system that must be maintained for many years. Which concern from the notes best applies?",
+      "options": [
+        "Implicit knowledge evaporates with the team, making undocumented long-lived systems difficult to maintain",
+        "No-paper processes are always better because they reduce all forms of waste",
+        "Documentation is only useful before coding and has no maintenance value",
+        "Maintenance gets easier when only the original developers understand the system"
+      ],
+      "correct_answer": "Implicit knowledge evaporates with the team, making undocumented long-lived systems difficult to maintain",
+      "explanation": "The Agile notes warn that undocumented long-lived systems become nightmares because knowledge disappears with the team. Documentation supports future maintenance and understanding.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["documentation", "maintenance", "agile"]
+    },
+    {
+      "id": "q_software_process_foundations_009",
+      "concept_id": "software_process_foundations",
+      "question": "A project manager tells the team to focus almost entirely on coding for the first half of the project and to worry about architecture, reviews, documentation, and layered testing later. Based on the SPS notes, which response is strongest?",
+      "options": [
+        "This is acceptable because coding is the main real activity in software projects and the rest can be added once the product works",
+        "This approach ignores the notes' core message that architecture, reviews, traceability, documentation, and early testing must happen throughout the process. Delaying them increases late defects and cost instead of reducing risk.",
+        "This is ideal for every project because documentation written after coding is always more accurate than documentation written during development",
+        "This only becomes risky if the team also forgets to use a version control tool"
+      ],
+      "correct_answer": "This approach ignores the notes' core message that architecture, reviews, traceability, documentation, and early testing must happen throughout the process. Delaying them increases late defects and cost instead of reducing risk.",
+      "explanation": "The lectures repeatedly argue that coding is only one part of software work. They stress design, traceability, reviews, documentation, and earlier defect detection as essential process activities.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["process-discipline", "architecture", "boss"]
+    },
+    {
+      "id": "q_software_process_foundations_010",
+      "concept_id": "software_process_foundations",
+      "question": "If a team can reach testing sooner by skipping process steps, the overall project cost will usually decrease.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes say skipping steps costs more in the end because more bugs escape to later, more expensive stages. This is a classic software process trap.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["pitfall", "cost", "anomaly"]
+    },
+    {
+      "id": "q_sdlc_models_001",
+      "concept_id": "sdlc_models",
+      "question": "Which sequence matches the SDLC phases given in the SPS slides?",
+      "options": [
+        "Requirements, Design, Implementation, Testing, Deployment, Maintenance",
+        "Design, Requirements, Deployment, Testing, Maintenance, Implementation",
+        "Requirements, Coding, Marketing, Testing, Sales, Maintenance",
+        "Planning, Budgeting, Coding, Deployment, Architecture, Maintenance"
+      ],
+      "correct_answer": "Requirements, Design, Implementation, Testing, Deployment, Maintenance",
+      "explanation": "The SDLC slide lists those six phases in that order. Other options insert non-SDLC activities or scramble the sequence.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["sdlc", "phases"]
+    },
+    {
+      "id": "q_sdlc_models_002",
+      "concept_id": "sdlc_models",
+      "question": "For which kind of project do the notes say the Waterfall model is best suited?",
+      "options": [
+        "Projects with well-defined requirements and minimal expected changes",
+        "Projects where requirements change daily and feedback must be immediate",
+        "Projects that depend on repeated risk analysis in every cycle",
+        "Projects that have no need for documentation or validation"
+      ],
+      "correct_answer": "Projects with well-defined requirements and minimal expected changes",
+      "explanation": "The Waterfall introduction slide explicitly links the model to stable, well-defined requirements. It is presented as less suitable when change is frequent.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["waterfall", "model-selection"]
+    },
+    {
+      "id": "q_sdlc_models_003",
+      "concept_id": "sdlc_models",
+      "question": "Which process model combines iterative development with systematic risk assessment?",
+      "options": [
+        "Spiral",
+        "Waterfall",
+        "V-Model",
+        "Bare repository model"
+      ],
+      "correct_answer": "Spiral",
+      "explanation": "The Spiral model is defined in the notes as risk-driven and iterative. Risk analysis is the key feature that distinguishes it from the others listed here.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["spiral", "risk", "models"]
+    },
+    {
+      "id": "q_sdlc_models_004",
+      "concept_id": "sdlc_models",
+      "question": "What makes the V-Model different from basic Waterfall in the SPS notes?",
+      "options": [
+        "It adds a corresponding testing and validation activity for each development stage",
+        "It removes testing so development can move faster",
+        "It replaces requirements with prototyping only",
+        "It avoids documentation to stay lightweight"
+      ],
+      "correct_answer": "It adds a corresponding testing and validation activity for each development stage",
+      "explanation": "The V-Model is described as an extension of Waterfall with matching test and verification work across development stages. That is why it suits high-assurance work.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["v-model", "validation", "testing"]
+    },
+    {
+      "id": "q_sdlc_models_005",
+      "concept_id": "sdlc_models",
+      "question": "The Iterative model is a single-pass life cycle with no repeated review or refinement.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes describe the Iterative model as cyclical, with planning, design, implementation, testing, and review repeated in cycles. Repetition and refinement are central to it.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["iterative", "cycles"]
+    },
+    {
+      "id": "q_sdlc_models_006",
+      "concept_id": "sdlc_models",
+      "question": "Which option best defines evolutionary prototyping from the SPS notes?",
+      "options": [
+        "A prototyping approach where the working prototype is refined into the final system",
+        "A prototyping approach where the prototype can never be changed once shown to users",
+        "A documentation method used only after deployment",
+        "A testing method that replaces requirements elicitation"
+      ],
+      "correct_answer": "A prototyping approach where the working prototype is refined into the final system",
+      "explanation": "The prototyping notes say a prototype may either be thrown away or evolved into the final system. That latter path is evolutionary prototyping.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["prototyping", "evolutionary", "definition"]
+    },
+    {
+      "id": "q_sdlc_models_007",
+      "concept_id": "sdlc_models",
+      "question": "A team is building software for a medical device and needs strict validation and early defect detection at each stage. Which model best matches the notes?",
+      "options": [
+        "V-Model",
+        "Throwaway prototyping only",
+        "Waterfall without testing links",
+        "An undocumented Agile approach"
+      ],
+      "correct_answer": "V-Model",
+      "explanation": "The notes describe the V-Model as validation-focused and suitable for high-assurance systems. Early defect detection is one of its stated strengths.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["v-model", "medical-devices", "selection"]
+    },
+    {
+      "id": "q_sdlc_models_008",
+      "concept_id": "sdlc_models",
+      "question": "A project is large, risky, and needs continuous refinement through repeated planning and risk analysis. Which model is the best fit according to the notes?",
+      "options": [
+        "Spiral",
+        "Waterfall",
+        "V-Model",
+        "Main branch workflow"
+      ],
+      "correct_answer": "Spiral",
+      "explanation": "The Spiral model is presented as best for large, high-risk work because it combines iteration with explicit risk analysis and evaluation in every loop.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["spiral", "risk-management", "elite"]
+    },
+    {
+      "id": "q_sdlc_models_009",
+      "concept_id": "sdlc_models",
+      "question": "Two projects are being planned. Project A is a school platform expected to change based on regular feedback. Project B is a tightly regulated system where validation evidence is critical and requirements are stable. Which answer best applies the SPS notes?",
+      "options": [
+        "Both projects should use the same model because model choice does not depend on risk, feedback, or flexibility",
+        "Project A fits an iterative or Agile-style approach because feedback and refinement matter, while Project B fits a validation-focused model such as the V-Model because stability and evidence are more important",
+        "Project A should avoid iteration because feedback causes scope creep, and Project B should use prototyping only because regulation reduces risk",
+        "Project B should use no formal model because validation will happen automatically through coding standards"
+      ],
+      "correct_answer": "Project A fits an iterative or Agile-style approach because feedback and refinement matter, while Project B fits a validation-focused model such as the V-Model because stability and evidence are more important",
+      "explanation": "The comparison slides emphasize choosing a model based on flexibility, risk, and assurance needs. Iterative approaches support feedback, while V-Model suits strict validation contexts.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["model-selection", "boss", "comparison"]
+    },
+    {
+      "id": "q_sdlc_models_010",
+      "concept_id": "sdlc_models",
+      "question": "In prototyping, the prototype must always be discarded before the final system is developed.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes say prototypes may be thrown away or evolved into the final system. Assuming they must always be discarded ignores evolutionary prototyping.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["prototyping", "anomaly"]
+    },
+    {
+      "id": "q_requirements_engineering_001",
+      "concept_id": "requirements_engineering",
+      "question": "Which activity comes first in the requirements engineering process shown in the notes?",
+      "options": [
+        "Requirements elicitation",
+        "Requirements validation",
+        "Requirements management",
+        "Requirements deployment"
+      ],
+      "correct_answer": "Requirements elicitation",
+      "explanation": "The process slide lists elicitation first, followed by analysis, specification, validation, and management. Elicitation is where user needs are first gathered.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["requirements", "elicitation", "process"]
+    },
+    {
+      "id": "q_requirements_engineering_002",
+      "concept_id": "requirements_engineering",
+      "question": "Which requirements engineering activity focuses on classifying, prioritising, and negotiating requirements?",
+      "options": [
+        "Requirements analysis",
+        "Requirements elicitation",
+        "Requirements deployment",
+        "Requirements coding"
+      ],
+      "correct_answer": "Requirements analysis",
+      "explanation": "The notes define analysis as the phase where gathered requirements are classified, prioritised, and negotiated. It comes after elicitation.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["analysis", "prioritisation"]
+    },
+    {
+      "id": "q_requirements_engineering_003",
+      "concept_id": "requirements_engineering",
+      "question": "Which set contains elicitation techniques explicitly listed in the SPS notes?",
+      "options": [
+        "Interviews, surveys, workshops, prototyping, scenario, ethnography, and JAD",
+        "Compilation, debugging, packaging, and deployment",
+        "Branching, rebasing, merging, and fetching",
+        "Load balancing, sharding, encryption, and compression"
+      ],
+      "correct_answer": "Interviews, surveys, workshops, prototyping, scenario, ethnography, and JAD",
+      "explanation": "Those techniques appear on the How to Gather Requirements slide. The other options list activities from different domains.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["elicitation", "techniques"]
+    },
+    {
+      "id": "q_requirements_engineering_004",
+      "concept_id": "requirements_engineering",
+      "question": "In the lab activity, what information is recorded in the stakeholder matrix?",
+      "options": [
+        "Stakeholder roles, their needs or expectations, and their influence on the project",
+        "Only the developers' preferred programming languages",
+        "Just the final test cases for the product",
+        "The detailed source code structure of every subsystem"
+      ],
+      "correct_answer": "Stakeholder roles, their needs or expectations, and their influence on the project",
+      "explanation": "The lab instructions explicitly define the stakeholder matrix in those terms. It is meant to capture who matters and why.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["stakeholders", "lab", "matrix"]
+    },
+    {
+      "id": "q_requirements_engineering_005",
+      "concept_id": "requirements_engineering",
+      "question": "Requirements management deals with handling changes to the requirements document over time.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The process slide asks how to manage the sometimes inevitable changes to requirements. That is exactly the role of requirements management.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["management", "change"]
+    },
+    {
+      "id": "q_requirements_engineering_006",
+      "concept_id": "requirements_engineering",
+      "question": "Which option best defines a stakeholder in the context of the SPS notes and lab?",
+      "options": [
+        "A person or group with needs, expectations, influence, or involvement in the system and project",
+        "Only the programmers who write the source code",
+        "A testing tool used to review the SRS document",
+        "A report generated after deployment is complete"
+      ],
+      "correct_answer": "A person or group with needs, expectations, influence, or involvement in the system and project",
+      "explanation": "The lecture and lab materials treat stakeholders broadly, including users, managers, staff, and others affected by the system. They are not limited to developers.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["stakeholder", "definition"]
+    },
+    {
+      "id": "q_requirements_engineering_007",
+      "concept_id": "requirements_engineering",
+      "question": "A team asks, 'What are the main problems users face with the current system?' Which requirements activity does this question support?",
+      "options": [
+        "Requirements elicitation",
+        "Deployment monitoring",
+        "Code refactoring",
+        "Branch deletion"
+      ],
+      "correct_answer": "Requirements elicitation",
+      "explanation": "The lab gives example stakeholder interview questions like this one. Asking them is part of gathering requirements from users and other stakeholders.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["interviews", "elicitation", "lab"]
+    },
+    {
+      "id": "q_requirements_engineering_008",
+      "concept_id": "requirements_engineering",
+      "question": "After collecting requests from students, teachers, and administrators, a team now has to classify, prioritise, and negotiate conflicting needs. Which phase is this?",
+      "options": [
+        "Requirements analysis",
+        "Requirements elicitation",
+        "Version control setup",
+        "Sprint Review"
+      ],
+      "correct_answer": "Requirements analysis",
+      "explanation": "The notes define analysis as the stage where requirements are organised, prioritised, and negotiated. That is exactly what the scenario describes.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["analysis", "negotiation", "elite"]
+    },
+    {
+      "id": "q_requirements_engineering_009",
+      "concept_id": "requirements_engineering",
+      "question": "A group is starting the K-12 platform project. They must identify the right people, gather functional and non-functional needs, review what matters most, and then produce a formal requirements document. Which answer best reflects the SPS notes?",
+      "options": [
+        "Begin coding first, because requirements can be written more accurately after the system already exists",
+        "Start with stakeholder identification and elicitation, then analyse and prioritise the findings, validate them with stakeholders, and document them in an SRS",
+        "Skip validation because user feedback usually causes scope creep",
+        "Focus only on technical system requirements, since business and user requirements belong outside software engineering"
+      ],
+      "correct_answer": "Start with stakeholder identification and elicitation, then analyse and prioritise the findings, validate them with stakeholders, and document them in an SRS",
+      "explanation": "That sequence follows the requirements engineering process and the lab/project workflow. The notes do not support coding first or ignoring validation and non-technical viewpoints.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["workflow", "srs", "boss"]
+    },
+    {
+      "id": "q_requirements_engineering_010",
+      "concept_id": "requirements_engineering",
+      "question": "If the development team understands the product well, talking only to developers is enough to capture user requirements accurately.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes emphasize direct engagement with stakeholders such as users, managers, and support staff. Limiting elicitation to developers risks missing real user needs.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["stakeholders", "anomaly", "elicitation"]
+    },
+    {
+      "id": "q_requirements_specification_001",
+      "concept_id": "requirements_specification",
+      "question": "Which of the following examples from the notes is a business requirement?",
+      "options": [
+        "Improve power outage response time by 30%",
+        "Customers should receive real-time outage notifications",
+        "The system must send real-time outage alerts via SMS and email",
+        "Users shall authenticate using a health authority identity card"
+      ],
+      "correct_answer": "Improve power outage response time by 30%",
+      "explanation": "The comparison slide uses that statement as a business requirement because it expresses a high-level business objective. The other options are user or system-level statements.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["business-requirement", "types"]
+    },
+    {
+      "id": "q_requirements_specification_002",
+      "concept_id": "requirements_specification",
+      "question": "Which statement is a non-functional requirement from the SPS notes?",
+      "options": [
+        "The MHC-PMS shall be available to all clinics during normal working hours and downtime shall not exceed five seconds in any one day",
+        "Users should be able to enroll and attend classes online",
+        "The system should allow password reset",
+        "Students should receive coding lessons"
+      ],
+      "correct_answer": "The MHC-PMS shall be available to all clinics during normal working hours and downtime shall not exceed five seconds in any one day",
+      "explanation": "That example describes availability and downtime constraints, which are non-functional qualities. The other options describe functional services.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["non-functional", "availability"]
+    },
+    {
+      "id": "q_requirements_specification_003",
+      "concept_id": "requirements_specification",
+      "question": "How do the notes describe the software requirements document?",
+      "options": [
+        "It is the official statement of what is required of the system developers",
+        "It is a design document that should explain exactly how every feature will be coded",
+        "It is a deployment log written after release",
+        "It is a Git history report used to inspect branches"
+      ],
+      "correct_answer": "It is the official statement of what is required of the system developers",
+      "explanation": "The notes use that wording directly. They also warn that the requirements document is not a design document and should focus on what, not how.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["srs", "requirements-document"]
+    },
+    {
+      "id": "q_requirements_specification_004",
+      "concept_id": "requirements_specification",
+      "question": "Which chapter in the notes presents a high-level overview of the anticipated system architecture?",
+      "options": [
+        "System architecture",
+        "Index",
+        "Preface",
+        "Glossary"
+      ],
+      "correct_answer": "System architecture",
+      "explanation": "The document structure slides say the System architecture chapter shows the distribution of functions across modules and highlights reused components.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["srs-structure", "architecture"]
+    },
+    {
+      "id": "q_requirements_specification_005",
+      "concept_id": "requirements_specification",
+      "question": "Functional requirements may also explicitly state what the system should not do.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The functional requirements slide says they may explicitly state what the system should not do, as long as the specification remains complete and consistent.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["functional-requirements", "true-false"]
+    },
+    {
+      "id": "q_requirements_specification_006",
+      "concept_id": "requirements_specification",
+      "question": "Which option best defines the user story format taught in the SPS notes?",
+      "options": [
+        "As a [user role], I want [feature] so that [benefit]",
+        "Given [test], when [input], then [output]",
+        "If [bug], then [patch], therefore [release]",
+        "When [manager], because [budget], therefore [deadline]"
+      ],
+      "correct_answer": "As a [user role], I want [feature] so that [benefit]",
+      "explanation": "The notes present that sentence pattern as the standard user story structure. It keeps the story anchored to role, feature, and value.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["user-stories", "definition"]
+    },
+    {
+      "id": "q_requirements_specification_007",
+      "concept_id": "requirements_specification",
+      "question": "Which rewrite best turns the vague requirement 'The app should be fast' into a SMART requirement, based on the lecture example?",
+      "options": [
+        "Process payments in under 3 seconds with 10k users",
+        "Make the app very fast for everyone",
+        "Try to improve speed if the developers have time",
+        "Ensure the app feels smoother than before"
+      ],
+      "correct_answer": "Process payments in under 3 seconds with 10k users",
+      "explanation": "The SMART slide uses a measurable, concrete target instead of a vague adjective. That makes the requirement specific and testable.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["smart", "quality", "requirements"]
+    },
+    {
+      "id": "q_requirements_specification_008",
+      "concept_id": "requirements_specification",
+      "question": "Which type of requirement is the statement 'The system must support multi-currency transactions and integrate with international payment gateways' in the lecture comparison table?",
+      "options": [
+        "System requirement",
+        "Business requirement",
+        "Version control requirement",
+        "Stakeholder matrix entry"
+      ],
+      "correct_answer": "System requirement",
+      "explanation": "The comparison slide uses that example to show how system requirements describe how the system will meet business and user needs at a technical level.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["system-requirement", "classification", "elite"]
+    },
+    {
+      "id": "q_requirements_specification_009",
+      "concept_id": "requirements_specification",
+      "question": "A team is drafting the SRS for the K-12 platform. They need to decide what belongs in the document. Which option best follows the SPS notes?",
+      "options": [
+        "The SRS should mostly contain source code structure and implementation tricks because those are the most technical details",
+        "The SRS should describe what the system must do, include sections such as introduction, user requirements, architecture overview, detailed requirements, models, evolution, and appendices, and avoid turning into a design manual",
+        "The SRS should be replaced by a sprint board because user stories make all formal documents unnecessary",
+        "The SRS should include only business goals and omit functional or non-functional requirements"
+      ],
+      "correct_answer": "The SRS should describe what the system must do, include sections such as introduction, user requirements, architecture overview, detailed requirements, models, evolution, and appendices, and avoid turning into a design manual",
+      "explanation": "This matches both the requirements document structure slides and the warning that the requirements document should focus on what, not detailed implementation how.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["srs", "boss", "document-structure"]
+    },
+    {
+      "id": "q_requirements_specification_010",
+      "concept_id": "requirements_specification",
+      "question": "Because the SRS is a formal technical document, it should explain exactly how the software will be implemented.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes explicitly say the requirements document is not a design document and should describe what the system must do rather than how it will be built.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["srs", "what-vs-how", "anomaly"]
+    },
+    {
+      "id": "q_traceability_validation_001",
+      "concept_id": "traceability_validation",
+      "question": "What does forward traceability track?",
+      "options": [
+        "Requirements from their source through design, implementation, and testing",
+        "Only the defects found after deployment",
+        "Developers back to their Git commits",
+        "Budgets from the project start to the final presentation"
+      ],
+      "correct_answer": "Requirements from their source through design, implementation, and testing",
+      "explanation": "The traceability notes define forward traceability as following a requirement into later artifacts. It answers what is being built to satisfy that requirement.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["forward-traceability", "requirements"]
+    },
+    {
+      "id": "q_traceability_validation_002",
+      "concept_id": "traceability_validation",
+      "question": "Backward traceability helps answer which question?",
+      "options": [
+        "What requirement does this implemented feature fulfill?",
+        "Which developer wrote the longest source file?",
+        "How many users logged in during the Sprint?",
+        "Which branch should be deleted first?"
+      ],
+      "correct_answer": "What requirement does this implemented feature fulfill?",
+      "explanation": "Backward traceability traces a built component or feature back to its original requirement. It confirms that implemented work is justified by a requirement.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["backward-traceability", "requirements"]
+    },
+    {
+      "id": "q_traceability_validation_003",
+      "concept_id": "traceability_validation",
+      "question": "What is the main purpose of a traceability matrix?",
+      "options": [
+        "To map requirements to design, code, and test artifacts so nothing is overlooked",
+        "To replace all validation activities with one spreadsheet",
+        "To estimate how long a Sprint should last",
+        "To rank programmers by the number of commits they make"
+      ],
+      "correct_answer": "To map requirements to design, code, and test artifacts so nothing is overlooked",
+      "explanation": "The notes describe the matrix as a grid that links requirements to later artifacts. Its job is coverage and visibility, not staffing or scheduling.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["traceability-matrix", "coverage"]
+    },
+    {
+      "id": "q_traceability_validation_004",
+      "concept_id": "traceability_validation",
+      "question": "In the SPS notes, validation is mainly about making sure that:",
+      "options": [
+        "The right product is being built for stakeholder needs and intended use",
+        "Every requirement has already been implemented in code",
+        "No stakeholder ever asks for changes",
+        "The team uses only one software process model"
+      ],
+      "correct_answer": "The right product is being built for stakeholder needs and intended use",
+      "explanation": "Validation is described as checking that the software satisfies intended use and stakeholder needs. It is broader than verifying code completion.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["validation", "stakeholders"]
+    },
+    {
+      "id": "q_traceability_validation_005",
+      "concept_id": "traceability_validation",
+      "question": "Bidirectional traceability combines forward and backward traceability.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The traceability notes define bidirectional traceability exactly that way. It supports both completeness and accountability.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["bidirectional", "traceability"]
+    },
+    {
+      "id": "q_traceability_validation_006",
+      "concept_id": "traceability_validation",
+      "question": "Which option best defines a verifiable requirement?",
+      "options": [
+        "A requirement that can be checked or tested to confirm whether it has been met",
+        "A requirement that is popular with stakeholders even if it is vague",
+        "A requirement that is written only after implementation is complete",
+        "A requirement that appears in a slide deck instead of an SRS"
+      ],
+      "correct_answer": "A requirement that can be checked or tested to confirm whether it has been met",
+      "explanation": "The validation checklist in the notes asks whether requirements can be checked. Verifiability is about testability and objective confirmation.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["verifiability", "definition"]
+    },
+    {
+      "id": "q_traceability_validation_007",
+      "concept_id": "traceability_validation",
+      "question": "A stakeholder changes an important requirement midway through the project. Which benefit of traceability becomes most useful immediately?",
+      "options": [
+        "Impact analysis across design, code, and test artifacts",
+        "Automatic creation of a new product backlog",
+        "Replacement of all validation reviews",
+        "Guaranteed removal of all project risk"
+      ],
+      "correct_answer": "Impact analysis across design, code, and test artifacts",
+      "explanation": "The notes list impact analysis as a major reason traceability matters. It helps the team assess what else is affected by the change.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["impact-analysis", "change"]
+    },
+    {
+      "id": "q_traceability_validation_008",
+      "concept_id": "traceability_validation",
+      "question": "Users are unsure whether a proposed interface flow really matches their needs. Which validation technique from the notes is the strongest fit?",
+      "options": [
+        "Prototyping",
+        "Ignoring the issue until deployment",
+        "Deleting the requirement",
+        "Creating a bare repository"
+      ],
+      "correct_answer": "Prototyping",
+      "explanation": "The validation notes recommend prototypes and mockups when stakeholders need to visualize the system before committing to requirements. It is especially useful for interface questions.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["prototyping", "validation", "elite"]
+    },
+    {
+      "id": "q_traceability_validation_009",
+      "concept_id": "traceability_validation",
+      "question": "A requirements set contains vague wording, conflicting statements, and no clear link from requirements to test cases. Which response best follows the SPS notes?",
+      "options": [
+        "Accept the document because validation can wait until the final system test",
+        "Improve clarity and consistency, review the requirements for completeness and realism, and build traceability links such as a matrix to connect requirements to later artifacts and tests",
+        "Focus only on adding more non-functional requirements because those automatically remove ambiguity",
+        "Rewrite the whole document as source code so it becomes self-validating"
+      ],
+      "correct_answer": "Improve clarity and consistency, review the requirements for completeness and realism, and build traceability links such as a matrix to connect requirements to later artifacts and tests",
+      "explanation": "The notes combine quality measures, validation checklists, and traceability practices. The correct response uses all three instead of postponing quality work.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["quality", "traceability", "boss"]
+    },
+    {
+      "id": "q_traceability_validation_010",
+      "concept_id": "traceability_validation",
+      "question": "A requirement can still be considered high quality even if no one can test or verify it, as long as stakeholders say they like it.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes explicitly include verifiability in the validation checklist. A requirement that cannot be checked is not high quality just because it sounds good.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["verifiability", "anomaly", "quality"]
+    },
+    {
+      "id": "q_agile_scrum_001",
+      "concept_id": "agile_scrum",
+      "question": "Which statement reflects one of the Agile values highlighted in the SPS notes?",
+      "options": [
+        "Responding to change over following a plan",
+        "Comprehensive documentation over working software",
+        "Processes and tools over individuals and interactions",
+        "Contract negotiation over customer collaboration"
+      ],
+      "correct_answer": "Responding to change over following a plan",
+      "explanation": "The Agile values slide includes that comparison directly. The other options reverse the emphasis shown in the notes.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["agile-values", "principles"]
+    },
+    {
+      "id": "q_agile_scrum_002",
+      "concept_id": "agile_scrum",
+      "question": "According to the Scrum Guide, Scrum is founded on:",
+      "options": [
+        "Empiricism and lean thinking",
+        "Big Design Up Front and zero feedback",
+        "Centralized version control and release freezes",
+        "Late testing and fixed documentation weight"
+      ],
+      "correct_answer": "Empiricism and lean thinking",
+      "explanation": "The Scrum Theory section explicitly states that Scrum is founded on empiricism and lean thinking. That foundation supports inspection and adaptation.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["scrum", "empiricism", "lean"]
+    },
+    {
+      "id": "q_agile_scrum_003",
+      "concept_id": "agile_scrum",
+      "question": "Who orders the work into the Product Backlog according to the Scrum notes?",
+      "options": [
+        "The Product Owner",
+        "The Scrum Master",
+        "The Test Manager",
+        "The GitHub administrator"
+      ],
+      "correct_answer": "The Product Owner",
+      "explanation": "The Scrum definition section says the Product Owner orders the work into the Product Backlog. Product backlog management remains the Product Owner's accountability.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["product-owner", "product-backlog"]
+    },
+    {
+      "id": "q_agile_scrum_004",
+      "concept_id": "agile_scrum",
+      "question": "Which set contains the five Scrum values named in the guide?",
+      "options": [
+        "Commitment, Focus, Openness, Respect, and Courage",
+        "Speed, Automation, Testing, Releases, and Velocity",
+        "Planning, Design, Coding, Testing, and Deployment",
+        "Budget, Scope, Staff, Contract, and Governance"
+      ],
+      "correct_answer": "Commitment, Focus, Openness, Respect, and Courage",
+      "explanation": "Those five values appear together in the Scrum Values section. They support how the Scrum Team works, behaves, and makes decisions.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["scrum-values", "teamwork"]
+    },
+    {
+      "id": "q_agile_scrum_005",
+      "concept_id": "agile_scrum",
+      "question": "The Sprint is a container for the other Scrum events.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The Scrum Guide says the Sprint contains the other formal events. Sprint Planning, Daily Scrum, Sprint Review, and Sprint Retrospective all occur within it.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["sprint", "events"]
+    },
+    {
+      "id": "q_agile_scrum_006",
+      "concept_id": "agile_scrum",
+      "question": "Which option best defines the Definition of Done in Scrum?",
+      "options": [
+        "A formal description of the state of the Increment when it meets the required quality measures",
+        "A list of all future ideas that might improve the product someday",
+        "A report used only to justify cancelling a Sprint",
+        "A branch naming convention for Git repositories"
+      ],
+      "correct_answer": "A formal description of the state of the Increment when it meets the required quality measures",
+      "explanation": "The Scrum Guide defines the Definition of Done in those terms. It creates shared transparency around what completed work means.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["definition-of-done", "increment", "definition"]
+    },
+    {
+      "id": "q_agile_scrum_007",
+      "concept_id": "agile_scrum",
+      "question": "What is the main purpose of the Daily Scrum according to the Scrum Guide?",
+      "options": [
+        "To inspect progress toward the Sprint Goal and adapt the Sprint Backlog as needed",
+        "To approve the yearly project budget",
+        "To replace all other meetings and reviews permanently",
+        "To let the Product Owner assign tasks to each developer in detail"
+      ],
+      "correct_answer": "To inspect progress toward the Sprint Goal and adapt the Sprint Backlog as needed",
+      "explanation": "The guide says the Daily Scrum exists to inspect progress and adapt the upcoming plan. It supports focus and self-management.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["daily-scrum", "sprint-goal"]
+    },
+    {
+      "id": "q_agile_scrum_008",
+      "concept_id": "agile_scrum",
+      "question": "A Sprint Goal has become obsolete. According to the Scrum Guide, who has the authority to cancel the Sprint?",
+      "options": [
+        "The Product Owner",
+        "The Scrum Master",
+        "Any Developer",
+        "Any stakeholder attending the Sprint Review"
+      ],
+      "correct_answer": "The Product Owner",
+      "explanation": "The Sprint section states that only the Product Owner has authority to cancel the Sprint. This is an easy detail to mix up with the Scrum Master's facilitation role.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["sprint-cancel", "product-owner", "elite"]
+    },
+    {
+      "id": "q_agile_scrum_009",
+      "concept_id": "agile_scrum",
+      "question": "A team says it is using Scrum, but its backlog is unclear, progress is not transparent, incomplete work is shown as finished, and no one adapts after reviews. Which answer best fits the SPS notes?",
+      "options": [
+        "This is still healthy Scrum because Scrum is intentionally incomplete and teams can drop any practice they dislike",
+        "This setup undermines Scrum's pillars of transparency, inspection, and adaptation, and it ignores the need for commitments such as a clear backlog and Definition of Done",
+        "This is ideal Agile because removing structure always improves flexibility",
+        "This only becomes a problem if the team also stops using version control"
+      ],
+      "correct_answer": "This setup undermines Scrum's pillars of transparency, inspection, and adaptation, and it ignores the need for commitments such as a clear backlog and Definition of Done",
+      "explanation": "The Scrum Guide ties Scrum's effectiveness to transparency, inspection, adaptation, and clear artifacts with commitments. Without those, the team is no longer following the framework in any meaningful way.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["scrum-pillars", "definition-of-done", "boss"]
+    },
+    {
+      "id": "q_agile_scrum_010",
+      "concept_id": "agile_scrum",
+      "question": "Because Scrum is purposefully incomplete, a team can remove transparency or inspection and still claim to be practicing Scrum fully.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The guide says Scrum is immutable as a framework and depends on its empirical pillars. Removing transparency or inspection undercuts Scrum itself, not just a minor detail.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["scrum", "pillars", "anomaly"]
+    },
+    {
+      "id": "q_git_version_control_001",
+      "concept_id": "git_version_control",
+      "question": "What is version control according to the Git notes?",
+      "options": [
+        "A system that records changes to a file or set of files over time",
+        "A deployment tool that replaces testing",
+        "A method for drawing system architecture diagrams",
+        "A way to schedule Sprint events automatically"
+      ],
+      "correct_answer": "A system that records changes to a file or set of files over time",
+      "explanation": "That sentence appears directly in the Git introduction. Version control is about tracking change history, not deployment or planning.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["version-control", "definition"]
+    },
+    {
+      "id": "q_git_version_control_002",
+      "concept_id": "git_version_control",
+      "question": "How is Git classified in the notes?",
+      "options": [
+        "A distributed version control system",
+        "A centralized testing framework",
+        "A requirements elicitation technique",
+        "A project budgeting method"
+      ],
+      "correct_answer": "A distributed version control system",
+      "explanation": "The Git slides explicitly identify Git as a distributed version control system. That is contrasted with centralized systems in the introduction.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["git", "dvcs"]
+    },
+    {
+      "id": "q_git_version_control_003",
+      "concept_id": "git_version_control",
+      "question": "What does the git init command do?",
+      "options": [
+        "Creates a new Git repository and its .git metadata directory",
+        "Deletes all remote branches",
+        "Immediately pushes all local files to GitHub",
+        "Merges the current branch into main"
+      ],
+      "correct_answer": "Creates a new Git repository and its .git metadata directory",
+      "explanation": "The setup slides say git init creates a new repository and more precisely creates a .git subdirectory with repository metadata. It does not push or merge anything by itself.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["git-init", "repository"]
+    },
+    {
+      "id": "q_git_version_control_004",
+      "concept_id": "git_version_control",
+      "question": "What is the role of git add in the workflow shown in the notes?",
+      "options": [
+        "It begins tracking new files and stages changes for commit",
+        "It permanently records changes in repository history",
+        "It downloads the latest remote commits and merges them",
+        "It deletes the current branch and switches to main"
+      ],
+      "correct_answer": "It begins tracking new files and stages changes for commit",
+      "explanation": "The notes say git add is used to start tracking new files and to stage modified tracked files. A later git commit records those staged changes in history.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["git-add", "staging"]
+    },
+    {
+      "id": "q_git_version_control_005",
+      "concept_id": "git_version_control",
+      "question": "The command git commit -a automatically stages every already tracked modified file before committing.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The notes describe git commit -a as a shortcut that stages tracked modified files before committing. It does not pick up untracked files.",
+      "difficulty": 2,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["git-commit", "tracked-files"]
+    },
+    {
+      "id": "q_git_version_control_006",
+      "concept_id": "git_version_control",
+      "question": "Which option best defines a branch in Git according to the slides?",
+      "options": [
+        "A lightweight movable pointer to one of the commits",
+        "A backup copy of the whole internet",
+        "A folder that stores only test cases",
+        "A fixed label that can never change once created"
+      ],
+      "correct_answer": "A lightweight movable pointer to one of the commits",
+      "explanation": "The branch slides define a branch in exactly those terms. This is why creating and moving branches is cheap in Git.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["branch", "definition"]
+    },
+    {
+      "id": "q_git_version_control_007",
+      "concept_id": "git_version_control",
+      "question": "You want to see which files are untracked, modified, staged, or unmodified in your working copy. Which command should you use?",
+      "options": [
+        "git status",
+        "git push",
+        "git branch -d",
+        "git remote remove"
+      ],
+      "correct_answer": "git status",
+      "explanation": "The notes present git status as the command for checking file states in the working copy. It is the standard inspection step before staging or committing.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["git-status", "workflow"]
+    },
+    {
+      "id": "q_git_version_control_008",
+      "concept_id": "git_version_control",
+      "question": "You want to bring remote commits into your local repository for review without immediately merging them into your current branch. Which command best matches the notes?",
+      "options": [
+        "git fetch",
+        "git pull",
+        "git init",
+        "git commit -a"
+      ],
+      "correct_answer": "git fetch",
+      "explanation": "The slides say git fetch imports remote commits and stores them as remote branches so you can review them before integration. Pull fetches and merges immediately.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["git-fetch", "remotes", "elite"]
+    },
+    {
+      "id": "q_git_version_control_009",
+      "concept_id": "git_version_control",
+      "question": "A student joins the SPS group project on GitHub. They need a safe workflow that keeps the central copy clean while they work on their own changes and later synchronize them. Which option best matches the Git notes?",
+      "options": [
+        "Clone the repository, keep main unchanged as the local copy of the central repository, create a new local branch for your own changes, commit your work there, and then synchronize with the remote using the appropriate push and pull workflow",
+        "Edit directly inside the bare central repository so there is only one copy of the files",
+        "Avoid branches because they make collaboration harder than editing main directly",
+        "Use git pull as the first and only command before every change, even before the repository is cloned"
+      ],
+      "correct_answer": "Clone the repository, keep main unchanged as the local copy of the central repository, create a new local branch for your own changes, commit your work there, and then synchronize with the remote using the appropriate push and pull workflow",
+      "explanation": "This matches the workflow exercises in the Git notes. The material explicitly recommends leaving main unchanged and doing personal work on a separate branch.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["github", "branches", "boss"]
+    },
+    {
+      "id": "q_git_version_control_010",
+      "concept_id": "git_version_control",
+      "question": "git pull only downloads changes from a remote repository and never integrates them into the current local branch.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes say git pull is effectively git fetch followed by git merge of the remote copy of the current branch. It integrates, not just downloads.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["git-pull", "anomaly", "integration"]
+    },
+    {
+      "id": "q_sps_project_mvp_001",
+      "concept_id": "sps_project_mvp",
+      "question": "How do the SPS project notes describe the early development strategy for the K-12 platform?",
+      "options": [
+        "Use an iterative approach with an early Minimum Viable Product before expanding features",
+        "Build the full system in one pass before showing anything to users",
+        "Delay all user testing until after final deployment",
+        "Ignore process model choice and let each team member work independently"
+      ],
+      "correct_answer": "Use an iterative approach with an early Minimum Viable Product before expanding features",
+      "explanation": "The project brief explicitly says the process should follow an iterative approach with an early MVP. Feature expansion and refinement come later.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["mvp", "project", "iteration"]
+    },
+    {
+      "id": "q_sps_project_mvp_002",
+      "concept_id": "sps_project_mvp",
+      "question": "Which set of work belongs to the MVP Development phase in the SPS project notes?",
+      "options": [
+        "User authentication, dashboard, basic lesson structure, basic AI recommendations, and initial user testing",
+        "Final sustainability plan, open-source partnerships, and full deployment monitoring only",
+        "Only bug fixing and no feature implementation",
+        "Teacher dashboards, robotics expansion, and all final scalability work"
+      ],
+      "correct_answer": "User authentication, dashboard, basic lesson structure, basic AI recommendations, and initial user testing",
+      "explanation": "Those tasks are listed under Phase 1 or MVP Development. Later phases expand features, improve recommendations, and handle broader deployment/refinement work.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["mvp-phase", "features"]
+    },
+    {
+      "id": "q_sps_project_mvp_003",
+      "concept_id": "sps_project_mvp",
+      "question": "In MoSCoW prioritisation, what does Must-Have mean?",
+      "options": [
+        "Essential features that are critical for the MVP or release scope",
+        "Nice-to-have features that can be postponed easily",
+        "Items that are permanently out of scope",
+        "Features chosen only by the lecturer after deployment"
+      ],
+      "correct_answer": "Essential features that are critical for the MVP or release scope",
+      "explanation": "The lab notes define Must-Have as essential. It is the category for functionality the team cannot leave out of the MVP scope.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["moscow", "prioritisation"]
+    },
+    {
+      "id": "q_sps_project_mvp_004",
+      "concept_id": "sps_project_mvp",
+      "question": "What does the MVP rubric expect for good version control usage?",
+      "options": [
+        "Consistent use with clear commit messages and a meaningful commit history",
+        "One large commit at the end of the project",
+        "No comments or commit descriptions so the history stays shorter",
+        "Using version control only after the project presentation"
+      ],
+      "correct_answer": "Consistent use with clear commit messages and a meaningful commit history",
+      "explanation": "The rubric names GitHub commits and comments and rewards frequent, meaningful, well-documented commit history. Sparse or unclear commits score lower.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["rubric", "version-control", "commits"]
+    },
+    {
+      "id": "q_sps_project_mvp_005",
+      "concept_id": "sps_project_mvp",
+      "question": "Initial user testing is part of the MVP phase in the SPS project.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The MVP Development phase explicitly includes conducting initial user testing and collecting feedback. Testing is not postponed until the very end.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["user-testing", "mvp"]
+    },
+    {
+      "id": "q_sps_project_mvp_006",
+      "concept_id": "sps_project_mvp",
+      "question": "Which option best defines the Minimum Viable Product in the context of the SPS project documents?",
+      "options": [
+        "An early version that delivers core platform functionality before later feature expansion",
+        "The last release produced after every optional feature has been completed",
+        "A document that replaces the stakeholder matrix and SRS",
+        "A grading method for measuring plagiarism percentage"
+      ],
+      "correct_answer": "An early version that delivers core platform functionality before later feature expansion",
+      "explanation": "The project brief uses MVP to describe an initial workable version focused on essential functionality. It is the starting point for later refinement, not the final fully expanded system.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["mvp", "definition"]
+    },
+    {
+      "id": "q_sps_project_mvp_007",
+      "concept_id": "sps_project_mvp",
+      "question": "According to the MoSCoW example in the notes, how should 'dark mode' be prioritised?",
+      "options": [
+        "Should-Have",
+        "Must-Have",
+        "Won't-Have",
+        "Project Goal"
+      ],
+      "correct_answer": "Should-Have",
+      "explanation": "The user story prioritisation slide gives dark mode as the example of a Should-Have feature: important, but not essential.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["moscow", "dark-mode"]
+    },
+    {
+      "id": "q_sps_project_mvp_008",
+      "concept_id": "sps_project_mvp",
+      "question": "After the team identifies stakeholders and defines requirements, which deliverables are listed in the project schedule for that stage?",
+      "options": [
+        "Stakeholder Analysis, Requirements Specification, and Project Plan",
+        "Final Sustainability Plan and Pilot Feedback Report only",
+        "Deployment Report and Bug Fix Log only",
+        "GitHub Account Setup and SSH Key Registration only"
+      ],
+      "correct_answer": "Stakeholder Analysis, Requirements Specification, and Project Plan",
+      "explanation": "The project schedule links those deliverables to the early task of identifying stakeholders and defining requirements. They appear before deeper implementation work.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["deliverables", "planning", "elite"]
+    },
+    {
+      "id": "q_sps_project_mvp_009",
+      "concept_id": "sps_project_mvp",
+      "question": "A team has only the first five weeks to show serious progress on the K-12 platform. They are tempted to delay requirements work and build advanced features first. Which response best matches the SPS project notes and lab materials?",
+      "options": [
+        "Skip stakeholder and SRS work for now and focus on the most visually impressive features so the MVP looks advanced",
+        "Use the early phase to identify stakeholders, define requirements, build the core platform pieces such as login, dashboard, and a basic lesson, add a basic AI recommendation component, and gather initial user feedback before expanding features later",
+        "Avoid prioritisation because MoSCoW is only useful after deployment",
+        "Leave testing until the deployment phase because MVP work is only about feature quantity"
+      ],
+      "correct_answer": "Use the early phase to identify stakeholders, define requirements, build the core platform pieces such as login, dashboard, and a basic lesson, add a basic AI recommendation component, and gather initial user feedback before expanding features later",
+      "explanation": "This answer follows both the project milestones and the lab workflow. The notes frame MVP as disciplined scoping plus early feedback, not as rushed feature accumulation.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["mvp", "boss", "project-planning"]
+    },
+    {
+      "id": "q_sps_project_mvp_010",
+      "concept_id": "sps_project_mvp",
+      "question": "A Won't-Have item in MoSCoW means the team still intends to squeeze it into the MVP if enough time is left during the same phase.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes define Won't-Have as out of scope for now. Treating it as a hidden MVP commitment defeats the purpose of prioritisation.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["moscow", "scope", "anomaly"]
+    },
+    {
+      "id": "q_process_quality_reviews_001",
+      "concept_id": "process_quality_reviews",
+      "question": "According to the V-model notes, unit testing traces to which artifact level?",
+      "options": [
+        "Detailed Design",
+        "High Level Design",
+        "Product Requirements Specification",
+        "Deployment plan"
+      ],
+      "correct_answer": "Detailed Design",
+      "explanation": "The notes say unit tests trace to detailed design because they focus on individual modules, procedures, or subroutines defined at that level.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["unit-test", "detailed-design", "vee-model"]
+    },
+    {
+      "id": "q_process_quality_reviews_002",
+      "concept_id": "process_quality_reviews",
+      "question": "Which testing level in the notes traces to High Level Design by checking module interactions?",
+      "options": [
+        "Integration test",
+        "Acceptance test",
+        "Regression test",
+        "Product test"
+      ],
+      "correct_answer": "Integration test",
+      "explanation": "Integration testing is linked to High Level Design in the notes because it focuses on interactions and interfaces between modules or subsystems.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["integration-test", "hld", "testing"]
+    },
+    {
+      "id": "q_process_quality_reviews_003",
+      "concept_id": "process_quality_reviews",
+      "question": "What do the SPS notes say about product testing when compared with early reviews?",
+      "options": [
+        "It is late and expensive",
+        "It replaces the need for design reviews",
+        "It is the cheapest place to find most defects",
+        "It makes traceability unnecessary"
+      ],
+      "correct_answer": "It is late and expensive",
+      "explanation": "The notes contrast product testing with earlier review activities and emphasize that late defect discovery increases cost and risk.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["product-testing", "cost", "defects"]
+    },
+    {
+      "id": "q_process_quality_reviews_004",
+      "concept_id": "process_quality_reviews",
+      "question": "In the V-model notes, what is the main purpose of Software Quality Assurance (SQA)?",
+      "options": [
+        "To check whether the required process steps are being followed",
+        "To replace all functional testing with audits",
+        "To write the Product Backlog for the team",
+        "To stage files before commit"
+      ],
+      "correct_answer": "To check whether the required process steps are being followed",
+      "explanation": "The notes describe SQA as asking whether the process is being followed properly. It is about process quality, not just feature testing.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["sqa", "process-quality", "reviews"]
+    },
+    {
+      "id": "q_process_quality_reviews_005",
+      "concept_id": "process_quality_reviews",
+      "question": "Regression testing is used after a bug fix to make sure the defect stays fixed.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The notes define regression testing as testing after a bug fix to make sure the bug remains gone and no new breakage was introduced.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["regression-test", "true-false"]
+    },
+    {
+      "id": "q_process_quality_reviews_006",
+      "concept_id": "process_quality_reviews",
+      "question": "Which option best defines acceptance testing in the SPS notes?",
+      "options": [
+        "Testing customer-facing functionality against product requirements",
+        "Testing internal module logic against detailed design only",
+        "Testing commits before they are pushed to GitHub",
+        "Testing whether a requirement is measurable"
+      ],
+      "correct_answer": "Testing customer-facing functionality against product requirements",
+      "explanation": "The notes link acceptance testing to the Product Requirements Specification and customer-facing behavior, not just internal module checks.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["acceptance-test", "prs", "definition"]
+    },
+    {
+      "id": "q_process_quality_reviews_007",
+      "concept_id": "process_quality_reviews",
+      "question": "A team wants to find more defects before expensive late-stage testing begins. Based on the SPS notes, which approach best supports that goal?",
+      "options": [
+        "Use design peer reviews, code peer reviews, and layered testing earlier in the life cycle",
+        "Wait until final product testing because it is the most complete view of the system",
+        "Avoid traceability so the team can move faster",
+        "Replace all reviews with one final acceptance test"
+      ],
+      "correct_answer": "Use design peer reviews, code peer reviews, and layered testing earlier in the life cycle",
+      "explanation": "The notes explicitly argue that earlier reviews and staged testing are cheaper and more effective than finding most defects only at the end.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["peer-review", "layered-testing", "quality"]
+    },
+    {
+      "id": "q_process_quality_reviews_008",
+      "concept_id": "process_quality_reviews",
+      "question": "A defect appears only when two modules interact, even though each module works correctly by itself. Which test level best targets this problem according to the SPS notes?",
+      "options": [
+        "Integration testing",
+        "Acceptance testing",
+        "Requirements review",
+        "Project presentation"
+      ],
+      "correct_answer": "Integration testing",
+      "explanation": "Integration testing focuses on module interactions and interfaces. That makes it the appropriate level for defects that do not appear in isolated unit behavior.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["integration", "interfaces", "elite"]
+    },
+    {
+      "id": "q_process_quality_reviews_009",
+      "concept_id": "process_quality_reviews",
+      "question": "A team claims it can save time by skipping most reviews and traceability work, then relying on one large late testing phase to reveal the important defects. Which response best matches the SPS notes?",
+      "options": [
+        "This is efficient because the final test phase sees the whole product at once and makes earlier checks redundant",
+        "This is risky because the notes argue that late product testing is expensive, while reviews, traceability, and staged tests help find problems earlier and link them to the right artifacts",
+        "This is acceptable only if the team also avoids documentation completely",
+        "This is the preferred strategy of the V-model"
+      ],
+      "correct_answer": "This is risky because the notes argue that late product testing is expensive, while reviews, traceability, and staged tests help find problems earlier and link them to the right artifacts",
+      "explanation": "The SPS material repeatedly warns that deferring quality work makes defects more expensive to fix. The V-model and related notes spread quality activities across the life cycle for this reason.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["vee-model", "reviews", "boss"]
+    },
+    {
+      "id": "q_process_quality_reviews_010",
+      "concept_id": "process_quality_reviews",
+      "question": "If a system passes acceptance testing, unit and integration testing were unnecessary process overhead.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes separate test levels for different purposes. Passing a late customer-facing test does not make earlier module and interaction testing unnecessary.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["testing-levels", "anomaly", "quality"]
+    },
+    {
+      "id": "q_stakeholders_elicitation_001",
+      "concept_id": "stakeholders_elicitation",
+      "question": "What does the stakeholder matrix in the SPS lab ask teams to record?",
+      "options": [
+        "Stakeholder roles, their needs or expectations, and their influence on the project",
+        "Only each team member's coding language preference",
+        "The final test report and deployment log",
+        "Only the system architecture and database schema"
+      ],
+      "correct_answer": "Stakeholder roles, their needs or expectations, and their influence on the project",
+      "explanation": "The lab instructions describe the stakeholder matrix using those exact kinds of entries. It is meant to organize who matters and what they care about.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["stakeholder-matrix", "lab", "roles"]
+    },
+    {
+      "id": "q_stakeholders_elicitation_002",
+      "concept_id": "stakeholders_elicitation",
+      "question": "Which of the following is explicitly listed in the SPS notes as a requirements elicitation technique?",
+      "options": [
+        "Workshops",
+        "Code minification",
+        "Branch deletion",
+        "Binary packaging"
+      ],
+      "correct_answer": "Workshops",
+      "explanation": "The elicitation slide lists interviews, surveys, workshops, prototyping, scenario, ethnography, and JAD. The other options are unrelated to eliciting requirements.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["elicitation", "techniques"]
+    },
+    {
+      "id": "q_stakeholders_elicitation_003",
+      "concept_id": "stakeholders_elicitation",
+      "question": "In the patient records stakeholder example, who is responsible for installing and maintaining the system?",
+      "options": [
+        "IT staff",
+        "Patients",
+        "Receptionists",
+        "Ethics managers"
+      ],
+      "correct_answer": "IT staff",
+      "explanation": "The stakeholder example in the requirements engineering notes explicitly includes IT staff as the group responsible for installation and maintenance.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["stakeholders", "it-staff", "example"]
+    },
+    {
+      "id": "q_stakeholders_elicitation_004",
+      "concept_id": "stakeholders_elicitation",
+      "question": "Which question comes directly from the SPS lab's example stakeholder interview prompts?",
+      "options": [
+        "What features would improve user engagement and usability?",
+        "Which merge algorithm does Git choose automatically?",
+        "How many Scrum Masters should one Sprint have?",
+        "What syntax highlights the glossary chapter?"
+      ],
+      "correct_answer": "What features would improve user engagement and usability?",
+      "explanation": "That wording appears in the lab's example questions for stakeholder interviews. It is used to guide elicitation around real user needs.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["interview-questions", "lab", "usability"]
+    },
+    {
+      "id": "q_stakeholders_elicitation_005",
+      "concept_id": "stakeholders_elicitation",
+      "question": "Stakeholder analysis is useful because different stakeholders can have different needs and influence on the project.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The stakeholder matrix and examples in the notes assume that different groups bring different expectations, constraints, and priorities to the project.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["stakeholders", "analysis", "true-false"]
+    },
+    {
+      "id": "q_stakeholders_elicitation_006",
+      "concept_id": "stakeholders_elicitation",
+      "question": "Which option best defines elicitation in requirements engineering?",
+      "options": [
+        "The activity of gathering information about what users and stakeholders need from the system",
+        "The activity of translating source code into diagrams after deployment",
+        "The activity of deleting low-priority requirements from the backlog",
+        "The activity of compressing project files for submission"
+      ],
+      "correct_answer": "The activity of gathering information about what users and stakeholders need from the system",
+      "explanation": "The notes describe elicitation as the part of requirements engineering concerned with discovering required services, concerns, and expectations from stakeholders.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["elicitation", "definition", "requirements"]
+    },
+    {
+      "id": "q_stakeholders_elicitation_007",
+      "concept_id": "stakeholders_elicitation",
+      "question": "A team begins its K-12 platform work by listing students, teachers, parents, administrators, and IT staff, then recording their roles and project influence. Which SPS deliverable are they creating first?",
+      "options": [
+        "Stakeholder matrix",
+        "Regression test suite",
+        "Release branch",
+        "Definition of Done"
+      ],
+      "correct_answer": "Stakeholder matrix",
+      "explanation": "That activity matches the lab's stakeholder analysis deliverable exactly. It is meant to organize stakeholder roles, needs, and influence before deeper requirements work.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["stakeholder-matrix", "deliverable", "lab"]
+    },
+    {
+      "id": "q_stakeholders_elicitation_008",
+      "concept_id": "stakeholders_elicitation",
+      "question": "During elicitation for a records system, the team asks about current practice, legal restrictions, security issues, costs, and timescale. In the SPS notes, what is the purpose of such broad questioning?",
+      "options": [
+        "To gather multiple perspectives and constraints before drafting and reviewing requirements",
+        "To replace later validation entirely",
+        "To avoid talking to end users directly",
+        "To produce a finished design immediately"
+      ],
+      "correct_answer": "To gather multiple perspectives and constraints before drafting and reviewing requirements",
+      "explanation": "The patient records example shows elicitation as more than just feature collection. It gathers legal, operational, security, cost, and timing concerns before documentation is reviewed.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["elicitation", "constraints", "elite"]
+    },
+    {
+      "id": "q_stakeholders_elicitation_009",
+      "concept_id": "stakeholders_elicitation",
+      "question": "A team decides that speaking to only one stakeholder group will save time, so it interviews only administrators and assumes teachers and students want the same things. Which response best matches the SPS notes?",
+      "options": [
+        "This is acceptable because high-influence stakeholders automatically represent all other users",
+        "This is risky because stakeholder analysis exists precisely to capture different roles, expectations, and influence. Ignoring other groups can leave important needs and constraints undiscovered.",
+        "This is ideal if the administrators promise to review the final code later",
+        "This makes validation unnecessary because fewer opinions create fewer conflicts"
+      ],
+      "correct_answer": "This is risky because stakeholder analysis exists precisely to capture different roles, expectations, and influence. Ignoring other groups can leave important needs and constraints undiscovered.",
+      "explanation": "The SPS lab and lecture notes repeatedly emphasize identifying multiple stakeholder groups because they do not all need the same things. Cutting that step creates blind spots in the requirements.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["stakeholders", "boss", "elicitation"]
+    },
+    {
+      "id": "q_stakeholders_elicitation_010",
+      "concept_id": "stakeholders_elicitation",
+      "question": "Because stakeholders often disagree, the safest elicitation strategy is to avoid interviewing them directly and infer the requirements from the development team instead.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes treat direct stakeholder engagement as essential. Disagreement is a reason for structured analysis and negotiation, not a reason to avoid stakeholder input.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["elicitation", "stakeholders", "anomaly"]
+    },
+    {
+      "id": "q_requirements_quality_001",
+      "concept_id": "requirements_quality",
+      "question": "Which quality measure means a requirement should be expressed clearly and unambiguously?",
+      "options": [
+        "Clarity",
+        "Portability",
+        "Delivery",
+        "Branching"
+      ],
+      "correct_answer": "Clarity",
+      "explanation": "The quality notes define clarity as making sure requirements leave no room for different interpretations. Ambiguity causes confusion and rework.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["clarity", "quality", "requirements"]
+    },
+    {
+      "id": "q_requirements_quality_002",
+      "concept_id": "requirements_quality",
+      "question": "Which quality measure is concerned with avoiding contradictions between requirements?",
+      "options": [
+        "Consistency",
+        "Availability",
+        "Increment",
+        "Deployment"
+      ],
+      "correct_answer": "Consistency",
+      "explanation": "Consistency means the requirements should not conflict with one another. The notes warn that inconsistency leads to confusion and misalignment.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["consistency", "quality"]
+    },
+    {
+      "id": "q_requirements_quality_003",
+      "concept_id": "requirements_quality",
+      "question": "What does verifiability mean for a requirement?",
+      "options": [
+        "It can be tested or checked to confirm whether it has been met",
+        "It is easy to rewrite into source code",
+        "It belongs only in the glossary section",
+        "It never needs to change after first approval"
+      ],
+      "correct_answer": "It can be tested or checked to confirm whether it has been met",
+      "explanation": "The notes define verifiability in terms of being able to check whether the system satisfies the requirement. A requirement that cannot be tested is weak.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["verifiability", "testing"]
+    },
+    {
+      "id": "q_requirements_quality_004",
+      "concept_id": "requirements_quality",
+      "question": "Which quality measure asks whether a requirement can realistically be achieved within project constraints?",
+      "options": [
+        "Feasibility",
+        "Traceability",
+        "Refactoring",
+        "Timeboxing"
+      ],
+      "correct_answer": "Feasibility",
+      "explanation": "Feasibility is about whether time, budget, resources, and technical capability make the requirement achievable in practice.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["feasibility", "constraints"]
+    },
+    {
+      "id": "q_requirements_quality_005",
+      "concept_id": "requirements_quality",
+      "question": "A requirement should be measurable if the team wants to make it verifiable.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The notes connect verifiability with measurable statements. If a requirement cannot be checked objectively, the team cannot easily confirm it was satisfied.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["verifiability", "measurement", "true-false"]
+    },
+    {
+      "id": "q_requirements_quality_006",
+      "concept_id": "requirements_quality",
+      "question": "Which option best defines modifiability as a requirement quality measure?",
+      "options": [
+        "Requirements are written so they can be updated easily when changes arise",
+        "Requirements never change after the first version is signed off",
+        "Requirements are converted directly into Git branches",
+        "Requirements are intentionally vague so they fit many future situations"
+      ],
+      "correct_answer": "Requirements are written so they can be updated easily when changes arise",
+      "explanation": "The notes describe modifiability as making requirements easy to revise as projects evolve. It supports controlled change rather than resisting all change.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["modifiability", "definition", "change"]
+    },
+    {
+      "id": "q_requirements_quality_007",
+      "concept_id": "requirements_quality",
+      "question": "A team writes: 'The app should be easy to use.' Based on the SPS quality notes, what is the biggest immediate problem with this requirement?",
+      "options": [
+        "It lacks clarity and is not easily verifiable",
+        "It is too technical for an SRS",
+        "It already contains too many measurable details",
+        "It is automatically complete because it mentions usability"
+      ],
+      "correct_answer": "It lacks clarity and is not easily verifiable",
+      "explanation": "The statement is vague and difficult to test directly. The SPS notes push teams toward clearer, more specific, and measurable wording.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["clarity", "verifiability", "quality"]
+    },
+    {
+      "id": "q_requirements_quality_008",
+      "concept_id": "requirements_quality",
+      "question": "A stakeholder demands a feature that the team cannot implement within the available budget and current technology. Which quality issue is most directly affected?",
+      "options": [
+        "Feasibility",
+        "Completeness",
+        "Openness",
+        "Mergeability"
+      ],
+      "correct_answer": "Feasibility",
+      "explanation": "The quality notes define feasibility in terms of whether the requirement can actually be achieved within project constraints. Budget and technical limitations make this an explicit feasibility issue.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["feasibility", "elite", "constraints"]
+    },
+    {
+      "id": "q_requirements_quality_009",
+      "concept_id": "requirements_quality",
+      "question": "A requirements document contains ambiguous phrasing, conflicting statements, and several important sections that cannot be tested. Which response best follows the SPS notes?",
+      "options": [
+        "Leave the document as it is and rely on developers to interpret it flexibly during coding",
+        "Improve clarity, remove contradictions, check completeness, rewrite weak statements to become measurable and verifiable, and confirm feasibility within project constraints",
+        "Convert the whole document into user stories only and ignore formal quality checks",
+        "Postpone all quality work until after deployment because real users will reveal the problems anyway"
+      ],
+      "correct_answer": "Improve clarity, remove contradictions, check completeness, rewrite weak statements to become measurable and verifiable, and confirm feasibility within project constraints",
+      "explanation": "The quality measures in the notes work together. The best response is to strengthen the document before implementation instead of treating ambiguity and inconsistency as acceptable.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["requirements-quality", "boss", "improvement"]
+    },
+    {
+      "id": "q_requirements_quality_010",
+      "concept_id": "requirements_quality",
+      "question": "A requirement can still be considered strong even if it conflicts with another requirement, as long as both are important to different stakeholders.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes treat consistency as a quality requirement. Conflicts must be resolved through review and negotiation rather than preserved as contradictions.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["consistency", "anomaly", "quality"]
+    },
+    {
+      "id": "q_user_stories_prioritization_001",
+      "concept_id": "user_stories_prioritization",
+      "question": "Which format matches the SPS notes for a user story?",
+      "options": [
+        "As a [user role], I want [feature] so that [benefit]",
+        "If [bug], then [patch], because [deadline]",
+        "When [system], because [database], therefore [module]",
+        "Given [test], when [input], then [output]"
+      ],
+      "correct_answer": "As a [user role], I want [feature] so that [benefit]",
+      "explanation": "The user story slides give that sentence pattern directly. It keeps the feature tied to a user and a reason for value.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["user-story", "format"]
+    },
+    {
+      "id": "q_user_stories_prioritization_002",
+      "concept_id": "user_stories_prioritization",
+      "question": "Why do the SPS notes use user stories in Agile work?",
+      "options": [
+        "To describe features from the user's perspective and make needs clearer",
+        "To replace all project planning and stakeholder discussion",
+        "To avoid writing backlog items or tasks",
+        "To document only non-functional requirements"
+      ],
+      "correct_answer": "To describe features from the user's perspective and make needs clearer",
+      "explanation": "The notes describe user stories as short, simple feature descriptions from the perspective of the user. Their purpose is clarity around user value.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["user-story", "agile", "value"]
+    },
+    {
+      "id": "q_user_stories_prioritization_003",
+      "concept_id": "user_stories_prioritization",
+      "question": "In MoSCoW prioritisation, which category refers to critical features?",
+      "options": [
+        "Must-Have",
+        "Could-Have",
+        "Won't-Have",
+        "Retrospective"
+      ],
+      "correct_answer": "Must-Have",
+      "explanation": "The notes describe Must-Have items as essential features. They are the items that belong in the core scope of the MVP or release.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["moscow", "must-have"]
+    },
+    {
+      "id": "q_user_stories_prioritization_004",
+      "concept_id": "user_stories_prioritization",
+      "question": "What does Won't-Have mean in the SPS prioritisation notes?",
+      "options": [
+        "A feature that is out of scope for now",
+        "A feature that must be implemented before all others",
+        "A feature that automatically becomes part of the next Sprint",
+        "A feature that only developers are allowed to choose"
+      ],
+      "correct_answer": "A feature that is out of scope for now",
+      "explanation": "The notes describe Won't-Have items as excluded from the current scope. They are not hidden Must-Haves and should not be treated that way.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["moscow", "wont-have", "scope"]
+    },
+    {
+      "id": "q_user_stories_prioritization_005",
+      "concept_id": "user_stories_prioritization",
+      "question": "A user story can be broken down into smaller tasks for backlog and sprint work.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The SPS slides show user stories being decomposed into specific development tasks and assignees in sprint planning work.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["user-story", "tasks", "backlog"]
+    },
+    {
+      "id": "q_user_stories_prioritization_006",
+      "concept_id": "user_stories_prioritization",
+      "question": "Which option best defines MoSCoW prioritisation?",
+      "options": [
+        "A method for classifying work into Must-Have, Should-Have, Could-Have, and Won't-Have categories",
+        "A method for writing only technical system requirements",
+        "A testing strategy for verifying non-functional requirements only",
+        "A branching strategy that protects main from direct edits"
+      ],
+      "correct_answer": "A method for classifying work into Must-Have, Should-Have, Could-Have, and Won't-Have categories",
+      "explanation": "The notes present MoSCoW as a prioritisation framework used during validation and scope planning, especially for MVP work.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["moscow", "definition", "prioritisation"]
+    },
+    {
+      "id": "q_user_stories_prioritization_007",
+      "concept_id": "user_stories_prioritization",
+      "question": "A team labels login functionality as Must-Have and dark mode as Should-Have. What does this decision show?",
+      "options": [
+        "The team is distinguishing essential MVP scope from useful but less critical features",
+        "The team is treating dark mode as a blocker for initial release",
+        "The team is rejecting all user stories in favor of code-first planning",
+        "The team is using prioritisation only for documentation style"
+      ],
+      "correct_answer": "The team is distinguishing essential MVP scope from useful but less critical features",
+      "explanation": "This matches the examples in the notes. Login is critical platform functionality, while dark mode is important but not essential for the MVP.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["mvp", "moscow", "scope"]
+    },
+    {
+      "id": "q_user_stories_prioritization_008",
+      "concept_id": "user_stories_prioritization",
+      "question": "Which user story is written more effectively according to the SPS notes?",
+      "options": [
+        "As a user, I want to reset my password via email verification so that I can regain access securely",
+        "I want password reset",
+        "Reset password maybe somehow soon",
+        "Security feature for later perhaps"
+      ],
+      "correct_answer": "As a user, I want to reset my password via email verification so that I can regain access securely",
+      "explanation": "The notes explicitly compare this stronger example against a vague password reset statement. It clearly states who, what, and why.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["user-story", "writing", "elite"]
+    },
+    {
+      "id": "q_user_stories_prioritization_009",
+      "concept_id": "user_stories_prioritization",
+      "question": "A team has four proposed features for its first K-12 MVP: login, student progress tracking, animated decorative UI effects, and a future social networking feature. Which prioritisation strategy best matches the SPS notes?",
+      "options": [
+        "Treat all four as Must-Have so nothing important is delayed",
+        "Prioritise login and core progress tracking as Must-Have items, place decorative enhancements lower, and keep clearly out-of-scope features outside the MVP using MoSCoW",
+        "Ignore prioritisation because user stories already solve scope control by themselves",
+        "Move all visible UI ideas to the top because MVP should focus on appearance before function"
+      ],
+      "correct_answer": "Prioritise login and core progress tracking as Must-Have items, place decorative enhancements lower, and keep clearly out-of-scope features outside the MVP using MoSCoW",
+      "explanation": "The notes connect user stories to prioritisation so teams can protect essential value first. MoSCoW exists to stop optional work from crowding out core MVP scope.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["moscow", "mvp", "boss"]
+    },
+    {
+      "id": "q_user_stories_prioritization_010",
+      "concept_id": "user_stories_prioritization",
+      "question": "A Won't-Have item is simply a low-priority feature that still belongs in the current MVP if enough time remains.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The SPS notes use Won't-Have to mark work that is out of scope for now. Treating it as a backup MVP commitment defeats the purpose of prioritisation.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["won't-have", "anomaly", "scope"]
+    },
+    {
+      "id": "q_scrum_framework_001",
+      "concept_id": "scrum_framework",
+      "question": "What is the fundamental unit of Scrum according to the Scrum Guide used in SPS?",
+      "options": [
+        "The Scrum Team consisting of one Scrum Master, one Product Owner, and Developers",
+        "The Product Backlog by itself",
+        "The Daily Scrum meeting only",
+        "A single architect working with one tester"
+      ],
+      "correct_answer": "The Scrum Team consisting of one Scrum Master, one Product Owner, and Developers",
+      "explanation": "The guide identifies the Scrum Team as the fundamental unit of Scrum. It is made up of those three specific accountabilities.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["scrum-team", "roles"]
+    },
+    {
+      "id": "q_scrum_framework_002",
+      "concept_id": "scrum_framework",
+      "question": "How are Scrum Teams described in the guide?",
+      "options": [
+        "Cross-functional and self-managing",
+        "Strictly hierarchical and document-driven",
+        "Large, fixed departments with permanent sub-teams",
+        "Controlled entirely by the Scrum Master"
+      ],
+      "correct_answer": "Cross-functional and self-managing",
+      "explanation": "The Scrum Guide says Scrum Teams have the skills needed to create value and decide internally who does what, when, and how.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["scrum-team", "cross-functional", "self-managing"]
+    },
+    {
+      "id": "q_scrum_framework_003",
+      "concept_id": "scrum_framework",
+      "question": "What is the purpose of the Sprint Review?",
+      "options": [
+        "To inspect the outcome of the Sprint and determine future adaptations with stakeholders",
+        "To assign permanent job titles within the Scrum Team",
+        "To replace Sprint Planning entirely",
+        "To archive old backlog items automatically"
+      ],
+      "correct_answer": "To inspect the outcome of the Sprint and determine future adaptations with stakeholders",
+      "explanation": "The Scrum Guide describes the Sprint Review as the event where results are inspected with stakeholders and future adjustments are discussed.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["sprint-review", "adaptation", "stakeholders"]
+    },
+    {
+      "id": "q_scrum_framework_004",
+      "concept_id": "scrum_framework",
+      "question": "Which artifact is described as the single source of work undertaken by the Scrum Team?",
+      "options": [
+        "Product Backlog",
+        "Sprint Retrospective",
+        "Definition of Done",
+        "Acceptance test report"
+      ],
+      "correct_answer": "Product Backlog",
+      "explanation": "The guide states that the Product Backlog is the emergent, ordered list of what is needed to improve the product and is the single source of work for the Scrum Team.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["product-backlog", "artifact"]
+    },
+    {
+      "id": "q_scrum_framework_005",
+      "concept_id": "scrum_framework",
+      "question": "Multiple Increments may be created within a single Sprint.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The guide explicitly says multiple increments may be created within a Sprint, as long as they meet the Definition of Done.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["increment", "sprint", "true-false"]
+    },
+    {
+      "id": "q_scrum_framework_006",
+      "concept_id": "scrum_framework",
+      "question": "Which option best defines the Sprint Backlog in Scrum?",
+      "options": [
+        "The Sprint Goal, the selected Product Backlog items, and an actionable plan for delivering the Increment",
+        "A list of all features planned for the entire product life",
+        "Only the meeting schedule for the Sprint",
+        "A report written by the Scrum Master after the Sprint ends"
+      ],
+      "correct_answer": "The Sprint Goal, the selected Product Backlog items, and an actionable plan for delivering the Increment",
+      "explanation": "The guide defines the Sprint Backlog using those three parts: why, what, and how for the current Sprint.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["sprint-backlog", "definition"]
+    },
+    {
+      "id": "q_scrum_framework_007",
+      "concept_id": "scrum_framework",
+      "question": "A Product Backlog item does not meet the Definition of Done by the end of the Sprint. What should happen according to the guide?",
+      "options": [
+        "It cannot be treated as part of the Increment and returns to the Product Backlog for future consideration",
+        "It should still be shown as completed to maintain Sprint morale",
+        "It automatically becomes accepted if the Product Owner likes the idea",
+        "It must be deleted permanently from the product scope"
+      ],
+      "correct_answer": "It cannot be treated as part of the Increment and returns to the Product Backlog for future consideration",
+      "explanation": "The guide is clear that work not meeting the Definition of Done cannot be released or counted as part of the Increment.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["definition-of-done", "increment", "sprint"]
+    },
+    {
+      "id": "q_scrum_framework_008",
+      "concept_id": "scrum_framework",
+      "question": "A Scrum Team grows well beyond the size where communication is smooth. What does the Scrum Guide suggest?",
+      "options": [
+        "Consider reorganizing into multiple cohesive Scrum Teams focused on the same product",
+        "Add more mandatory meetings until coordination improves",
+        "Give all planning authority to the Scrum Master alone",
+        "Stop using Sprint Goals so less alignment is needed"
+      ],
+      "correct_answer": "Consider reorganizing into multiple cohesive Scrum Teams focused on the same product",
+      "explanation": "The guide notes that smaller teams communicate better and says overly large Scrum Teams should consider reorganizing into multiple cohesive teams on the same product.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["team-size", "scrum-team", "elite"]
+    },
+    {
+      "id": "q_scrum_framework_009",
+      "concept_id": "scrum_framework",
+      "question": "A team calls itself Scrum-based, but it has no clear Product Goal, no shared Definition of Done, it treats incomplete work as finished, and it skips the Sprint Retrospective because the developers are busy. Which response best matches the Scrum Guide?",
+      "options": [
+        "This is acceptable because Scrum is intentionally incomplete and teams can omit any parts they find inconvenient",
+        "This breaks core parts of Scrum because the framework depends on clear artifacts, commitments, and events that support transparency, inspection, and adaptation",
+        "This is only a minor documentation issue that does not affect Scrum effectiveness",
+        "This is a recommended shortcut for fast-moving projects"
+      ],
+      "correct_answer": "This breaks core parts of Scrum because the framework depends on clear artifacts, commitments, and events that support transparency, inspection, and adaptation",
+      "explanation": "The Scrum Guide presents Scrum as a complete framework built around artifacts, commitments, and events. Removing them undermines the empirical structure that makes Scrum work.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["scrum-events", "commitments", "boss"]
+    },
+    {
+      "id": "q_scrum_framework_010",
+      "concept_id": "scrum_framework",
+      "question": "If an organizational Definition of Done exists, a Scrum Team may ignore it and create a completely different one for the same product.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The guide says organizational Definition of Done standards must be followed as a minimum. Teams can add more, but they cannot ignore the shared standard.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["definition-of-done", "organizational-standard", "anomaly"]
+    },
+    {
+      "id": "q_git_branching_sync_001",
+      "concept_id": "git_branching_sync",
+      "question": "What is HEAD in the Git notes?",
+      "options": [
+        "A symbolic reference to the branch you are currently on",
+        "A command that deletes remote repositories",
+        "The oldest commit in the repository history",
+        "The name of the bare repository folder"
+      ],
+      "correct_answer": "A symbolic reference to the branch you are currently on",
+      "explanation": "The Git slides define HEAD as the symbolic reference to the current branch. It is stored in the .git/HEAD file.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["head", "git", "branches"]
+    },
+    {
+      "id": "q_git_branching_sync_002",
+      "concept_id": "git_branching_sync",
+      "question": "What remote connection is automatically created when you clone a repository, according to the notes?",
+      "options": [
+        "origin",
+        "main",
+        "upstream-only",
+        "default-sync"
+      ],
+      "correct_answer": "origin",
+      "explanation": "The cloning section explains that git clone automatically creates a remote called origin pointing back to the cloned repository.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["origin", "clone", "remote"]
+    },
+    {
+      "id": "q_git_branching_sync_003",
+      "concept_id": "git_branching_sync",
+      "question": "How are remote branches described in the Git notes?",
+      "options": [
+        "Like local branches, but representing commits from somebody else's repository",
+        "Temporary files that disappear after every commit",
+        "Tags used only for release builds",
+        "Encrypted backups of bare repositories"
+      ],
+      "correct_answer": "Like local branches, but representing commits from somebody else's repository",
+      "explanation": "The notes describe remote branches as representing commits from another repository and suggest thinking of them as read-only branches for review purposes.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["remote-branches", "git"]
+    },
+    {
+      "id": "q_git_branching_sync_004",
+      "concept_id": "git_branching_sync",
+      "question": "According to the notes, git pull is effectively equivalent to:",
+      "options": [
+        "git fetch followed by git merge of the remote copy of the current branch",
+        "git init followed by git add",
+        "git status followed by git branch -d",
+        "git clone followed by git push"
+      ],
+      "correct_answer": "git fetch followed by git merge of the remote copy of the current branch",
+      "explanation": "The slides explicitly explain git pull as a fetch plus immediate merge of the current branch's remote counterpart.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["git-pull", "fetch", "merge"]
+    },
+    {
+      "id": "q_git_branching_sync_005",
+      "concept_id": "git_branching_sync",
+      "question": "A bare repository has no working directory.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The Git notes define bare repositories in exactly those terms and explain why they are useful for shared central repositories.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["bare-repository", "true-false"]
+    },
+    {
+      "id": "q_git_branching_sync_006",
+      "concept_id": "git_branching_sync",
+      "question": "Which option best defines git fetch in the SPS Git notes?",
+      "options": [
+        "A command that imports commits from a remote repository into the local repository without immediately merging them into the current branch",
+        "A command that stages all tracked files and commits them",
+        "A command that deletes the remote copy of the project",
+        "A command that converts a normal repository into a bare one"
+      ],
+      "correct_answer": "A command that imports commits from a remote repository into the local repository without immediately merging them into the current branch",
+      "explanation": "The notes describe fetch as bringing in remote commits and storing them as remote branches, giving the developer a chance to review changes first.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["git-fetch", "definition", "remote"]
+    },
+    {
+      "id": "q_git_branching_sync_007",
+      "concept_id": "git_branching_sync",
+      "question": "A student wants to work on a change without touching the clean local copy of main. Which approach best fits the Git notes?",
+      "options": [
+        "Create a new branch and switch to it before making the changes",
+        "Delete main and rename the new work after the feature",
+        "Use git push immediately before editing anything",
+        "Work inside a bare repository so there is no working directory"
+      ],
+      "correct_answer": "Create a new branch and switch to it before making the changes",
+      "explanation": "The notes recommend keeping main unchanged as the local copy of the central repository and doing personal work on a separate branch.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["branching", "workflow", "main"]
+    },
+    {
+      "id": "q_git_branching_sync_008",
+      "concept_id": "git_branching_sync",
+      "question": "You are on your current branch and want to integrate changes from another branch into it. Which command from the notes directly performs that integration?",
+      "options": [
+        "git merge <branch>",
+        "git init <branch>",
+        "git remote remove <branch>",
+        "git status <branch>"
+      ],
+      "correct_answer": "git merge <branch>",
+      "explanation": "The merge section states that git merge <branch> merges the specified branch into the current branch.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["git-merge", "elite", "branching"]
+    },
+    {
+      "id": "q_git_branching_sync_009",
+      "concept_id": "git_branching_sync",
+      "question": "A team member clones the group repository, keeps main unchanged, creates a personal branch, uses fetch to review upstream changes, merges them when appropriate, and finally pushes local commits back to the shared remote. Why does this workflow fit the SPS Git notes well?",
+      "options": [
+        "Because it separates personal work from the central copy, uses remotes and branches as intended, and allows review before integration",
+        "Because Git only works if every developer uses a bare repository as their personal workspace",
+        "Because pushing should always happen before fetching to avoid remote branches",
+        "Because branches in Git are permanent and should never be merged"
+      ],
+      "correct_answer": "Because it separates personal work from the central copy, uses remotes and branches as intended, and allows review before integration",
+      "explanation": "This matches the workflow guidance in the Git lecture, especially around keeping main clean, working on a separate branch, and using fetch for review before integration.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["workflow", "remotes", "boss"]
+    },
+    {
+      "id": "q_git_branching_sync_010",
+      "concept_id": "git_branching_sync",
+      "question": "Pushing branches to a non-bare shared repository is the safest recommended setup for a central collaboration repo.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The notes warn that central repositories should be bare, because pushing branches to a non-bare repository can overwrite changes.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["bare-repository", "central-repo", "anomaly"]
+    },
+    {
+      "id": "q_project_deliverables_assessment_001",
+      "concept_id": "project_deliverables_assessment",
+      "question": "Which early deliverables are linked to identifying stakeholders and defining requirements in the SPS project schedule?",
+      "options": [
+        "Stakeholder Analysis, Requirements Specification, and Project Plan",
+        "Deployment Report, Bug Fix Log, and Pilot Feedback Report",
+        "Only the final presentation slides",
+        "Only the version control history"
+      ],
+      "correct_answer": "Stakeholder Analysis, Requirements Specification, and Project Plan",
+      "explanation": "The project schedule explicitly pairs those deliverables with the early task of identifying stakeholders and defining requirements.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["deliverables", "project-plan", "requirements"]
+    },
+    {
+      "id": "q_project_deliverables_assessment_002",
+      "concept_id": "project_deliverables_assessment",
+      "question": "Which rubric area directly evaluates GitHub commits and comments in the MVP assessment?",
+      "options": [
+        "Version Control Usage",
+        "Basic Interactivity",
+        "Core Functionality",
+        "Sustainability Plan"
+      ],
+      "correct_answer": "Version Control Usage",
+      "explanation": "The MVP rubric includes a dedicated criterion called Version Control Usage and describes clear, meaningful commit history as part of good performance.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["rubric", "version-control", "assessment"]
+    },
+    {
+      "id": "q_project_deliverables_assessment_003",
+      "concept_id": "project_deliverables_assessment",
+      "question": "What does the SRS project brief require students to do with the software requirements specification document once it is complete?",
+      "options": [
+        "Save it as a PDF and submit it through the required course channels",
+        "Keep it as a private draft and do not submit it",
+        "Replace it with screenshots because Turnitin cannot read PDFs",
+        "Submit it only as raw source code"
+      ],
+      "correct_answer": "Save it as a PDF and submit it through the required course channels",
+      "explanation": "The SRS project instructions explicitly require the requirements specification to be documented and saved as a PDF for submission.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["srs", "submission", "project"]
+    },
+    {
+      "id": "q_project_deliverables_assessment_004",
+      "concept_id": "project_deliverables_assessment",
+      "question": "Which of the following is listed as an MVP rubric criterion?",
+      "options": [
+        "Initial User Testing (Execution & Feedback Summary)",
+        "Compiler construction accuracy",
+        "Database normalization proofs only",
+        "Mathematical derivation of all AI models"
+      ],
+      "correct_answer": "Initial User Testing (Execution & Feedback Summary)",
+      "explanation": "The MVP rubric specifically includes initial user testing as one of the assessed categories, together with process model choice, code quality, documentation, and other criteria.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["rubric", "user-testing", "mvp"]
+    },
+    {
+      "id": "q_project_deliverables_assessment_005",
+      "concept_id": "project_deliverables_assessment",
+      "question": "According to the SRS project brief, the group project contributes 40% to the final semester mark.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The SRS project instructions state that the project contributes 40% to the final semester mark. This makes the deliverables and documentation especially important.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["assessment", "project-mark", "true-false"]
+    },
+    {
+      "id": "q_project_deliverables_assessment_006",
+      "concept_id": "project_deliverables_assessment",
+      "question": "Which option best defines the sustainability plan mentioned in the SPS project deliverables?",
+      "options": [
+        "A forward-looking plan addressing how the platform can continue through partnerships, funding strategies, or open-source contributions",
+        "A short list of commit messages from the final week",
+        "A replacement for technical documentation",
+        "A glossary of all programming terms used in the code"
+      ],
+      "correct_answer": "A forward-looking plan addressing how the platform can continue through partnerships, funding strategies, or open-source contributions",
+      "explanation": "The project brief includes a sustainability plan as one of the deliverables and links it to future continuation, partnerships, funding, and open-source contributions.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["sustainability-plan", "definition", "project"]
+    },
+    {
+      "id": "q_project_deliverables_assessment_007",
+      "concept_id": "project_deliverables_assessment",
+      "question": "A team submits strong code but provides weak setup instructions, poor code comments, and thin project documentation. Which rubric area is most directly harmed?",
+      "options": [
+        "Documentation (Setup Instructions, Code Comments)",
+        "Version Control Usage",
+        "Initial User Testing",
+        "Identified Process Model"
+      ],
+      "correct_answer": "Documentation (Setup Instructions, Code Comments)",
+      "explanation": "The MVP rubric has a dedicated documentation criterion that covers setup guidance and code comments. Good code alone does not satisfy that category.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["documentation", "rubric", "assessment"]
+    },
+    {
+      "id": "q_project_deliverables_assessment_008",
+      "concept_id": "project_deliverables_assessment",
+      "question": "A project has useful features and decent UI, but the commit history is sparse and messages are vague. Which assessed area will this weaken most clearly in the SPS rubric?",
+      "options": [
+        "Version Control Usage",
+        "Basic Interactivity",
+        "AI Recommendations",
+        "Core Functionality"
+      ],
+      "correct_answer": "Version Control Usage",
+      "explanation": "The rubric specifically rewards frequent and meaningful commit history. Weak commit practice reduces evidence of disciplined version control.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["version-control", "rubric", "elite"]
+    },
+    {
+      "id": "q_project_deliverables_assessment_009",
+      "concept_id": "project_deliverables_assessment",
+      "question": "A team delivers a mostly working platform, but its process model is poorly justified, the documentation is thin, user testing is shallow, and the Git history is disorganized. Which response best matches the SPS assessment documents?",
+      "options": [
+        "The team should still score near perfect because implementation quality outweighs all other deliverables",
+        "The team would lose marks across multiple assessed areas because SPS evaluates process model choice, documentation, user testing, version control, and other life-cycle products in addition to working features",
+        "Only the final presentation would be affected because the rubric does not consider process evidence",
+        "The project would automatically pass if the AI feature works"
+      ],
+      "correct_answer": "The team would lose marks across multiple assessed areas because SPS evaluates process model choice, documentation, user testing, version control, and other life-cycle products in addition to working features",
+      "explanation": "The SRS and MVP documents clearly assess more than code. They reward evidence across requirements, process, testing, documentation, and version control as part of the complete project.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["assessment", "boss", "deliverables"]
+    },
+    {
+      "id": "q_project_deliverables_assessment_010",
+      "concept_id": "project_deliverables_assessment",
+      "question": "Late submissions are always accepted in SPS as long as the team includes a strong presentation.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The course outline states that late submissions will not be accepted after the due date and time and will be marked as zero, unless specific supplementary rules apply for genuine reasons.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["late-submission", "anomaly", "policy"]
+    },
+    {
+      "id": "q_process_selection_challenges_001",
+      "concept_id": "process_selection_challenges",
+      "question": "What do the SPS process model notes say about choosing the best model for a project?",
+      "options": [
+        "There is no one-size-fits-all model; choice depends on project needs",
+        "Agile is always the best model in every context",
+        "Waterfall should always be chosen if documentation exists",
+        "Teams should avoid explicit model choice because it limits creativity"
+      ],
+      "correct_answer": "There is no one-size-fits-all model; choice depends on project needs",
+      "explanation": "The Week 2 slides explicitly say no single process model fits every project. Selection should be based on project context and constraints.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["process-selection", "models"]
+    },
+    {
+      "id": "q_process_selection_challenges_002",
+      "concept_id": "process_selection_challenges",
+      "question": "According to the notes, which model is especially suitable for large, high-risk projects requiring continuous risk management?",
+      "options": [
+        "Spiral",
+        "Waterfall",
+        "Glossary",
+        "Git Flow"
+      ],
+      "correct_answer": "Spiral",
+      "explanation": "The Spiral model is described as risk-driven and suited to large, high-risk projects. Risk analysis is one of its defining characteristics.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["spiral", "risk", "selection"]
+    },
+    {
+      "id": "q_process_selection_challenges_003",
+      "concept_id": "process_selection_challenges",
+      "question": "Which challenge is explicitly listed in the SPS slides on software processes?",
+      "options": [
+        "Changing requirements",
+        "Lack of monitor resolution",
+        "Absence of branch names",
+        "Too many glossary entries"
+      ],
+      "correct_answer": "Changing requirements",
+      "explanation": "The challenges slide names changing requirements along with tight deadlines and resource constraints as common software process difficulties.",
+      "difficulty": 1,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["challenges", "requirements-change"]
+    },
+    {
+      "id": "q_process_selection_challenges_004",
+      "concept_id": "process_selection_challenges",
+      "question": "Which factor from the SPS notes is important when choosing a software process model?",
+      "options": [
+        "Project size and complexity",
+        "Favorite text editor",
+        "Number of emojis in documentation",
+        "Color of the deployment server"
+      ],
+      "correct_answer": "Project size and complexity",
+      "explanation": "The model selection slides mention project size and complexity, flexibility needs, risk management, and time or budget constraints as key decision factors.",
+      "difficulty": 2,
+      "type": "multiple_choice",
+      "tier": "standard",
+      "tags": ["selection", "complexity", "risk"]
+    },
+    {
+      "id": "q_process_selection_challenges_005",
+      "concept_id": "process_selection_challenges",
+      "question": "The SPS slides connect poor planning and process failures with real project setbacks.",
+      "options": ["True", "False"],
+      "correct_answer": "True",
+      "explanation": "The challenges section explicitly says real-world examples show how poor planning and process failures lead to setbacks.",
+      "difficulty": 1,
+      "type": "true_false",
+      "tier": "standard",
+      "tags": ["process-failure", "true-false"]
+    },
+    {
+      "id": "q_process_selection_challenges_006",
+      "concept_id": "process_selection_challenges",
+      "question": "Which option best defines a risk-driven software process model in the SPS notes?",
+      "options": [
+        "A model that repeatedly evaluates and manages risk as part of the development cycle",
+        "A model that ignores uncertainty and focuses only on coding speed",
+        "A model that treats all requirements as fixed from the first day",
+        "A model that replaces planning with branch creation"
+      ],
+      "correct_answer": "A model that repeatedly evaluates and manages risk as part of the development cycle",
+      "explanation": "This is how the Spiral model is described in the notes. Risk is not an afterthought but a central organizing idea in the cycle.",
+      "difficulty": 2,
+      "type": "define",
+      "tier": "standard",
+      "tags": ["risk-driven", "definition", "spiral"]
+    },
+    {
+      "id": "q_process_selection_challenges_007",
+      "concept_id": "process_selection_challenges",
+      "question": "A project has evolving requirements and frequent stakeholder feedback. Which broad process direction do the SPS notes suggest is more suitable than a rigid linear model?",
+      "options": [
+        "Agile or Iterative approaches",
+        "A documentation-free process with no reviews",
+        "Only acceptance testing",
+        "A bare repository"
+      ],
+      "correct_answer": "Agile or Iterative approaches",
+      "explanation": "The notes connect Agile and Iterative approaches with changing requirements and continuous feedback. Rigid linear models become harder to manage in that context.",
+      "difficulty": 2,
+      "type": "short_exam",
+      "tier": "standard",
+      "tags": ["agile", "iterative", "selection"]
+    },
+    {
+      "id": "q_process_selection_challenges_008",
+      "concept_id": "process_selection_challenges",
+      "question": "In the Boeing 737 MAX activity marking guide, which process weaknesses are explicitly highlighted for student analysis?",
+      "options": [
+        "Rush to market and lack of testing",
+        "Too many product retrospectives and excessive documentation",
+        "Use of GitHub branches instead of subversion tags",
+        "Lack of user stories for a dark mode feature"
+      ],
+      "correct_answer": "Rush to market and lack of testing",
+      "explanation": "The marking guide explicitly names rush to market and lack of testing as factors students should analyse in relation to the disaster case.",
+      "difficulty": 3,
+      "type": "short_exam",
+      "tier": "elite",
+      "tags": ["boeing", "testing", "elite"]
+    },
+    {
+      "id": "q_process_selection_challenges_009",
+      "concept_id": "process_selection_challenges",
+      "question": "A team is choosing a process for a project with changing requirements, tight time pressure, significant quality risk, and stakeholder concern about oversight. Which response best follows the SPS notes?",
+      "options": [
+        "Ignore context and choose whichever model is currently most fashionable",
+        "Evaluate the project in terms of flexibility needs, risk level, validation demands, and constraints, then justify a model choice instead of assuming one model always fits all situations",
+        "Choose Agile automatically because it removes the need for robust process discipline",
+        "Avoid any formal model because time pressure makes process selection irrelevant"
+      ],
+      "correct_answer": "Evaluate the project in terms of flexibility needs, risk level, validation demands, and constraints, then justify a model choice instead of assuming one model always fits all situations",
+      "explanation": "This matches the process selection guidance in the notes. SPS expects context-sensitive choice and awareness that weak oversight or poor testing can amplify risk.",
+      "difficulty": 3,
+      "type": "long_exam",
+      "tier": "boss",
+      "tags": ["process-selection", "boss", "risk"]
+    },
+    {
+      "id": "q_process_selection_challenges_010",
+      "concept_id": "process_selection_challenges",
+      "question": "Because Agile is flexible, it is automatically the best choice regardless of project size, risk, or validation needs.",
+      "options": ["True", "False"],
+      "correct_answer": "False",
+      "explanation": "The SPS notes explicitly reject one-size-fits-all thinking. Model choice depends on context such as risk, structure, flexibility, and assurance requirements.",
+      "difficulty": 3,
+      "type": "true_false",
+      "tier": "anomaly",
+      "tags": ["agile", "model-selection", "anomaly"]
+    }
+  ]
+}
